@@ -18,6 +18,7 @@ package com.google.gwt.gwtai.applet.client;
 
 import java.util.HashMap;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HTML;
@@ -42,7 +43,11 @@ public class AppletJSUtil {
 					"' width='" + aapplet.getWidth() + "' height='" + aapplet.getHeight() +
 					"' name='" + aapplet.getName() + "' id='" + aapplet.getName() +
 					"' alt='Java Runtime Environment is not working on your system'";
-					
+
+			if (null != aapplet.getCodebase()) {
+				htmlCode += "codebase='" + aapplet.getCodebase() +"'";
+			}
+			
 			if (null != aapplet.getArchive()) {
 				htmlCode += "archive='" + aapplet.getArchive() +"'";
 			}
@@ -65,10 +70,31 @@ public class AppletJSUtil {
 				}
 			}
 				
-				
-				
 			htmlCode +=	"</applet>";
 			
+			return new HTML(htmlCode);
+		}
+		
+		return null;
+	}
+	
+	public static Widget createAppletWidget(Applet applet, String forceJavaVersion) {
+		if (applet instanceof AppletAccomplice) {
+			AppletAccomplice aapplet = (AppletAccomplice) applet;
+			
+			String codebase = GWT.getModuleBaseURL();
+			
+			String htmlCode = "<p style='text-align: center;'><script src='http://java.com/js/deployJava.js'></script>" +
+					"<script>deployJava.runApplet({codebase:'" + codebase + "', ";
+			
+			if (null != aapplet.getArchive()) {
+				htmlCode += "archive:'" + aapplet.getArchive() +"', ";
+			}
+			
+			htmlCode += "code:'" +aapplet.getCode() +"', width:'" + aapplet.getWidth()
+					+"', Height:'" + aapplet.getHeight() +"'}, null, '" + forceJavaVersion +"');" +
+					"</script></p>";
+
 			return new HTML(htmlCode);
 		}
 		
