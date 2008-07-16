@@ -1,0 +1,7 @@
+<module>
+
+	<generate-with class='com.google.gwt.gwtai.applet.generator.AppletProxyGenerator'>
+		<when-type-assignable class='com.google.gwt.gwtai.applet.client.Applet' />
+	</generate-with>
+
+</module>

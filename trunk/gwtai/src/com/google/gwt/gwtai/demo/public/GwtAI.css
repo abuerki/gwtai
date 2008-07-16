@@ -1,0 +1,45 @@
+body {
+  font-family:arial,sans-serif;
+  padding: 10px;
+}
+
+div,td {
+  color:#000000
+}
+
+a:link {
+  color:#0000cc
+}
+     
+a:visited {
+  color:#551a8b
+}
+
+a:active {
+  color:#ff0000
+}
+
+button {
+  display: block;
+  font-size: 16pt
+}
+
+.header {
+	background: #E0E0E0;
+  	width: 100%
+}
+
+.content {
+	background: #E0E0E0;
+  	width: 100%
+}
+
+.gwt-DisclosurePanel .header,
+.gwt-DisclosurePanel .header a,
+.gwt-DisclosurePanel .header td {
+	color: black;
+	cursor: pointer;
+	text-decoration: none;
+	background:	#D0E4F6;
+	width: 100%
+}
