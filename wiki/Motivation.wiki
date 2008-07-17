@@ -1,11 +1,16 @@
 #summary What GwtAI is about...
 
-===Summary===
+==Summary==
 
 People shout for fast loading, responsive, accessible and searchable websites/web-applications. On the other hand the very same people expect a desktop-like experience with these applications. The [http://code.google.com/webtoolkit/ Google Web Toolkit (GWT) ] has gone a long way in fulfilling these requirements, but there are some things that can simply not be done in plain HTML/!JavaScript.
 
-===Explanation===
+==Explanation==
 
 I have been listening to some talks about [http://www.adobe.com/de/products/flex/ Adobe Flex] at the [http://jazoon.com/ Jazoon Java Conference] 2008. Those guys made a big fuss about the ability to have a web-application (Flex) running in the browser and kind of a standalone version of the application (AIR). As far as I know it is even possible  to interacting between those two applications.
 
 At this moment I had the idea to do something similar in [http://code.google.com/webtoolkit/ GWT]. Integrating and interacting with a full-blown standalone application from within a website is something that can be done in Java since a decade.
+
+==Future==
+
+ * [http://java.sun.com/javase/downloads/ea.jsp Java SE6 Update 10] brings a [http://java.sun.com/javase/downloads/ea/6u10/plugin2/index.jsp new browser plugin] that allows Applets to run in a separate Thead and improves Java/!JavaScript communication. This opens a new world of possibilities.
+ * Running a GWT web-application as a standalone application is something that could be done. Using projects like [http://code.google.com/p/uface/ UFace] or probably the browser panel in the upcoming [http://java.sun.com/javase/downloads/ea.jsp Java SE6 Update 10].
