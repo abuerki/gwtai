@@ -1,12 +1,11 @@
 #summary What GwtAI is about...
 
-===Introduction===
+===Summary===
 
-People shout for fast loading, responsive, accessible and searchable websites/web-applications. On the other hand the very same people expect a desktop-like experience with these applications. [http://code.google.com/webtoolkit/ GWT] has gone a long way in fulfilling these requirements, but there are some things that can simply not be done in plain HTML/!JavaScript. There are pretty much two options to implement something beyond HTML/!JavaScript in a cross-browser compatible way, either [http://www.adobe.com/products/flash/flashpro/ Adobe Flash] or [http://java.sun.com/applets/ Java Applets]. Being in a Java environment with [http://code.google.com/webtoolkit/ GWT] [http://java.sun.com/applets/ Java Applets] seems like the natural choice.
+People shout for fast loading, responsive, accessible and searchable websites/web-applications. On the other hand the very same people expect a desktop-like experience with these applications. The [http://code.google.com/webtoolkit/ Google Web Toolkit (GWT) ] has gone a long way in fulfilling these requirements, but there are some things that can simply not be done in plain HTML/JavaScript.
 
-===Details===
+===Explanation===
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+I have been listening to some talks about [http://www.adobe.com/de/products/flex/ Adobe Flex] at the [http://jazoon.com/ Jazoon Java Conference] 2008. Those guys made a big fuss about the ability to have a web-application (Flex) running in the browser and kind of a standalone version of the application (AIR). As far as I know it is even possible  to interacting between those two applications.
+
+At this moment I had the idea to do something similar in [http://code.google.com/webtoolkit/ GWT]. Integrating and interacting with a full-blown standalone application from within a website is something that can be done in Java since a decade.
