@@ -2,7 +2,7 @@
 
 ===Summary===
 
-People shout for fast loading, responsive, accessible and searchable websites/web-applications. On the other hand the very same people expect a desktop-like experience with these applications. The [http://code.google.com/webtoolkit/ Google Web Toolkit (GWT) ] has gone a long way in fulfilling these requirements, but there are some things that can simply not be done in plain HTML/JavaScript.
+People shout for fast loading, responsive, accessible and searchable websites/web-applications. On the other hand the very same people expect a desktop-like experience with these applications. The [http://code.google.com/webtoolkit/ Google Web Toolkit (GWT) ] has gone a long way in fulfilling these requirements, but there are some things that can simply not be done in plain HTML/!JavaScript.
 
 ===Explanation===
 
