@@ -15,4 +15,4 @@ Integration of a [http://java.sun.com/applets/ Java Applet] is not that much of 
 ==Future==
 
  * [http://java.sun.com/javase/downloads/ea.jsp Java SE6 Update 10] brings a [http://java.sun.com/javase/downloads/ea/6u10/plugin2/index.jsp new browser plugin] that allows Applets to run in a separate Thread and improves Java/!JavaScript communication. This opens a new world of possibilities.
- * Running a GWT web-application as a standalone application is something that could be done. Using projects like [http://code.google.com/p/uface/ UFace] or probably the `JWebPane` in the upcoming [https://jdk7.dev.java.net/ Java 7].
+ * Running a GWT web-application as a standalone desktop application would be a great feature. Using the `JWebPane` from the upcoming [https://jdk7.dev.java.net/ Java 7], implementing some GWTtoSwing compiler or perhaps integrateing a _Universal UI API_ like the [http://code.google.com/p/uface/ UFace] project.
