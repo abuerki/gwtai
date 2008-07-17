@@ -2,7 +2,7 @@
 
 ===Introduction===
 
-People shout for fast loading, responsive, accessible and searchable websites/web-applications. On the other hand the very same people expect a desktop-like experience with these applications. GWT has gone a long way in fulfilling these requirements, but there are some things that can simply not be done in plain HTML/JavaScript.
+People shout for fast loading, responsive, accessible and searchable websites/web-applications. On the other hand the very same people expect a desktop-like experience with these applications. [http://code.google.com/webtoolkit/ GWT] has gone a long way in fulfilling these requirements, but there are some things that can simply not be done in plain HTML/!JavaScript. There are pretty much two options to implement something beyond HTML/!JavaScript in a cross-browser compatible way, either [http://www.adobe.com/products/flash/flashpro/ Adobe Flash] or [http://java.sun.com/applets/ Java Applets]. Being in a Java environment with [http://code.google.com/webtoolkit/ GWT] [http://java.sun.com/applets/ Java Applets] seems like the natural choice.
 
 ===Details===
 
