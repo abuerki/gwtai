@@ -1,0 +1,12 @@
+#summary What GwtAI is about...
+
+===Introduction===
+
+People shout for fast loading, responsive, accessible and searchable websites/web-applications. On the other hand the very same people expect a desktop-like experience with these applications. GWT has gone a long way in fulfilling these requirements, but there are some things that can simply not be done in plain HTML/JavaScript.
+
+===Details===
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
