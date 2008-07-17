@@ -2,7 +2,7 @@
 
 ==Summary==
 
-People shout for fast loading, responsive, accessible and searchable websites/web-applications. On the other hand the very same people expect a desktop-like experience with these applications. The [http://code.google.com/webtoolkit/ Google Web Toolkit (GWT) ] has gone a long way in fulfilling these requirements, but there are some things that can simply not be done in plain HTML/!JavaScript. There are two way to bring make these things happen in a browser, either [http://www.adobe.com/products/flash/ Adobe Flash] or the [http://java.sun.com/applets/ Java Applet] technology. [http://code.google.com/webtoolkit/ GWT] development is done in Java, so [http://java.sun.com/applets/ Java Applets] seem like the natural choice.
+People shout for fast loading, responsive, accessible and searchable websites/web-applications. On the other hand the very same people expect a desktop-like experience with these applications. The [http://code.google.com/webtoolkit/ Google Web Toolkit (GWT) ] has gone a long way in fulfilling these requirements, but there are some things that can simply not be done in plain HTML/!JavaScript. There are two way to make these things happen in a browser, either [http://www.adobe.com/products/flash/ Adobe Flash] or the [http://java.sun.com/applets/ Java Applet] technology. [http://code.google.com/webtoolkit/ GWT] development is done in Java, so [http://java.sun.com/applets/ Java Applets] seem like the natural choice.
 
 ==Explanation==
 
@@ -10,7 +10,7 @@ I have been listening to some talks about [http://www.adobe.com/de/products/flex
 
 At this moment I had the idea to do something similar in [http://code.google.com/webtoolkit/ GWT]. Integrating and interacting with a full-blown standalone application from within a website is something that can be done in Java since a decade.
 
-Integration an 
+Integration of a [http://java.sun.com/applets/ Java Applet] is not that much of a problem, but interaction with the website the [http://java.sun.com/applets/ Applet] is running within is a bit more complicated. The goal of GwtAI is to provide an easy to use cross-browser solution by automatically creating wrapper widgets for [http://java.sun.com/applets/ Java Applets] and mechanism to communicate between Java and !JavaScript. 
 
 ==Future==
 
