@@ -1,0 +1,96 @@
+#summary This page everything you'll need to know about getting started with the GwtAI project.
+
+==Download==
+
+Download the [http://code.google.com/p/gwtai/source/browse/trunk/gwtai/www/com.google.gwt.gwtai.demo.GwtAI/GwtAI-Client.jar  GwtAI-Client.jar] and [http://code.google.com/p/gwtai/source/browse/trunk/gwtai/www/com.google.gwt.gwtai.demo.GwtAI/GwtAI-Core.jar GwtAI-Core.jar] files and place them into your project's classpath.
+
+==Create applet interface==
+
+{{{
+import com.google.gwt.gwtai.applet.client.*;
+
+@ImplementingClass(com.google.gwt.gwtai.demo.impl.CounterAppletImpl.class)
+@Height(60)
+@Width(350)
+@Archive("GwtAI-Core.jar,GwtAI-Demo.jar")
+public interface CounterApplet extends Applet {
+                
+        public void increment();
+        
+        public void decrement();
+        
+        public Object getCurrentValue();
+
+}
+}}}
+
+==Implement applet==
+
+{{{
+import java.awt.Color;
+
+import javax.swing.*;
+
+import com.google.gwt.gwtai.demo.client.CounterApplet;
+
+public class CounterAppletImpl extends JApplet implements CounterApplet {
+        private JTextField _tfCounter;
+
+        public void init() {
+                JPanel panelMain = new JPanel();
+                
+                _tfCounter = new JTextField(20);
+                _tfCounter.setHorizontalAlignment(JTextField.CENTER);
+                _tfCounter.setText("0");
+                _tfCounter.setEditable(false);
+        
+                panelMain.add(new JLabel("Current count : "));
+                panelMain.add(_tfCounter);
+                
+                panelMain.setBorder(BorderFactory.createTitledBorder("CounterApplet"));
+                panelMain.setBackground(Color.WHITE);
+                
+                getContentPane().add(panelMain);
+        }
+        
+        public void increment() {
+                int currentCount = Integer.parseInt(_tfCounter.getText());
+                currentCount++;
+                
+                _tfCounter.setText(currentCount + "");
+        }
+        
+        public void decrement() {
+                int currentCount = Integer.parseInt(_tfCounter.getText());
+                currentCount--;
+                
+                _tfCounter.setText(currentCount + "");
+        }
+        
+        public Object getCurrentValue() {
+                return _tfCounter.getText();
+        }
+
+}
+}}}
+
+==Use generated applet proxy in your GWT code==
+
+{{{
+VerticalPanel panelMain = new VerticalPanel();
+
+Button buttonInc = new Button("Increment");
+
+final CounterApplet counterApplet = (CounterApplet) GWT.create(CounterApplet.class);
+                
+buttonInc.addClickListener(new ClickListener() {
+  public void onClick(Widget sender) {
+    counterApplet.increment();
+  }
+});
+
+Widget widgetApplet = AppletJSUtil.createAppletWidget(counterApplet);
+
+panelMain.add(widgetApplet);
+panelMain.add(buttonInc);
+}}}
