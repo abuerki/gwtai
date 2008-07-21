@@ -102,7 +102,7 @@ public class StopWatchAppletTab extends Composite {
 			"...</pre>\n" +
 			"<b>StopWatchCallback.java</b>" +
 			"<pre>...\n" +
-			"public class StopWatchCallback implements AppletCallback {\n" +
+			"public class StopWatchCallback implements AppletCallback&lt;String&gt; {\n" +
 			"  private VerticalPanel _panelLaps;\n" +
 			"  private int _lap;\n\n" +
 			"  public StopWatchCallback(VerticalPanel panelLaps) {\n" +

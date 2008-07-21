@@ -16,8 +16,8 @@
 
 package com.google.gwt.gwtai.applet.client;
 
-public interface AppletCallback {
+public interface AppletCallback<T> {
 
-	public void callback(Object callbackValue);
+	public void callback(T callbackValue);
 
 }

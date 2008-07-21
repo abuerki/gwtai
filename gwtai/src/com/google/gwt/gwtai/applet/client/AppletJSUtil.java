@@ -101,6 +101,14 @@ public class AppletJSUtil {
 		return null;
 	}
 	
+	/**
+	 * Registers an instance of your <code>AppletCallback</code> implementation to listen for callbacks coming
+	 * from the given <code>Applet</code>.
+	 * 
+	 * @param applet - The <code>Applet</code> instance to listen to.
+	 * @param appletCallback - The <code>AppletCallback</code> instance to notify once a callback is coming.
+	 */
+	@SuppressWarnings("unchecked")
 	public static void registerAppletCallback(Applet applet, AppletCallback appletCallback) {
 		if (applet instanceof AppletAccomplice) {
 			AppletAccomplice aapplet = (AppletAccomplice) applet;
