@@ -20,7 +20,12 @@ import com.google.gwt.gwtai.applet.client.AppletCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class StopWatchCallback implements AppletCallback {
+/**
+ * An example implementation of the  <code>AppletCallback</code> interface.
+ * 
+ * @author Adrian Buerki <a.buerki@gmail.com>
+ */
+public class StopWatchCallback implements AppletCallback<String> {
 	private VerticalPanel _panelLaps;
 	private int _lap;
 	
@@ -29,7 +34,7 @@ public class StopWatchCallback implements AppletCallback {
 		_lap = 1;
 	}
 
-	public void callback(Object msg) {
+	public void callback(String msg) {
 		_panelLaps.add(new HTML("<b>Lap " + _lap + "</b> : " + msg + " seconds"));
 		_lap++;
 	}

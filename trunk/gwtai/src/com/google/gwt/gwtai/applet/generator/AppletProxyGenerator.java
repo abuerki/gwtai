@@ -26,6 +26,7 @@ import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.TreeLogger.Type;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
+import com.google.gwt.core.ext.typeinfo.JParameter;
 import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
@@ -73,7 +74,7 @@ public class AppletProxyGenerator extends Generator {
 			composer.setSuperclass("com.google.gwt.gwtai.applet.client.AppletAccomplice");
 			
 			PrintWriter printWriter = context.tryCreate (logger, packageName, simpleName);
-			SourceWriter sw = composer.createSourceWriter(context, 	printWriter);
+			SourceWriter sw = composer.createSourceWriter(context, printWriter);
 				
 			JMethod[] methods = classType.getOverridableMethods();
 				
@@ -86,10 +87,46 @@ public class AppletProxyGenerator extends Generator {
 				sw.print("Element elem = DOM.getElementById(");
 				sw.print("getId()");
 				sw.println(");");
-				sw.print("Object obj = ");
-				sw.print("call(elem, \"");
-				sw.print(method.getName());
-				sw.println("\");");
+				
+				JParameter[] methodParams = method.getParameters();
+				
+				if (methodParams.length >0) {
+					String methodSignature = method.getName() + "(";
+					boolean first = true;
+					
+					for (JParameter param : method.getParameters()) {
+						if (!first) {
+							methodSignature += ", ";
+							first = false;
+						}
+						
+						methodSignature +=  param.getType().getJNISignature();
+					}
+					
+					methodSignature += ")";
+					
+					sw.print("Object args[] = new Object[");
+					sw.print(method.getParameters().length +"];");
+					
+					int i = 0;
+					
+					for (JParameter param : method.getParameters()) {
+						sw.print("args[");
+						sw.print(i + "] = ");
+						sw.print(param.getName());
+						sw.println(";");
+					}
+					
+					sw.print("Object obj = ");
+					sw.print("call(elem, \"");
+					sw.print(methodSignature);
+					sw.println("\", args);");
+				} else {
+					sw.print("Object obj = ");
+					sw.print("call(elem, \"");
+					sw.print(method.getName());
+					sw.println("\");");
+				}
 				
 				JType type = method.getReturnType();
 				
@@ -111,6 +148,16 @@ public class AppletProxyGenerator extends Generator {
 				sw.outdent();
 			}
 
+			sw.println();
+			sw.indent();
+			sw.println("public native Object call(Element elem, String methodName, Object args[]) /*-{");
+			sw.indent();
+			sw.println("var theFunc = elem[methodName];");
+			sw.println("return theFunc(args);");
+			sw.outdent();
+			sw.println("}-*/;");
+			sw.outdent();
+			
 			sw.println();
 			sw.indent();
 			sw.println("public native Object call(Element elem, String methodName) /*-{");

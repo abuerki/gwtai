@@ -16,31 +16,48 @@
 
 package com.google.gwt.gwtai.applet.client;
 
+import java.util.Date;
 import java.util.HashMap;
+
+import com.google.gwt.i18n.client.DateTimeFormat;
 
 /**
  * Injects code to bridge between GWT and applets.
  * 
  * @author Adrian Buerki <a.buerki@gmail.com>
  */
+@SuppressWarnings("unchecked")
 public class CallbackUtil {
+	private static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
+	
 	public static HashMap<String, AppletCallback> _appletCallbacks = new HashMap<String, AppletCallback>();
 	
 	public static void registerCallback(String appletName, AppletCallback appletCallback) {
 		_appletCallbacks.put(appletName, appletCallback);
 	}
 
-	public static void callbackApplet(String appletName, Object callbackValue) {
+	public static void callbackApplet(String appletName, String callbackValue, String callbackType) {
 		AppletCallback appletCallback = _appletCallbacks.get(appletName);
+		Object parsedCallbackValue;
+		
+		if (callbackType.equals(Integer.class.getName())) {
+			parsedCallbackValue = Integer.valueOf(callbackValue);
+		} else if (callbackType.equals(Float.class.getName())) {
+			parsedCallbackValue = Float.valueOf(callbackValue);
+		} else if (callbackType.equals(Date.class.getName())) {
+			parsedCallbackValue = DATE_FORMAT.parse(callbackValue);
+		} else {
+			parsedCallbackValue = callbackValue;
+		}
 		
 		if (null != appletCallback) {
-			appletCallback.callback(callbackValue);
+			appletCallback.callback(parsedCallbackValue);
 		}
 	}
 
 	public static native void defineBridgeMethod() /*-{
-	  	$wnd.callbackApplet = function(appletName, callbackValue) {
-	    	@com.google.gwt.gwtai.applet.client.CallbackUtil::callbackApplet(Ljava/lang/String;Ljava/lang/Object;)(appletName, callbackValue);
+	  	$wnd.callbackApplet = function(appletName, callbackValue, callbackType) {
+	    	@com.google.gwt.gwtai.applet.client.CallbackUtil::callbackApplet(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(appletName, callbackValue, callbackType);
 		}
 	}-*/;
 
