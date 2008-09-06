@@ -7,6 +7,6 @@
 	<classpathentry kind="lib" path="lib/tray.jar"/>
 	<classpathentry kind="var" path="GWT_HOME/gwt-dev-linux.jar"/>
 	<classpathentry kind="var" path="GWT_HOME/gwt-user.jar"/>
-	<classpathentry kind="lib" path="/usr/lib/jvm/ia32-java-6-sun-1.6.0.03/jre/lib/plugin.jar"/>
+	<classpathentry kind="lib" path="lib/plugin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

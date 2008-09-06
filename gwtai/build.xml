@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="GwtAI" default="package" basedir=".">
 
-	<property name="web.dir" value="src/com/google/gwtai/demo/public" />
+	<property name="web.dir" value="src/com/google/gwt/gwtai/demo/public" />
 	<property name="bin.dir" value="bin" />
 	<property name="src.dir" value="src" />
 	<property name="build.dir" value="build" />
 	<property name="lib.dir" value="lib" />
 	<property name="out.www.dir" value="www/com.google.gwt.gwtai.demo.GwtAI" />
-	<property name="gwt.dir" value="D:/DevTools/gwt-windows-1.5.0" />
+	<property name="gwt.dir" value="/opt/gwt-linux-1.5.2" />
 
 	<path id="project.class.path">
 		<pathelement path="${java.class.path}/" />
 		<pathelement path="${gwt.dir}/gwt-user.jar" />
 		<pathelement path="${lib.dir}/plugin.jar" />
-		<pathelement path="${gwt.dir}/gwt-dev-windows.jar" />
+		<pathelement path="${gwt.dir}/gwt-dev-linux.jar" />
 		<pathelement path="${lib.dir}/tray.jar" />
 	</path>
 
@@ -43,11 +43,12 @@
 			<jvmarg value="-Xmx512m"  /> 
 	        <classpath>
 				<pathelement path="${src.dir}" />
+	        	<pathelement path="${bin.dir}" />
 				<path refid="project.class.path" />
 	        </classpath>
 	        <arg value="-out" />
 	        <arg value="www" />
-	        <arg value="com.google.gwtai.demo.GwtAI" />
+	        <arg value="com.google.gwt.gwtai.demo.GwtAI" />
 	    </java>
 	</target> 
 
@@ -131,8 +132,14 @@
 		
 		<mkdir dir="${build.dir}/tmp" />
 		<unzip src="${lib.dir}/tray.jar" dest="${build.dir}/tmp" />
+		<!-- unzip src="${lib.dir}/jdic.jar" dest="${build.dir}/tmp" />
+			<patternset>
+		        <include name="**/tray/**"/>
+		    </patternset>
+		</unzip -->
 		<copy todir="${build.dir}/tmp">
 		  <fileset dir="${lib.dir}">
+		  	<include name="**/*.jnilib"/> 
 		    <include name="**/*.so"/> 
 		  	<include name="**/*.dll"/>
 		  </fileset>
@@ -145,9 +152,9 @@
 				<include name="com/google/gwt/gwtai/trayicon/client/**"/>
 				<include name="com/google/gwt/gwtai/trayicon/impl/**"/>
 			</fileset>
-			<fileset dir="${src.dir}">
+			<!-- fileset dir="${src.dir}">
 				<include name="com/google/gwt/gwtai/trayicon/impl/**.gif"/>
-			</fileset>
+			</fileset -->
 			<fileset dir="${build.dir}/tmp" />
 			<manifest>
 			      <attribute name="Built-By" value="Adrian Buerki"/>

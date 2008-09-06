@@ -18,6 +18,9 @@ package com.google.gwt.gwtai.applet.client;
 
 import java.util.HashMap;
 
+import com.google.gwt.core.client.JavaScriptException;
+import com.google.gwt.user.client.Window;
+
 /**
  * This abstract class provides functionality that is only meant to be used within the GwtAI
  * library. The information obtainable from a <code>AppletAccomplice</code> object are mainly
@@ -87,5 +90,23 @@ public abstract class AppletAccomplice {
 			return tmp;
 		}
 	}
+	
+	/**
+	 * Detect if an <code>Applet</code> is ready. An <code>Applet</code> is active just before its
+	 * start method is called.
+	 *
+	 * @return <code>true</code> if the <code>Applet</code> is active, <code>false</code> otherwise.
+	 */
+	public boolean isActive() {
+		try {
+			return isAppletActive();
+		} catch (JavaScriptException jse) {
+			Window.alert(jse.getDescription());
+		}
+		
+		return false;
+	}
+		
+	protected abstract boolean isAppletActive();
 
 }

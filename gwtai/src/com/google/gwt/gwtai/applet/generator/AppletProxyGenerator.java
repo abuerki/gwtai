@@ -79,91 +79,54 @@ public class AppletProxyGenerator extends Generator {
 			JMethod[] methods = classType.getOverridableMethods();
 				
 			for (JMethod method : methods) {
+				String methodDeclaration = method.getReadableDeclaration(false, false, false, false, true);
+				methodDeclaration = methodDeclaration.replace("public", "public native");
+				
 				sw.println();
 				sw.indent();
-				sw.print(method.getReadableDeclaration(false, false, false, false, true));
-				sw.println(" {");
+				sw.print(methodDeclaration);
+				sw.println(" /*-{");
 				sw.indent();
-				sw.print("Element elem = DOM.getElementById(");
-				sw.print("getId()");
-				sw.println(");");
-				
+				sw.print("var id = '");
+				sw.println(simpleName +"';");
+				sw.println("var gwtElem = @com.google.gwt.user.client.DOM::getElementById(Ljava/lang/String;)(id);");
+								
 				JParameter[] methodParams = method.getParameters();
+				String paramList = "";
 				
-				if (methodParams.length >0) {
-					String methodSignature = method.getName() + "(";
-					boolean first = true;
+				int i = 0;
 					
-					for (JParameter param : method.getParameters()) {
-						if (!first) {
-							methodSignature += ", ";
-							first = false;
-						}
-						
-						methodSignature +=  param.getType().getJNISignature();
+				for (JParameter param : methodParams) {
+					paramList += param.getName();
+
+					if ((i + 1)< method.getParameters().length) {
+						paramList += ",";
+						i++;
 					}
-					
-					methodSignature += ")";
-					
-					sw.print("Object args[] = new Object[");
-					sw.print(method.getParameters().length +"];");
-					
-					int i = 0;
-					
-					for (JParameter param : method.getParameters()) {
-						sw.print("args[");
-						sw.print(i + "] = ");
-						sw.print(param.getName());
-						sw.println(";");
-					}
-					
-					sw.print("Object obj = ");
-					sw.print("call(elem, \"");
-					sw.print(methodSignature);
-					sw.println("\", args);");
-				} else {
-					sw.print("Object obj = ");
-					sw.print("call(elem, \"");
-					sw.print(method.getName());
-					sw.println("\");");
 				}
 				
 				JType type = method.getReturnType();
 				
 				if (!type.getSimpleSourceName().equals("void")) {
-					if (null != type.isPrimitive()) {
-						sw.print("return ");
-						sw.print(type.isPrimitive().getQualifiedBoxedSourceName());
-						sw.println(".valueOf(obj.toString());"); 
-					} else {
-						sw.print("return (");
-						sw.print(type.getSimpleSourceName());
-						sw.print(") ");
-						sw.println("obj;");
-					}
+					sw.println("return gwtElem['"+method.getName()+"'](" + paramList+ ");");
+				} else {
+					sw.println("gwtElem['"+method.getName()+"'](" + paramList+ ");");
 				}
 
 				sw.outdent();
-				sw.println("}");
+				sw.println("}-*/;");
 				sw.outdent();
 			}
-
-			sw.println();
-			sw.indent();
-			sw.println("public native Object call(Element elem, String methodName, Object args[]) /*-{");
-			sw.indent();
-			sw.println("var theFunc = elem[methodName];");
-			sw.println("return theFunc(args);");
-			sw.outdent();
-			sw.println("}-*/;");
-			sw.outdent();
 			
 			sw.println();
 			sw.indent();
-			sw.println("public native Object call(Element elem, String methodName) /*-{");
+			sw.print("protected native boolean isAppletActive()");
+			sw.println(" /*-{");
 			sw.indent();
-			sw.println("var theFunc = elem[methodName];");
-			sw.println("return theFunc();");
+			sw.print("var id = '");
+			sw.println(simpleName +"';");
+			sw.println("var gwtElem = @com.google.gwt.user.client.DOM::getElementById(Ljava/lang/String;)(id);");
+			sw.println("return gwtElem['isActive']();");
 			sw.outdent();
 			sw.println("}-*/;");
 			sw.outdent();
@@ -224,7 +187,6 @@ public class AppletProxyGenerator extends Generator {
 			
 			sw.println(";");
 			sw.outdent();
-			sw.println();
 			sw.println("}");
 			sw.outdent();
 			
@@ -255,7 +217,6 @@ public class AppletProxyGenerator extends Generator {
 				sw.print(archiveAttribute.value());
 				sw.println("\";");
 				sw.outdent();
-				sw.println();
 				sw.println("}");
 				sw.outdent();
 			}

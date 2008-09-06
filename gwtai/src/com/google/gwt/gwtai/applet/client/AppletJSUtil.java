@@ -103,7 +103,17 @@ public class AppletJSUtil {
 	
 	/**
 	 * Registers an instance of your <code>AppletCallback</code> implementation to listen for callbacks coming
-	 * from the given <code>Applet</code>.
+	 * from the given <code>Applet</code>. The actual <code>Applet</code> implementation can check whether an
+	 * <code>AppletCallback</code> handler is installed, if so it can notify the given <code>AppletCallback</code>
+	 * instance about updates or events.
+	 * 
+	 * Example:
+	 * 
+	 * First, register a listening <code>AppletCallback</code> object:
+	 * <code>AppletJSUtil.registerAppletCallback(stopWatchApplet, new StopWatchCallback(panelLaps));</code>
+	 *
+	 * Then callback to GWT from your <code>Applet</code> implementation (Java):
+	 * <code>AppletUtil.callback(StopWatchAppletImpl.this, _swLabel.getText());</code>
 	 * 
 	 * @param applet - The <code>Applet</code> instance to listen to.
 	 * @param appletCallback - The <code>AppletCallback</code> instance to notify once a callback is coming.
@@ -117,6 +127,12 @@ public class AppletJSUtil {
 		}
 	}
 
+	/**
+	 * Calls the method with the given name on the <code>Applet</code> instance.
+	 *  
+	 * @param applet - The <code>Applet</code> instance to call the method on.
+	 * @param methodName - The name of the method to call.
+	 */
 	public static void call(Applet applet, String methodName) {
 		if (applet instanceof AppletAccomplice) {
 			String id = ((AppletAccomplice) applet).getId();
@@ -126,9 +142,36 @@ public class AppletJSUtil {
 		}
 	}
 	
+	/**
+	 * Calls the method with the given name on the <code>Applet</code> instance.
+	 *  
+	 * @param applet - The <code>Applet</code> instance to call the method on.
+	 * @param methodName - The name of the method to call.
+	 * @param args - The method arguments.
+	 */
+	public static void call(Applet applet, String methodName, Object[] args) {
+		if (applet instanceof AppletAccomplice) {
+			String id = ((AppletAccomplice) applet).getId();
+			Element elem = DOM.getElementById(id);
+			
+			call(elem, methodName, args);
+		}
+	}
+	
+	/**
+	 * Helper-method to do the actual calling.
+	 */
 	private static native Object call(Element elem, String methodName) /*-{
 		var theFunc = elem[methodName];
 		return theFunc();
+	}-*/;
+
+	/**
+	 * Helper-method to do the actual calling.
+	 */
+	private static native Object call(Element elem, String methodName, Object args) /*-{
+		var theFunc = elem[methodName];
+		return theFunc(args);
 	}-*/;
 
 }
