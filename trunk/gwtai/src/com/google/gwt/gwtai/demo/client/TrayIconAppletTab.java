@@ -19,10 +19,16 @@ package com.google.gwt.gwtai.demo.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.gwtai.applet.client.AppletJSUtil;
 import com.google.gwt.gwtai.trayicon.client.TrayIconApplet;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -48,9 +54,59 @@ public class TrayIconAppletTab extends Composite {
 		panelCode.setWidth("100%");
 		panelCode.setAnimationEnabled(true);
 		panelCode.setContent(createCodeHTML());
+
+		HorizontalPanel panelItems = new HorizontalPanel();
+		panelItems.setSpacing(4);
+		
+		final TextBox boxCaption = new TextBox();
+		
+		final ListBox boxItemType = new ListBox();
+		boxItemType.addItem("Text");
+		boxItemType.addItem("RadioButton");
+		boxItemType.addItem("CheckBox");
+		boxItemType.setSelectedIndex(0);
+		
+		Button buttonAdd = new Button("Add menu item");
+		
+		buttonAdd.addClickListener(new ClickListener() {
+
+			public void onClick(Widget sender) {
+				String caption = boxCaption.getText();
+				
+				if (null == caption || caption.length() < 1) {
+					Window.alert("Caption can not be empty");
+				} else {
+					String itemType = boxItemType.getItemText(boxItemType.getSelectedIndex());
+					
+					if (itemType.equals("RadioButton")) {
+						_trayIconApplet.addRadioButtonItem(caption);
+					} else if (itemType.equals("CheckBox")) {
+						_trayIconApplet.addCheckBoxItem(caption);
+					} else {
+						_trayIconApplet.addTextItem(caption);
+					}
+				}
+			}
+			
+		});
+		
+		Button buttonSeparator = new Button("Add separator");
+		buttonSeparator.addClickListener(new ClickListener() {
+
+			public void onClick(Widget sender) {
+				_trayIconApplet.addSeparator();
+			}
+			
+		});
+		
+		panelItems.add(boxCaption);
+		panelItems.add(boxItemType);
+		panelItems.add(buttonAdd);
+		panelItems.add(buttonSeparator);
 		
 		panelMain.add(labelTitle);
 		panelMain.add(widgetApplet);
+		panelMain.add(panelItems);
 		panelMain.add(panelCode);
 		
 		panelMain.setCellHorizontalAlignment(labelTitle, VerticalPanel.ALIGN_CENTER);
@@ -73,7 +129,7 @@ public class TrayIconAppletTab extends Composite {
 			"initWidget(panelMain);\n" +
 			"...</pre>";
 		
-			return new HTML(html);
+		return new HTML(html);
 	}
 
 }

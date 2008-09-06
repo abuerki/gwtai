@@ -17,14 +17,14 @@
 package com.google.gwt.gwtai.applet.client;
 
 /**
- * A tag interface that facilitates compile-time creation of an handle objects
- * for Java Applet classes. Such a handle can be used to call methods in
- * the Applet from within a GWT application.
+ * A tag interface that facilitates compile-time creation of an handle objects for Java Applet
+ * classes. Such a handle can be used to call methods in the Applet from within a GWT application.
  * 
- * Using <code>GWT.create(<i>class</i>)</code> to 'instantiate' an interface that
- * extends <code>Applet</code> returns an instance of an automatically
- * generated subclass that implements proxy methods to the actual implementation in
- * the Java Applet class.
+ * Using <code>GWT.create(<i>class</i>)</code> to 'instantiate' an interface that extends
+ * <code>Applet</code> returns an instance of an automatically generated subclass that implements
+ * proxy methods to the actual implementation in the Java Applet class. All public methods declared
+ * in the interface extending <code>Applet</code> will be wrapped and made available in the proxy
+ * class.
  * 
  * @author Adrian Buerki <a.buerki@gmail.com>
  */ 

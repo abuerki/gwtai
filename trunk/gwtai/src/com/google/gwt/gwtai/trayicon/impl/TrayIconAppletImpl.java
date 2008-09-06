@@ -51,6 +51,7 @@ public class TrayIconAppletImpl extends JApplet implements TrayIconApplet {
 	private SystemTray _tray;
 	private JPopupMenu _menu;
 	private TrayIcon _trayIcon;
+	private JCheckBox _cbTrayIcon;
 
 	public TrayIconAppletImpl() {
 		try {
@@ -59,16 +60,22 @@ public class TrayIconAppletImpl extends JApplet implements TrayIconApplet {
 			throw new RuntimeException("Can not add tray native library to the java.library.path",
 					e);
 		}
-
-		System.out.println(System.getProperty("java.library.path"));
 	}
 
 	public void showTrayIcon() {
 		_tray.addTrayIcon(_trayIcon);
+		
+		if (!_cbTrayIcon.isSelected()) {
+			_cbTrayIcon.setSelected(true);
+		}
 	}
 
 	public void hideTrayIcon() {
 		_tray.removeTrayIcon(_trayIcon);
+		
+		if (_cbTrayIcon.isSelected()) {
+			_cbTrayIcon.setSelected(false);
+		}
 	}
 	
     public void addSeparator() {
@@ -97,13 +104,13 @@ public class TrayIconAppletImpl extends JApplet implements TrayIconApplet {
 	public void init() {
 		JPanel panelMain = new JPanel();
 		
-		final JCheckBox cbTrayIcon = new JCheckBox("Show tray icon");
-		cbTrayIcon.setBackground(Color.WHITE);
+		_cbTrayIcon = new JCheckBox("Show tray icon");
+		_cbTrayIcon.setBackground(Color.WHITE);
 
-		cbTrayIcon.addActionListener(new ActionListener() {
+		_cbTrayIcon.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				if (cbTrayIcon.isSelected()) {
+				if (_cbTrayIcon.isSelected()) {
 					showTrayIcon();
 				} else {
 					hideTrayIcon();
@@ -112,7 +119,7 @@ public class TrayIconAppletImpl extends JApplet implements TrayIconApplet {
 
 		});
 
-		panelMain.add(cbTrayIcon);
+		panelMain.add(_cbTrayIcon);
 
 		_tray = SystemTray.getDefaultSystemTray();
 
@@ -131,12 +138,6 @@ public class TrayIconAppletImpl extends JApplet implements TrayIconApplet {
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
-		
-		addTextItem("A menu item");
-		addTextItem("Another one");
-		addSeparator();
-		addRadioButtonItem("A radio button");
-		addCheckBoxItem("A check box");
 		
 		panelMain.setBorder(BorderFactory.createTitledBorder("TrayIconApplet"));
 		panelMain.setBackground(Color.WHITE);

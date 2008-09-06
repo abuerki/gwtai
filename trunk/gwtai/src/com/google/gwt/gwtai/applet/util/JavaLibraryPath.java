@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.util.Properties;
+import java.util.Random;
 
 /**
  * Solution to make native libraries available for an applet. Some of the code
@@ -33,6 +34,7 @@ import java.util.Properties;
  * @author Adrian Buerki <a.buerki@gmail.com>
  */
 public class JavaLibraryPath {
+	private static final Random RANDOM = new Random();
 	
 	/**
 	 * Extract the tray.dll or libtray.so (depending on the Operating System)
@@ -54,37 +56,52 @@ public class JavaLibraryPath {
 			}
 		} else if (osName.contains("Linux")) {
 			path = extract("linux", "libtray.so");
+		} else if (osName.startsWith("mac os x")) {
+			path = extract("mac", "libtray.jnilib");
 		} else {
-			path = extract("win", "tray.dll");
+			path = extract("win", "tray.dll"); // , "jdic.dll", "WinMsiWrapper.dll");
 		}
 
 		add(path);
 	}
 	
-	private static File extract(String packageName, String resourceName) throws Exception {
-		InputStream fin = JavaLibraryPath.class.getResourceAsStream("/" + packageName + "/" + resourceName);
-			
+	private static File extract(String packageName, String... resourceNames) throws Exception {
 		String tmpDirName = System.getProperty("java.io.tmpdir");
 			
 		if (null == tmpDirName) {
 			tmpDirName = System.getProperty("user.home");
 		}
-			
-		File tmpFile = new File(tmpDirName + resourceName);
+
+		tmpDirName += File.separator + "ld" + RANDOM.nextInt(100);
 		
-		if (!tmpFile.exists()) {
-			tmpFile.createNewFile();
-			// tmpFile.deleteOnExit();
+		File tmpDirFile = new File(tmpDirName);
+		
+		if (!tmpDirFile.exists()) {
+			tmpDirFile.mkdir();
+		}
+		
+		InputStream fin;
+		File tmpFile;
+		
+		for (String resourceName: resourceNames) {
+			fin = JavaLibraryPath.class.getResourceAsStream("/" + packageName + "/" + resourceName);
+			tmpFile = new File(tmpDirName + File.separator + resourceName);
+
+			if (!tmpFile.exists()) {
+				tmpFile.createNewFile();
+			}
 	    
 			OutputStream fout = new FileOutputStream(tmpFile);
 	        
 			byte[] buf = new byte[1024];
 			int len;
+		
 			while ((len = fin.read(buf)) > 0) {
 				fout.write(buf, 0, len);
 			}
 
 			fin.close();
+			fout.flush();
 			fout.close();
 		}
 
