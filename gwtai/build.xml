@@ -6,6 +6,7 @@
 	<property name="src.dir" value="src" />
 	<property name="build.dir" value="build" />
 	<property name="lib.dir" value="lib" />
+	<property name="doc.dir" value="doc/api" />
 	<property name="out.www.dir" value="www/com.google.gwt.gwtai.demo.GwtAI" />
 	<property name="gwt.dir" value="/opt/gwt-linux-1.5.2" />
 
@@ -24,6 +25,7 @@
 		<mkdir dir="${bin.dir}" />
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${out.www.dir}" />
+		<mkdir dir="${doc.dir}"/>
 	</target>
 
 	<target name="compile" depends="init">
@@ -188,6 +190,20 @@
 		<signjar jar="${build.dir}/${ant.project.name}-Demo.jar" alias="Adrian Buerki" storepass="gwtaigwtai" keystore=".keystore" />
 	</target>
 
+	<target name="create-javadoc" depends="init">
+		<javadoc packagenames="com.google.gwt.gwtai.*"
+				sourcepath="${src.dir}"
+				defaultexcludes="yes"
+				destdir="${doc.dir}"
+				author="true"
+				version="true"
+				use="true"
+				windowtitle="gwtai API">
+			<classpath refid="project.class.path" />
+			<bottom><![CDATA[<i>For more information visit the <a target="_top" href="http://code.google.com/p/gwtai/">gwtai project homepage</a></i>]]></bottom>
+		</javadoc>
+	</target>
+	
 	<target name="all" depends="package" />
 
 </project>

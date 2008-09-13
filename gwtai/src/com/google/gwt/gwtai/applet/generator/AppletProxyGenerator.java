@@ -38,104 +38,123 @@ import com.google.gwt.gwtai.applet.client.ImplementingClass;
 import com.google.gwt.gwtai.applet.client.Params;
 import com.google.gwt.gwtai.applet.client.Width;
 
+/**
+ * GWT Generator that creates the proxy classes to access the applet. The proxy
+ * classes consist mostly of native JavaScript code embedded with GWT's JNSI
+ * functionality. 
+ * 
+ * @author Adrian Buerki <a.buerki@gmail.com>
+ */
 public class AppletProxyGenerator extends Generator {
 	private HashMap<String, String> _createdClassNames;
-	
+
 	public AppletProxyGenerator() {
 		_createdClassNames = new HashMap<String, String>();
 	}
 
-	public String generate(TreeLogger logger, GeneratorContext context, String typeName)
-			throws UnableToCompleteException {
-		
+	public String generate(TreeLogger logger, GeneratorContext context,
+			String typeName) throws UnableToCompleteException {
+
 		String createdClassName = _createdClassNames.get(typeName);
-		
+
 		if (null == createdClassName) {
 			JClassType classType;
-			
-			try {			
+
+			try {
 				classType = context.getTypeOracle().getType(typeName);
 			} catch (Exception e) {
 				logger.log(Type.ERROR, e.getMessage(), e);
-				
+
 				throw new UnableToCompleteException();
 			}
-			
-			String packageName = classType.getPackage().getName ();
+
+			String packageName = classType.getPackage().getName();
 			String simpleName = classType.getSimpleSourceName() + "Impl";
-			ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
-			
+			ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(
+					packageName, simpleName);
+
 			composer.addImport("java.util.HashMap");
-			composer.addImport("com.google.gwt.gwtai.applet.client.AppletCallback");
+			composer
+					.addImport("com.google.gwt.gwtai.applet.client.AppletCallback");
 			composer.addImport("com.google.gwt.dom.client.Element");
 			composer.addImport("com.google.gwt.user.client.DOM");
-			
+
 			composer.addImplementedInterface(typeName);
-			composer.setSuperclass("com.google.gwt.gwtai.applet.client.AppletAccomplice");
-			
-			PrintWriter printWriter = context.tryCreate (logger, packageName, simpleName);
+			composer
+					.setSuperclass("com.google.gwt.gwtai.applet.client.AppletAccomplice");
+
+			PrintWriter printWriter = context.tryCreate(logger, packageName,
+					simpleName);
 			SourceWriter sw = composer.createSourceWriter(context, printWriter);
-				
+
 			JMethod[] methods = classType.getOverridableMethods();
-				
+
 			for (JMethod method : methods) {
-				String methodDeclaration = method.getReadableDeclaration(false, false, false, false, true);
-				methodDeclaration = methodDeclaration.replace("public", "public native");
-				
+				String methodDeclaration = method.getReadableDeclaration(false,
+						false, false, false, true);
+				methodDeclaration = methodDeclaration.replace("public",
+						"public native");
+
 				sw.println();
 				sw.indent();
 				sw.print(methodDeclaration);
 				sw.println(" /*-{");
 				sw.indent();
 				sw.print("var id = '");
-				sw.println(simpleName +"';");
-				sw.println("var gwtElem = @com.google.gwt.user.client.DOM::getElementById(Ljava/lang/String;)(id);");
-								
+				sw.println(simpleName + "';");
+				sw
+						.println("var gwtElem = @com.google.gwt.user.client.DOM::getElementById(Ljava/lang/String;)(id);");
+
 				JParameter[] methodParams = method.getParameters();
 				String paramList = "";
-				
+
 				int i = 0;
-					
+
 				for (JParameter param : methodParams) {
 					paramList += param.getName();
 
-					if ((i + 1)< method.getParameters().length) {
+					if ((i + 1) < method.getParameters().length) {
 						paramList += ",";
 						i++;
 					}
 				}
-				
+
 				JType type = method.getReturnType();
-				
+
 				if (!type.getSimpleSourceName().equals("void")) {
-					sw.println("return gwtElem['"+method.getName()+"'](" + paramList+ ");");
+					sw.println("return gwtElem['" + method.getName() + "']("
+							+ paramList + ");");
 				} else {
-					sw.println("gwtElem['"+method.getName()+"'](" + paramList+ ");");
+					sw.println("gwtElem['" + method.getName() + "']("
+							+ paramList + ");");
 				}
 
 				sw.outdent();
 				sw.println("}-*/;");
 				sw.outdent();
 			}
-			
+
 			sw.println();
 			sw.indent();
 			sw.print("protected native boolean isAppletActive()");
 			sw.println(" /*-{");
 			sw.indent();
 			sw.print("var id = '");
-			sw.println(simpleName +"';");
-			sw.println("var gwtElem = @com.google.gwt.user.client.DOM::getElementById(Ljava/lang/String;)(id);");
+			sw.println(simpleName + "';");
+			sw
+					.println("var gwtElem = @com.google.gwt.user.client.DOM::getElementById(Ljava/lang/String;)(id);");
 			sw.println("return gwtElem['isActive']();");
 			sw.outdent();
 			sw.println("}-*/;");
 			sw.outdent();
-				
-			ImplementingClass implementingClass = classType.getAnnotation(ImplementingClass.class);
-				
+
+			ImplementingClass implementingClass = classType
+					.getAnnotation(ImplementingClass.class);
+
 			if (null == implementingClass) {
-				logger.log(Type.ERROR, "Implementing class annotation is missing.");
-					
+				logger.log(Type.ERROR,
+						"Implementing class annotation is missing.");
+
 				throw new UnableToCompleteException();
 			}
 
@@ -149,49 +168,49 @@ public class AppletProxyGenerator extends Generator {
 			sw.outdent();
 			sw.println("}");
 			sw.outdent();
-			
+
 			Width widthAttribute = classType.getAnnotation(Width.class);
-			
+
 			sw.println();
 			sw.indent();
-			sw.println("public int getWidth() {");
+			sw.println("public String getWidth() {");
 			sw.indent();
 			sw.print("return ");
-			
+
 			if (null == widthAttribute) {
 				// Default to 350
-				sw.print("350");
+				sw.print("\"350\"");
 			} else {
-				sw.print(widthAttribute.value() + "");
+				sw.print("\"" + widthAttribute.value() + "\"");
 			}
-			
+
 			sw.println(";");
 			sw.outdent();
 			sw.println("}");
 			sw.outdent();
-			
+
 			Height heigthAttribute = classType.getAnnotation(Height.class);
-			
+
 			sw.println();
 			sw.indent();
-			sw.println("public int getHeight() {");
+			sw.println("public String getHeight() {");
 			sw.indent();
 			sw.print("return ");
-			
+
 			if (null == heigthAttribute) {
 				// Default to 350
-				sw.print("350");
+				sw.print("\"350\"");
 			} else {
-				sw.print(heigthAttribute.value() + "");
+				sw.print("\"" + heigthAttribute.value() + "\"");
 			}
-			
+
 			sw.println(";");
 			sw.outdent();
 			sw.println("}");
 			sw.outdent();
-			
+
 			Align alignAttribute = classType.getAnnotation(Align.class);
-			
+
 			if (null != alignAttribute) {
 				sw.println();
 				sw.indent();
@@ -205,9 +224,9 @@ public class AppletProxyGenerator extends Generator {
 				sw.println("}");
 				sw.outdent();
 			}
-			
+
 			Archive archiveAttribute = classType.getAnnotation(Archive.class);
-			
+
 			if (null != archiveAttribute) {
 				sw.println();
 				sw.indent();
@@ -220,9 +239,10 @@ public class AppletProxyGenerator extends Generator {
 				sw.println("}");
 				sw.outdent();
 			}
-			
-			Codebase codeBaseAttribute = classType.getAnnotation(Codebase.class);
-			
+
+			Codebase codeBaseAttribute = classType
+					.getAnnotation(Codebase.class);
+
 			if (null != codeBaseAttribute) {
 				sw.println();
 				sw.indent();
@@ -236,19 +256,20 @@ public class AppletProxyGenerator extends Generator {
 				sw.println("}");
 				sw.outdent();
 			}
-			
+
 			Params paramAttribute = classType.getAnnotation(Params.class);
-			
+
 			if (null != paramAttribute) {
 				sw.println();
 				sw.indent();
 				sw.println("public HashMap<String, String> getParameters() {");
 				sw.indent();
-				sw.println("HashMap<String, String> props = new HashMap<String, String>();");
-				
+				sw
+						.println("HashMap<String, String> props = new HashMap<String, String>();");
+
 				String[] names = paramAttribute.names();
 				String[] values = paramAttribute.values();
-				
+
 				for (int i = 0; i < names.length; i++) {
 					sw.print("props.put(\"");
 					sw.print(names[i]);
@@ -263,11 +284,11 @@ public class AppletProxyGenerator extends Generator {
 				sw.println("}");
 				sw.outdent();
 			}
-			
+
 			sw.commit(logger);
-			
+
 			createdClassName = composer.getCreatedClassName();
-			
+
 			_createdClassNames.put(typeName, createdClassName);
 		}
 

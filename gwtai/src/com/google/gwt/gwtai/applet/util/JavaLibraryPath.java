@@ -27,75 +27,80 @@ import java.util.Random;
 /**
  * Solution to make native libraries available for an applet. Some of the code
  * in this class has been copied from the Java Sun forums:
+ * <ul>
+ * <li>http://forum.java.sun.com/thread.jspa?threadID=627890&start=15</li>
+ * <li>http://forum.java.sun.com/thread.jspa?threadID=658650&messageID=3875555</li>
+ * </ul>
  * 
- * - http://forum.java.sun.com/thread.jspa?threadID=627890&start=15
- * - http://forum.java.sun.com/thread.jspa?threadID=658650&messageID=3875555
- *               
  * @author Adrian Buerki <a.buerki@gmail.com>
  */
 public class JavaLibraryPath {
 	private static final Random RANDOM = new Random();
-	
+
 	/**
-	 * Extract the tray.dll or libtray.so (depending on the Operating System)
-	 * into a temporary location and add this very location to the
-	 * <i>java.library.path</i> path.
+	 * Extract the given files into a temporary location and add this very
+	 * location to the <i>java.library.path</i> path.
 	 * 
-	 * @throws Exception In case of an error.
+	 * @throws Exception
+	 *             In case of an error.
 	 */
-	public static void injectTrayNativLib() throws Exception {
+	public static void injectNativLib(LibraryElement... pathElements)
+			throws Exception {
 		String osName = System.getProperty("os.name");
 		String osAch = System.getProperty("os.arch");
-		File path;
-		
-		if (osName.contains("Solaris") || osName.contains("SunOS")) {
-			if (osAch.contains("x86")) {
-				path = extract("solaris/x86", "libtray.so");
-			} else {
-				path = extract("solaris/sparc", "libtray.so");
+		File path = null;
+
+		for (LibraryElement pathElement : pathElements) {
+			if (pathElement.matchesOsNameAndArch(osName, osAch)) {
+				if (path == null) {
+					path = extract(pathElement.getPackageName(), pathElement
+							.getLibraryName());
+				} else {
+					path = extract(path, pathElement.getPackageName(),
+							pathElement.getLibraryName());
+				}
 			}
-		} else if (osName.contains("Linux")) {
-			path = extract("linux", "libtray.so");
-		} else if (osName.startsWith("mac os x")) {
-			path = extract("mac", "libtray.jnilib");
-		} else {
-			path = extract("win", "tray.dll"); // , "jdic.dll", "WinMsiWrapper.dll");
 		}
+
+		if (path != null) {
+			add(path);
+		}
+	}
+
+	/**
+	 * Extract the given files into a temporary location and add this very
+	 * location to the <i>java.library.path</i> path.
+	 * 
+	 * @throws Exception
+	 *             In case of an error.
+	 */
+	public static void injectNativLib(String folderName, String... fileNames)
+			throws Exception {
+		File path = extract(folderName, fileNames);
 
 		add(path);
 	}
-	
-	private static File extract(String packageName, String... resourceNames) throws Exception {
-		String tmpDirName = System.getProperty("java.io.tmpdir");
-			
-		if (null == tmpDirName) {
-			tmpDirName = System.getProperty("user.home");
-		}
 
-		tmpDirName += File.separator + "ld" + RANDOM.nextInt(100);
-		
-		File tmpDirFile = new File(tmpDirName);
-		
-		if (!tmpDirFile.exists()) {
-			tmpDirFile.mkdir();
-		}
-		
+	private static File extract(File tmpDirFile, String packageName,
+			String... resourceNames) throws Exception {
 		InputStream fin;
 		File tmpFile;
-		
-		for (String resourceName: resourceNames) {
-			fin = JavaLibraryPath.class.getResourceAsStream("/" + packageName + "/" + resourceName);
-			tmpFile = new File(tmpDirName + File.separator + resourceName);
+
+		for (String resourceName : resourceNames) {
+			fin = JavaLibraryPath.class.getResourceAsStream("/" + packageName
+					+ "/" + resourceName);
+			tmpFile = new File(tmpDirFile.getPath() + File.separator
+					+ resourceName);
 
 			if (!tmpFile.exists()) {
 				tmpFile.createNewFile();
 			}
-	    
+
 			OutputStream fout = new FileOutputStream(tmpFile);
-	        
+
 			byte[] buf = new byte[1024];
 			int len;
-		
+
 			while ((len = fin.read(buf)) > 0) {
 				fout.write(buf, 0, len);
 			}
@@ -105,7 +110,26 @@ public class JavaLibraryPath {
 			fout.close();
 		}
 
-		return new File(tmpDirName);
+		return tmpDirFile;
+	}
+
+	private static File extract(String packageName, String... resourceNames)
+			throws Exception {
+		String tmpDirName = System.getProperty("java.io.tmpdir");
+
+		if (null == tmpDirName) {
+			tmpDirName = System.getProperty("user.home");
+		}
+
+		tmpDirName += File.separator + "ld" + RANDOM.nextInt(100);
+
+		File tmpDirFile = new File(tmpDirName);
+
+		if (!tmpDirFile.exists()) {
+			tmpDirFile.mkdir();
+		}
+
+		return extract(tmpDirFile, packageName, resourceNames);
 	}
 
 	private static void add(File path) throws Exception {
@@ -113,22 +137,21 @@ public class JavaLibraryPath {
 		if (newLibraryPath == null || newLibraryPath.length() < 1) {
 			newLibraryPath = path.getCanonicalPath();
 		} else {
-			newLibraryPath += File.pathSeparator +
-			path.getCanonicalPath();
+			newLibraryPath += File.pathSeparator + path.getCanonicalPath();
 		}
-	 
+
 		Field f = System.class.getDeclaredField("props");
 		f.setAccessible(true);
 		Properties props = (Properties) f.get(null);
 
 		props.put("java.library.path", newLibraryPath);
-	 
+
 		Field usr_pathsField = ClassLoader.class.getDeclaredField("usr_paths");
 		usr_pathsField.setAccessible(true);
 		String[] usr_paths = (String[]) usr_pathsField.get(null);
-		String[] newUsr_paths = new String[usr_paths == null ? 1 : 
-			usr_paths.length + 1];
-		
+		String[] newUsr_paths = new String[usr_paths == null ? 1
+				: usr_paths.length + 1];
+
 		if (usr_paths != null) {
 			System.arraycopy(usr_paths, 0, newUsr_paths, 0, usr_paths.length);
 		}

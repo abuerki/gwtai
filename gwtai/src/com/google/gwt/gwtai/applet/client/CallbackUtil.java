@@ -28,18 +28,21 @@ import com.google.gwt.i18n.client.DateTimeFormat;
  */
 @SuppressWarnings("unchecked")
 public class CallbackUtil {
-	private static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
-	
+	private static final DateTimeFormat DATE_FORMAT = DateTimeFormat
+			.getFormat("yyyy-MM-dd HH:mm:ss");
+
 	public static HashMap<String, AppletCallback> _appletCallbacks = new HashMap<String, AppletCallback>();
-	
-	public static void registerCallback(String appletName, AppletCallback appletCallback) {
+
+	public static void registerCallback(String appletName,
+			AppletCallback appletCallback) {
 		_appletCallbacks.put(appletName, appletCallback);
 	}
 
-	public static void callbackApplet(String appletName, String callbackValue, String callbackType) {
+	public static void callbackApplet(String appletName, String callbackValue,
+			String callbackType) {
 		AppletCallback appletCallback = _appletCallbacks.get(appletName);
 		Object parsedCallbackValue;
-		
+
 		if (callbackType.equals(Integer.class.getName())) {
 			parsedCallbackValue = Integer.valueOf(callbackValue);
 		} else if (callbackType.equals(Float.class.getName())) {
@@ -49,7 +52,7 @@ public class CallbackUtil {
 		} else {
 			parsedCallbackValue = callbackValue;
 		}
-		
+
 		if (null != appletCallback) {
 			appletCallback.callback(parsedCallbackValue);
 		}

@@ -22,9 +22,16 @@ import com.google.gwt.gwtai.applet.client.Height;
 import com.google.gwt.gwtai.applet.client.ImplementingClass;
 import com.google.gwt.gwtai.applet.client.Width;
 
+/**
+ * The applet methods that shall be available from GWT are defined in this
+ * interface. There are also a couple of annotations used to configure how the
+ * applet is embedded within the page (the applet's dimension and other stuff).
+ * 
+ * @author Adrian Buerki <a.buerki@gmail.com>
+ */
 @ImplementingClass(com.google.gwt.gwtai.demo.impl.StopWatchAppletImpl.class)
-@Height(100)
-@Width(350)
+@Height("100")
+@Width("350")
 @Archive("GwtAI-Core.jar,GwtAI-Demo.jar")
 public interface StopWatchApplet extends Applet {
 	

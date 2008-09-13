@@ -21,27 +21,32 @@ import static java.lang.annotation.ElementType.TYPE;
 import java.lang.annotation.Target;
 
 /**
- * The <code>Align</code> Annotation specifies the value that is filled into the applet's ALIGN
- * attribute. The ALIGN attributes define the alignment of the applet. The possible values of this
- * attribute are:
- * - left
- * - right
- * - top
- * - texttop
- * - middle
- * - absmiddle
- * - baseline
- * - bottom
- * - absbottom
+ * The <code>Align</code> Annotation specifies the value that is filled into
+ * the applet's ALIGN attribute. The ALIGN attributes define the alignment of
+ * the applet. The possible values of this attribute are:
+ * <ul>
+ * <li>left</li>
+ * <li>right</li>
+ * <li>top</li>
+ * <li>texttop</li>
+ * <li>middle</li>
+ * <li>absmiddle</li>
+ * <li>baseline</li>
+ * <li>bottom</li>
+ * <li>absbottom</li>
+ * </ul>
  * 
- * This Annotation is optional.
+ * This Annotation is optional. The value is of type
+ * <code>Align.Alignment</code>.
  * 
  * @author Adrian Buerki <a.buerki@gmail.com>
  */
 @Target(TYPE)
 public @interface Align {
-	enum Alignment {left, right, top, texttop, middle, absmiddle, baseline, bottom, absbottom}; 
-	
+	enum Alignment {
+		left, right, top, texttop, middle, absmiddle, baseline, bottom, absbottom
+	};
+
 	Alignment value();
 
 }

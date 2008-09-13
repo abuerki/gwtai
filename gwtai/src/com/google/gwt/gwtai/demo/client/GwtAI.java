@@ -21,7 +21,8 @@ import com.google.gwt.user.client.ui.DecoratedTabPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
- * Entry point classes define <code>onModuleLoad()</code>.
+ * Entry point represents the demo's main class, its <code>onModuleLoad()</code>
+ * it the first thing that is called once the page is loaded.
  * 
  * @author Adrian Buerki <a.buerki@gmail.com>
  */
@@ -32,17 +33,17 @@ public class GwtAI implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 		DecoratedTabPanel tabPanel = new DecoratedTabPanel();
-	    tabPanel.setWidth("600px");
+		tabPanel.setWidth("600px");
 
-	    tabPanel.getDeckPanel().setAnimationEnabled(true);
-	    
-	    tabPanel.add(new CounterAppletTab(), "Counter");
-	    tabPanel.add(new StopWatchAppletTab(), "Stop Watch");
-	    tabPanel.add(new TrayIconAppletTab(), "Tray Icon");
-	    
-	    tabPanel.selectTab(0);
+		tabPanel.getDeckPanel().setAnimationEnabled(true);
+
+		tabPanel.add(new CounterAppletTab(), "Counter");
+		tabPanel.add(new StopWatchAppletTab(), "Stop Watch");
+		tabPanel.add(new TrayIconAppletTab(), "Tray Icon");
+
+		tabPanel.selectTab(0);
 
 		RootPanel.get().add(tabPanel);
 	}
-  
+
 }

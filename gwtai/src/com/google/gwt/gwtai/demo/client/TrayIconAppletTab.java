@@ -44,12 +44,13 @@ public class TrayIconAppletTab extends Composite {
 		VerticalPanel panelMain = new VerticalPanel();
 		panelMain.setWidth("100%");
 		panelMain.setSpacing(4);
-		
+
 		_trayIconApplet = (TrayIconApplet) GWT.create(TrayIconApplet.class);
-		
+
 		Widget widgetApplet = AppletJSUtil.createAppletWidget(_trayIconApplet);
 
-		Label labelTitle = new Label("Hook into the desktop tray from a GWT application. This is a 'Proof of Concept', the feature is not finished yet.");
+		Label labelTitle = new Label(
+				"Hook into the desktop tray from a GWT application. This is a 'Proof of Concept', the feature is not finished yet.");
 		DisclosurePanel panelCode = new DisclosurePanel("View code");
 		panelCode.setWidth("100%");
 		panelCode.setAnimationEnabled(true);
@@ -57,27 +58,28 @@ public class TrayIconAppletTab extends Composite {
 
 		HorizontalPanel panelItems = new HorizontalPanel();
 		panelItems.setSpacing(4);
-		
+
 		final TextBox boxCaption = new TextBox();
-		
+
 		final ListBox boxItemType = new ListBox();
 		boxItemType.addItem("Text");
 		boxItemType.addItem("RadioButton");
 		boxItemType.addItem("CheckBox");
 		boxItemType.setSelectedIndex(0);
-		
+
 		Button buttonAdd = new Button("Add menu item");
-		
+
 		buttonAdd.addClickListener(new ClickListener() {
 
 			public void onClick(Widget sender) {
 				String caption = boxCaption.getText();
-				
+
 				if (null == caption || caption.length() < 1) {
 					Window.alert("Caption can not be empty");
 				} else {
-					String itemType = boxItemType.getItemText(boxItemType.getSelectedIndex());
-					
+					String itemType = boxItemType.getItemText(boxItemType
+							.getSelectedIndex());
+
 					if (itemType.equals("RadioButton")) {
 						_trayIconApplet.addRadioButtonItem(caption);
 					} else if (itemType.equals("CheckBox")) {
@@ -87,48 +89,48 @@ public class TrayIconAppletTab extends Composite {
 					}
 				}
 			}
-			
+
 		});
-		
+
 		Button buttonSeparator = new Button("Add separator");
 		buttonSeparator.addClickListener(new ClickListener() {
 
 			public void onClick(Widget sender) {
 				_trayIconApplet.addSeparator();
 			}
-			
+
 		});
-		
+
 		panelItems.add(boxCaption);
 		panelItems.add(boxItemType);
 		panelItems.add(buttonAdd);
 		panelItems.add(buttonSeparator);
-		
+
 		panelMain.add(labelTitle);
 		panelMain.add(widgetApplet);
 		panelMain.add(panelItems);
 		panelMain.add(panelCode);
-		
-		panelMain.setCellHorizontalAlignment(labelTitle, VerticalPanel.ALIGN_CENTER);
-		panelMain.setCellHorizontalAlignment(widgetApplet, VerticalPanel.ALIGN_CENTER);
+
+		panelMain.setCellHorizontalAlignment(labelTitle,
+				VerticalPanel.ALIGN_CENTER);
+		panelMain.setCellHorizontalAlignment(widgetApplet,
+				VerticalPanel.ALIGN_CENTER);
 
 		initWidget(panelMain);
 	}
 
 	/**
-	 * Helper-Method to construct an HTML element containing some example code snippets.
+	 * Helper-Method to construct an HTML element containing some example code
+	 * snippets.
 	 */
 	private HTML createCodeHTML() {
-		String html =
-			"<b>TrayIconAppletTab.java</b>" +
-			"<pre>...\n" +
-			"TrayIconApplet trayIconApplet = (TrayIconApplet) GWT.create(TrayIconApplet.class);\n" +
-			"Widget widgetApplet = AppletJSUtil.createAppletWidget(trayIconApplet);\n" +
-			"...\n" +
-			"panelMain.add(widgetApplet);\n" +
-			"initWidget(panelMain);\n" +
-			"...</pre>";
-		
+		String html = "<b>TrayIconAppletTab.java</b>"
+				+ "<pre>...\n"
+				+ "TrayIconApplet trayIconApplet = (TrayIconApplet) GWT.create(TrayIconApplet.class);\n"
+				+ "Widget widgetApplet = AppletJSUtil.createAppletWidget(trayIconApplet);\n"
+				+ "...\n" + "panelMain.add(widgetApplet);\n"
+				+ "initWidget(panelMain);\n" + "...</pre>";
+
 		return new HTML(html);
 	}
 

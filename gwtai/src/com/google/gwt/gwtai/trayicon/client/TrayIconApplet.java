@@ -24,13 +24,18 @@ import com.google.gwt.gwtai.applet.client.Params;
 import com.google.gwt.gwtai.applet.client.Width;
 
 /**
- * Don't call the add methods to soon. Make sure the applet is initialized first.
+ * The applet methods that shall be available from GWT are defined in this
+ * interface. There are also a couple of annotations used to configure how the
+ * applet is embedded within the page (the applet's dimension and other stuff).
+ * 
+ * Note; don't call the add methods to soon. Make sure the applet is
+ * initialized first.
  * 
  * @author Adrian Buerki <a.buerki@gmail.com>
  */
 @ImplementingClass(com.google.gwt.gwtai.trayicon.impl.TrayIconAppletImpl.class)
-@Height(70)
-@Width(200)
+@Height("70")
+@Width("200")
 @Archive("GwtAI-Core.jar,GwtAI-Demo.jar")
 @Params(names={"name1", "name2"}, values={"value1", "value2"})
 public interface TrayIconApplet extends Applet {

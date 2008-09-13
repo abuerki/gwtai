@@ -26,96 +26,114 @@ import netscape.javascript.JSObject;
  * Applet-side utility class.
  * 
  * @author Adrian Buerki <a.buerki@gmail.com>
- */ 
+ */
 public class AppletUtil {
-	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
+			"yyyy-MM-dd HH:mm:ss");
+
 	/**
-	 * <code>Float</code>s will be converted and sent as <code>String</code>s, once arrived in the
-	 * JavaScript world GwtAI parses the number back into an appropriate GWT object.
+	 * <code>Float</code>s will be converted and sent as <code>String</code>s,
+	 * once arrived in the JavaScript world GwtAI parses the number back into an
+	 * appropriate GWT object.
 	 * 
-	 * @param applet - The <code>Applet</code> doing the callback.
-	 * @param callbackValue - The value to send.
+	 * @param applet -
+	 *            The <code>Applet</code> doing the callback.
+	 * @param callbackValue -
+	 *            The value to send.
 	 */
 	public static void callback(Applet applet, Float callbackValue) {
 		String transferString;
-		
+
 		if (null == callbackValue) {
 			transferString = "";
 		} else {
 			transferString = callbackValue.toString();
 		}
-		
+
 		callback(applet, transferString, Float.class.getName());
 	}
-	
+
 	/**
-	 * <code>Integer</code>s will be converted and sent as <code>String</code>s, once arrived in the
-	 * JavaScript world GwtAI parses the number back into an appropriate GWT object.
+	 * <code>Integer</code>s will be converted and sent as
+	 * <code>String</code>s, once arrived in the JavaScript world GwtAI
+	 * parses the number back into an appropriate GWT object.
 	 * 
-	 * @param applet - The <code>Applet</code> doing the callback.
-	 * @param callbackValue - The value to send.
+	 * @param applet -
+	 *            The <code>Applet</code> doing the callback.
+	 * @param callbackValue -
+	 *            The value to send.
 	 */
 	public static void callback(Applet applet, Integer callbackValue) {
 		String transferString;
-		
+
 		if (null == callbackValue) {
 			transferString = "";
 		} else {
 			transferString = callbackValue.toString();
 		}
-		
+
 		callback(applet, transferString, Integer.class.getName());
 	}
-	
+
 	/**
-	 * <code>Dates</code>s will be converted and sent as <code>String</code>s, once arrived in the
-	 * JavaScript world GwtAI parses the date back into an appropriate GWT object.
+	 * <code>Dates</code>s will be converted and sent as <code>String</code>s,
+	 * once arrived in the JavaScript world GwtAI parses the date back into an
+	 * appropriate GWT object.
 	 * 
-	 * @param applet - The <code>Applet</code> doing the callback.
-	 * @param callbackValue - The value to send.
+	 * @param applet -
+	 *            The <code>Applet</code> doing the callback.
+	 * @param callbackValue -
+	 *            The value to send.
 	 */
 	public static void callback(Applet applet, Date callbackValue) {
 		String transferString;
-		
+
 		if (null == callbackValue) {
 			transferString = "";
 		} else {
 			transferString = DATE_FORMAT.format(callbackValue);
 		}
-		
+
 		callback(applet, transferString, Date.class.getName());
 	}
-	
+
 	/**
-	 * The an easy one, everything is transfered as <code>String</code> anyway.
+	 * The an easy one, everything is transfered as <code>String</code>
+	 * anyway.
 	 * 
-	 * @param applet - The <code>Applet</code> doing the callback.
-	 * @param callbackValue - The value to send.
+	 * @param applet -
+	 *            The <code>Applet</code> doing the callback.
+	 * @param callbackValue -
+	 *            The value to send.
 	 */
 	public static void callback(Applet applet, String callbackValue) {
 		callback(applet, callbackValue, String.class.getName());
 	}
-	
+
 	/**
 	 * Does the actual calling.
 	 * 
-	 * @param applet - The <code>Applet</code> doing the callback.
-	 * @param callbackValue - The value to send.
-	 * @param callbackType - The type of the value, so we can parse it back later on.
+	 * @param applet -
+	 *            The <code>Applet</code> doing the callback.
+	 * @param callbackValue -
+	 *            The value to send.
+	 * @param callbackType -
+	 *            The type of the value, so we can parse it back later on.
 	 */
-	private static void callback(Applet applet, String callbackValue, String callbackType) {
+	private static void callback(Applet applet, String callbackValue,
+			String callbackType) {
 		String appletName = getAppletName(applet);
-		
-		String jsCmd = "callbackApplet(\"" + appletName + "\", \"" + callbackValue + "\", \"" + callbackType +"\");";
+
+		String jsCmd = "callbackApplet(\"" + appletName + "\", \""
+				+ callbackValue + "\", \"" + callbackType + "\");";
 
 		eval(applet, jsCmd);
 	}
-	
+
 	public static Object eval(Applet applet, String jsCmd) {
 		JSObject jso = JSObject.getWindow(applet);
-		
-		if (jso != null ) {
+
+		if (jso != null) {
 			return jso.eval(jsCmd);
 		}
 
@@ -124,17 +142,17 @@ public class AppletUtil {
 
 	public static Object call(Applet applet, String jsCmd, Object[] params) {
 		JSObject jso = JSObject.getWindow(applet);
-		
-		if (jso != null ) {
+
+		if (jso != null) {
 			return jso.call(jsCmd, params);
 		}
 
 		return null;
 	}
-	
+
 	private static String getAppletName(Applet applet) {
 		String tmp = applet.getClass().getName();
-		
+
 		if (tmp.lastIndexOf(".") > -1) {
 			return tmp.substring(tmp.lastIndexOf(".") + 1);
 		} else {
