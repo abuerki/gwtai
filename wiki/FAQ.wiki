@@ -1,0 +1,9 @@
+#summary Frequently Asked Questions
+
+== I run the GWT Shell and get a dialog that says _Java(TM) Plug-in Fatal Error_ ==
+
+Alas the GWT Shell can not handle embedded things like Flash or Applets. There is some restriction in the SWT component used to run a browser inside of the Shell application. To test your application you have to compile the code and run it in a browser.
+
+== The GWT !Java2JavaScript compiler says _No source code is available for type javax.swing.JApplet_ ==
+
+You have your applet implementation class within you _client_ package, that does not work. You have to put the applet class into the _server package_, or in a package of its own.
