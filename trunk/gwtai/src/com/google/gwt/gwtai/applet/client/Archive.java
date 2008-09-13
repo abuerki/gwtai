@@ -21,11 +21,11 @@ import static java.lang.annotation.ElementType.TYPE;
 import java.lang.annotation.Target;
 
 /**
- * The <code>Archive</code> Annotation specifies the value that is filled into the applet's ARCHIVE
- * attribute. This annotation takes a comma-separated list of archived files (either absolute URIs
- * or URIs relative to the CODEBASE).
+ * The <code>Archive</code> Annotation specifies the value that is filled into
+ * the applet's ARCHIVE attribute. This annotation takes a comma-separated list
+ * of archived files (either absolute URIs or URIs relative to the CODEBASE).
  * 
- * This Annotation is optional.
+ * This Annotation is optional. The value is of type <code>String</code>.
  * 
  * @author Adrian Buerki <a.buerki@gmail.com>
  * 

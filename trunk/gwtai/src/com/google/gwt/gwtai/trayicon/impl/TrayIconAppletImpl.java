@@ -35,17 +35,18 @@ import org.jdesktop.jdic.tray.SystemTray;
 import org.jdesktop.jdic.tray.TrayIcon;
 
 import com.google.gwt.gwtai.applet.util.JavaLibraryPath;
+import com.google.gwt.gwtai.applet.util.LibraryElement;
+import com.google.gwt.gwtai.applet.util.LibraryElement.OS;
+import com.google.gwt.gwtai.applet.util.LibraryElement.ARCH;
 import com.google.gwt.gwtai.trayicon.client.TrayIconApplet;
 
-
 /**
- * A demo applet that uses the system tray. This demo does work on Windows, Linux and Solaris (No
- * Mac yet - sorry).
+ * A demo applet that uses the system tray. This demo does work on Windows,
+ * Linux and Solaris (No Mac yet - sorry).
  * 
  * @author Adrian Buerki <a.buerki@gmail.com>
  */
 public class TrayIconAppletImpl extends JApplet implements TrayIconApplet {
-
 	private static final long serialVersionUID = -8907821050278144296L;
 
 	private SystemTray _tray;
@@ -55,16 +56,18 @@ public class TrayIconAppletImpl extends JApplet implements TrayIconApplet {
 
 	public TrayIconAppletImpl() {
 		try {
-			JavaLibraryPath.injectTrayNativLib();
+
+			injectTrayNativLib();
 		} catch (Exception e) {
-			throw new RuntimeException("Can not add tray native library to the java.library.path",
+			throw new RuntimeException(
+					"Can not add tray native library to the java.library.path",
 					e);
 		}
 	}
 
 	public void showTrayIcon() {
 		_tray.addTrayIcon(_trayIcon);
-		
+
 		if (!_cbTrayIcon.isSelected()) {
 			_cbTrayIcon.setSelected(true);
 		}
@@ -72,27 +75,27 @@ public class TrayIconAppletImpl extends JApplet implements TrayIconApplet {
 
 	public void hideTrayIcon() {
 		_tray.removeTrayIcon(_trayIcon);
-		
+
 		if (_cbTrayIcon.isSelected()) {
 			_cbTrayIcon.setSelected(false);
 		}
 	}
-	
-    public void addSeparator() {
-    	_menu.addSeparator();
-    }
-    
-    public void addTextItem(String caption) {
-    	_menu.add(new JMenuItem(caption));
-    }
-    
-    public void addRadioButtonItem(String caption) {
-    	_menu.add(new JRadioButtonMenuItem(caption));
-    }
-    
-    public void addCheckBoxItem(String caption) {
-    	_menu.add(new JCheckBoxMenuItem(caption));
-    }
+
+	public void addSeparator() {
+		_menu.addSeparator();
+	}
+
+	public void addTextItem(String caption) {
+		_menu.add(new JMenuItem(caption));
+	}
+
+	public void addRadioButtonItem(String caption) {
+		_menu.add(new JRadioButtonMenuItem(caption));
+	}
+
+	public void addCheckBoxItem(String caption) {
+		_menu.add(new JCheckBoxMenuItem(caption));
+	}
 
 	public void stop() {
 		hideTrayIcon();
@@ -103,7 +106,7 @@ public class TrayIconAppletImpl extends JApplet implements TrayIconApplet {
 	 */
 	public void init() {
 		JPanel panelMain = new JPanel();
-		
+
 		_cbTrayIcon = new JCheckBox("Show tray icon");
 		_cbTrayIcon.setBackground(Color.WHITE);
 
@@ -123,7 +126,8 @@ public class TrayIconAppletImpl extends JApplet implements TrayIconApplet {
 
 		_tray = SystemTray.getDefaultSystemTray();
 
-		ImageIcon i = new ImageIcon(TrayIconAppletImpl.class.getResource("icon.gif"));
+		ImageIcon i = new ImageIcon(TrayIconAppletImpl.class
+				.getResource("icon.gif"));
 
 		_menu = new JPopupMenu("GwtAI Menu");
 		_trayIcon = new TrayIcon(i, "GwtAI TrayIcon Demo", _menu);
@@ -131,18 +135,47 @@ public class TrayIconAppletImpl extends JApplet implements TrayIconApplet {
 		_trayIcon.setIconAutoSize(true);
 		_trayIcon.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "This feature is brought to you by GwtAI.\n"
-						+ " - http://code.google.com/gwtai\n\n"
-						+ "With the friendly assistance of the JDIC project.\n"
-						+ " - http://jdic.dev.java.net/", "GwtAI TrayIcon Demo",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane
+						.showMessageDialog(
+								null,
+								"This feature is brought to you by GwtAI.\n"
+										+ " - http://code.google.com/gwtai\n\n"
+										+ "With the friendly assistance of the JDIC project.\n"
+										+ " - http://jdic.dev.java.net/",
+								"GwtAI TrayIcon Demo",
+								JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
-		
+
 		panelMain.setBorder(BorderFactory.createTitledBorder("TrayIconApplet"));
 		panelMain.setBackground(Color.WHITE);
-		
+
 		getContentPane().add(panelMain);
+	}
+
+	/**
+	 * Extract the tray.dll or libtray.so (depending on the Operating System)
+	 * into a temporary location and add this very location to the
+	 * <i>java.library.path</i> path.
+	 * 
+	 * @throws Exception
+	 *             In case of an error.
+	 */
+	public void injectTrayNativLib() throws Exception {
+		// "jdic.dll", "WinMsiWrapper.dll");
+		LibraryElement winLib = new LibraryElement("win", "tray.dll",
+				OS.Windows);
+		LibraryElement winSunX86 = new LibraryElement("solaris/x86",
+				"libtray.so", OS.SunOS, ARCH.x86);
+		LibraryElement winSunSparc = new LibraryElement("solaris/sparc",
+				"libtray.so", OS.SunOS, ARCH.sparc);
+		LibraryElement winLinux = new LibraryElement("linux", "libtray.so",
+				OS.Linux);
+		LibraryElement winMac = new LibraryElement("mac", "libtray.jnilib",
+				OS.Mac);
+
+		JavaLibraryPath.injectNativLib(winLib, winSunX86, winSunSparc,
+				winLinux, winMac);
 	}
 
 }

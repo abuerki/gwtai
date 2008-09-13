@@ -41,7 +41,7 @@ public class StopWatchAppletImpl extends JApplet implements StopWatchApplet {
 	private static final long serialVersionUID = -6910666758506270768L;
 
 	private StopWatchLabel _swLabel;
-	
+
 	public void init() {
 		JPanel panelMain = new JPanel(new BorderLayout());
 
@@ -50,26 +50,28 @@ public class StopWatchAppletImpl extends JApplet implements StopWatchApplet {
 
 			public void actionPerformed(ActionEvent e) {
 				startWatch();
-				AppletUtil.callback(StopWatchAppletImpl.this, _swLabel.getText());
+				AppletUtil.callback(StopWatchAppletImpl.this, _swLabel
+						.getText());
 			}
-			
+
 		});
-		
+
 		_swLabel = new StopWatchLabel();
-		
+
 		panelMain.add(_swLabel, BorderLayout.CENTER);
 		panelMain.add(buttonLap, BorderLayout.SOUTH);
 
-		panelMain.setBorder(BorderFactory.createTitledBorder("StopWatchApplet"));
+		panelMain
+				.setBorder(BorderFactory.createTitledBorder("StopWatchApplet"));
 		panelMain.setBackground(Color.WHITE);
-		
+
 		getContentPane().add(panelMain);
 	}
-	
+
 	public void stopWatch() {
 		_swLabel.stopWatch();
 	}
-	
+
 	public void startWatch() {
 		_swLabel.startWatch();
 	}
@@ -78,26 +80,28 @@ public class StopWatchAppletImpl extends JApplet implements StopWatchApplet {
 		private static final long serialVersionUID = 564090526934223258L;
 
 		private long _startTime;
+
 		private boolean _running;
+
 		private Timer _timer;
-		
+
 		public StopWatchLabel() {
 			super("Click start...", JLabel.CENTER);
-			
+
 			setFont(new Font("SansSerif", Font.BOLD, 24));
 		}
 
 		public void actionPerformed(ActionEvent evt) {
 			setText(getCurrentTime());
 		}
-		
+
 		public void startWatch() {
 			if (!_running) {
 				_running = true;
-				
+
 				_startTime = System.currentTimeMillis();
 				setText("0.0");
-				
+
 				if (_timer == null) {
 					_timer = new Timer(100, this);
 					_timer.start();
@@ -106,7 +110,7 @@ public class StopWatchAppletImpl extends JApplet implements StopWatchApplet {
 				}
 			}
 		}
-		
+
 		public String getCurrentTime() {
 			return (System.currentTimeMillis() - _startTime) / 1000.0 + "";
 		}
@@ -114,9 +118,9 @@ public class StopWatchAppletImpl extends JApplet implements StopWatchApplet {
 		public void stopWatch() {
 			if (_running) {
 				_timer.stop();
-				
+
 				setText(getCurrentTime());
-				
+
 				_running = false;
 			}
 		}

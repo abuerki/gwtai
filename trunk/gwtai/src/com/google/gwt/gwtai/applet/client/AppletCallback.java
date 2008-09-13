@@ -16,6 +16,15 @@
 
 package com.google.gwt.gwtai.applet.client;
 
+/**
+ * The interface one must implement to receive responses from an applet. By
+ * registering a <code>AppletCallback</code> object with an applet, data can be
+ * sent back to the GWT application from within the applet code.  
+ * 
+ * @author Adrian Buerki <a.buerki@gmail.com>
+ *
+ * @param <T> The type of value this <code>AppletCallback</code> handles.
+ */
 public interface AppletCallback<T> {
 
 	public void callback(T callbackValue);

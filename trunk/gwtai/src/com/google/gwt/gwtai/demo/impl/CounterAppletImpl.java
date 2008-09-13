@@ -41,35 +41,35 @@ public class CounterAppletImpl extends JApplet implements CounterApplet {
 	 */
 	public void init() {
 		JPanel panelMain = new JPanel();
-		
+
 		_tfCounter = new JTextField(20);
 		_tfCounter.setHorizontalAlignment(JTextField.CENTER);
 		_tfCounter.setText("0");
 		_tfCounter.setEditable(false);
-	
+
 		panelMain.add(new JLabel("Current count : "));
 		panelMain.add(_tfCounter);
-		
+
 		panelMain.setBorder(BorderFactory.createTitledBorder("CounterApplet"));
 		panelMain.setBackground(Color.WHITE);
-		
+
 		getContentPane().add(panelMain);
 	}
-	
+
 	public void increment() {
 		int currentCount = Integer.parseInt(_tfCounter.getText());
 		currentCount++;
-		
+
 		_tfCounter.setText(currentCount + "");
 	}
-	
+
 	public void decrement() {
 		int currentCount = Integer.parseInt(_tfCounter.getText());
 		currentCount--;
-		
+
 		_tfCounter.setText(currentCount + "");
 	}
-	
+
 	public Object getCurrentValue() {
 		return _tfCounter.getText();
 	}

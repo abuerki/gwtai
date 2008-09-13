@@ -21,8 +21,9 @@ import static java.lang.annotation.ElementType.TYPE;
 import java.lang.annotation.Target;
 
 /**
- * The type of the actual <code>Applet</code> implementation.  This Annotation is required, without
- * this information the <code>AppletProxyGenerator</code> can not perform its task.
+ * The type of the actual <code>Applet</code> implementation. This Annotation
+ * is required, without this information the <code>AppletProxyGenerator</code>
+ * can not perform its task.
  * 
  * @author Adrian Buerki <a.buerki@gmail.com>
  */

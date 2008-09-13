@@ -21,12 +21,14 @@ import static java.lang.annotation.ElementType.TYPE;
 import java.lang.annotation.Target;
 
 /**
- * The <code>Height</code> Annotation specifies the value that is filled into the applet's HEIGHT
- * attribute. The WIDTH and HEIGHT attributes define the dimensions of the applet. The value can be
- * given in pixels or as a percentage of the parent element's height.
+ * The <code>Height</code> Annotation specifies the value that is filled into
+ * the applet's HEIGHT attribute. The WIDTH and HEIGHT attributes define the
+ * dimensions of the applet. The value can be given in pixels or as a percentage
+ * of the parent element's height.
  * 
- * This Annotation is optional. If no value is given, the <code>AppletProxyGenerator</code> will
- * use 350 as a default value.
+ * This Annotation is optional. If no value is given, the
+ * <code>AppletProxyGenerator</code> will use 350 as a default value. The
+ * value can be in pixels or as a percentage and is of type <code>String</code>.
  * 
  * @author Adrian Buerki <a.buerki@gmail.com>
  * 
@@ -35,6 +37,6 @@ import java.lang.annotation.Target;
 @Target(TYPE)
 public @interface Height {
 
-	int value();
+	String value();
 
 }

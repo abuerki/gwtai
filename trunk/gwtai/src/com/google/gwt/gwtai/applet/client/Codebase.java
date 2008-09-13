@@ -21,19 +21,20 @@ import static java.lang.annotation.ElementType.TYPE;
 import java.lang.annotation.Target;
 
 /**
- * The <code>Codebase</code> Annotation specifies the value that is filled into the applet's
- * CODEBASE attribute. This attribute specifies the base URL of the applet, meaning the location
- * from where the applet code is loaded. 
+ * The <code>Codebase</code> Annotation specifies the value that is filled
+ * into the applet's CODEBASE attribute. This attribute specifies the base URL
+ * of the applet, meaning the location from where the applet code is loaded.
  * 
  * This Annotation is optional. If not specified the module root URL is used.
- *  
+ * The value is of type <code>String</code>.
+ * 
  * @author Adrian Buerki <a.buerki@gmail.com>
  * 
  * @see com.google.gwt.gwtai.applet.client.Archive
  */
 @Target(TYPE)
 public @interface Codebase {
-	
+
 	String value();
-	
+
 }
