@@ -1,0 +1,10 @@
+<module>
+
+	<inherits name='com.google.gwt.user.User'/>
+	<inherits name='com.google.gwt.gwtai.applet.AppletIntegration' />
+
+	<entry-point class='com.google.gwt.gwtai.demo.client.JavaFXDemo'/>
+    
+	<stylesheet src='JavaFXDemo.css' />
+	
+</module>
