@@ -1,0 +1,81 @@
+body {
+	font-family:arial,sans-serif;
+	padding: 10px;
+	background-color: #000000;
+	color: #BEC7CC;
+	font-size: small;
+}
+
+a:link {
+	color: #FFA500;
+	font-weight: bold;
+	text-decoration: none
+}
+
+a:visited {
+	color: #FFA500;
+	font-weight: bold;
+	text-decoration: none
+}
+
+a:active {
+	color: #FFA500;
+	font-weight: bold;
+	text-decoration: none
+}
+
+a:hover {
+	color: #FFA500;
+	font-weight: bold;
+	text-decoration:underline;
+}
+
+.gwt-TabPanelBottom {
+	border-color: #FFA500;
+	border-style: solid;
+	border-width: 3px 2px 2px;
+	overflow: hidden;
+	padding: 6px;
+}
+
+.tabMiddleCenter {
+	font-size: small;
+	white-space: nowrap;
+	color: #000000;
+	cursor: pointer;
+	font-weight: bold;
+	text-align: center;
+	background-color: #FFA500;
+}
+
+.tabMiddleCenterInner {
+	margin: 5px;
+}
+
+.tabMiddleRight {
+	background-color: #FFA500;
+}
+
+.tabMiddleLeft {
+	background-color: #FFA500;
+}
+
+.tabTop {
+	background-color: #FFA500;
+}
+
+.gwt-HTML {
+	font-size: small;
+}
+
+.gwt-DisclosurePanel .header,
+.gwt-DisclosurePanel .header a,
+.gwt-DisclosurePanel .header td {
+	background-color: #FFA500;
+	font-size: small;
+	color: #000000;
+	cursor: pointer;
+	font-weight: bold;
+	text-decoration: none;
+	width: 100%;
+}
