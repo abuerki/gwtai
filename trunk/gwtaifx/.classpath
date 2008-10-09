@@ -6,9 +6,9 @@
 	<classpathentry kind="lib" path="/opt/gwt-linux-1.5.2/gwt-user.jar"/>
 	<classpathentry kind="lib" path="lib/GwtAI-Client.jar"/>
 	<classpathentry kind="lib" path="lib/GwtAI-Core.jar"/>
-	<classpathentry kind="lib" path="lib/javafxc.jar"/>
 	<classpathentry kind="lib" path="lib/javafxgui.jar"/>
 	<classpathentry kind="lib" path="lib/javafx-swing.jar"/>
 	<classpathentry kind="lib" path="lib/Scenario.jar"/>
+	<classpathentry kind="lib" path="lib/javafxrt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
