@@ -10,7 +10,7 @@ Even though the GwtAI classes are in the classpath and your IDE can access them,
 
 {{{
 <inherits name='com.google.gwt.gwtai.applet.AppletIntegration' />
-}}
+}}}
 
 ==Create applet interface==
 
