@@ -4,6 +4,11 @@
 
 Download the [http://code.google.com/p/gwtai/source/browse/trunk/gwtai/www/com.google.gwt.gwtai.demo.GwtAI/GwtAI-Client.jar  GwtAI-Client.jar] and [http://code.google.com/p/gwtai/source/browse/trunk/gwtai/www/com.google.gwt.gwtai.demo.GwtAI/GwtAI-Core.jar GwtAI-Core.jar] files and place them into your project's classpath.
 
+==Tell the GWT compiler that your project depends on GwtAI==
+
+Even though the GwtAI classes are in the classpath and your IDE can access them, the GWT compiler does not yet know about the dependency. The GWT compiler needs access to the source code of everything that shall be translated to !JavaScript, so you have to add the GwtAI module to your GWT application file. This is done by adding the line:
+
+
 ==Create applet interface==
 
 {{{
