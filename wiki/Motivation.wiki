@@ -10,7 +10,11 @@ I have been listening to some talks about [http://www.adobe.com/de/products/flex
 
 At this moment I had the idea to do something similar in [http://code.google.com/webtoolkit/ GWT]. Integrating and interacting with a full-blown standalone application from within a website is something that can be done in Java since a decade.
 
-Integration of a [http://java.sun.com/applets/ Java Applet] is not that much of a problem, but interaction with the website the [http://java.sun.com/applets/ Applet] is running within is a bit more complicated. The goal of GwtAI is to provide an easy to use cross-browser solution by automatically creating wrapper widgets for [http://java.sun.com/applets/ Java Applets] and mechanism to communicate between Java and !JavaScript. 
+Integration of a [http://java.sun.com/applets/ Java Applet] into a website is not that much of a problem, at least not technically. Of course things like the place where the jar
+files are located and all the settings that are necessary to load an Applet in the browser
+have to be correct. That is not trivial but pretty much the same as in a classical website. Alas GwtAI can not help much with these things. What GwtAI can do for you is save you from writing tedious !JavaScript code to finally communicate from your GWT application with the Applet. Interaction with the website the [http://java.sun.com/applets/ Applet] is running within is a bit more complicated.
+
+The goal of GwtAI is to provide an easy to use cross-browser solution by automatically creating wrapper widgets for [http://java.sun.com/applets/ Java Applets] and mechanism to communicate between Java and !JavaScript.
 
 ==Future==
 
