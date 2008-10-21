@@ -8,6 +8,9 @@ Download the [http://code.google.com/p/gwtai/source/browse/trunk/gwtai/www/com.g
 
 Even though the GwtAI classes are in the classpath and your IDE can access them, the GWT compiler does not yet know about the dependency. The GWT compiler needs access to the source code of everything that shall be translated to !JavaScript, so you have to add the GwtAI module to your GWT application file. This is done by adding the line:
 
+{{{
+<inherits name='com.google.gwt.gwtai.applet.AppletIntegration' />
+}}
 
 ==Create applet interface==
 
@@ -15,8 +18,8 @@ Even though the GwtAI classes are in the classpath and your IDE can access them,
 import com.google.gwt.gwtai.applet.client.*;
 
 @ImplementingClass(com.google.gwt.gwtai.demo.impl.CounterAppletImpl.class)
-@Height(60)
-@Width(350)
+@Height("60")
+@Width("350")
 @Archive("GwtAI-Core.jar,GwtAI-Demo.jar")
 public interface CounterApplet extends Applet {
                 
