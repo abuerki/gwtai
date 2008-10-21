@@ -9,3 +9,7 @@ For more information see the [http://code.google.com/p/google-web-toolkit/issues
 == The GWT !Java2JavaScript compiler says _No source code is available for type javax.swing.JApplet_ ==
 
 You have your applet implementation class within you _client_ package, that does not work. You have to put the applet class into the _server package_, or in a package of its own.
+
+== I don't want my GWT application to include the Applet source code ==
+
+During compilation the GWT !Java2JavaScript compiler needs to see the actual Applet implementation. But the respective annotation is compile time only. The GWT compiler only translates the files in the _client_ package. So decoupling works by placing the classes into different packages. Once you compiled your project the GWT compiler output won't contain any Applet classe.
