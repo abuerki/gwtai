@@ -7,7 +7,7 @@
 	<property name="build.dir" value="build" />
 	<property name="lib.dir" value="lib" />
 	<property name="out.www.dir" value="www/com.google.gwt.gwtai.demo.JavaFXDemo" />
-	<property name="gwt.dir" value="/opt/gwt-linux-1.5.2" />
+	<property name="gwt.dir" value="/opt/gwt-linux-1.5.3" />
 	
 	<path id="project.class.path">
 		<pathelement path="${java.class.path}/" />
