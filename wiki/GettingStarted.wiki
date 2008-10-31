@@ -1,4 +1,5 @@
 #summary This page everything you'll need to know about getting started with the GwtAI project.
+#labels Featured,Phase-Implementation
 
 ==Download==
 
@@ -13,6 +14,8 @@ Even though the GwtAI classes are in the classpath and your IDE can access them,
 }}}
 
 ==Create applet interface==
+
+GwtAI uses the [http://code.google.com/docreader/#p=google-web-toolkit-doc-1-5&s=google-web-toolkit-doc-1-5&t=DevGuideDeferredBinding deferred command mechanism] to get a handle to the Applet object. Thus working with GwtAI is in some way similar to [http://code.google.com/docreader/#p=google-web-toolkit-doc-1-5&s=google-web-toolkit-doc-1-5&t=DevGuideRemoteProcedureCalls GWT's RPC] handling. First of all you have to create an interface which defines the method on the Applet class that shall be available to the GWT code.
 
 {{{
 import com.google.gwt.gwtai.applet.client.*;
@@ -32,7 +35,11 @@ public interface CounterApplet extends Applet {
 }
 }}}
 
+Note: The interface has to be within your client-side code (in the `client` package). The interface will be compiled to JavaScript, so keep [http://code.google.com/docreader/#p=google-web-toolkit-doc-1-5&s=google-web-toolkit-doc-1-5&t=DevGuideJavaCompatibility GWT’s rules] for _runtime library support_ in mind.
+
 ==Implement applet==
+
+The next step is to implement the actual Applet class. The Applet class can not reside in the client-side package; you have to put the applet class into a package of its own.
 
 {{{
 import java.awt.Color;
@@ -83,6 +90,9 @@ public class CounterAppletImpl extends JApplet implements CounterApplet {
 }}}
 
 ==Use generated applet proxy in your GWT code==
+
+Now obtain a handle to the Applet using `GWT.create(...)`. The last step in integration an Applet is to construct a widget object with the help of the `AppletJSUtil` class and to add this very object to an UI container.
+
 
 {{{
 VerticalPanel panelMain = new VerticalPanel();
