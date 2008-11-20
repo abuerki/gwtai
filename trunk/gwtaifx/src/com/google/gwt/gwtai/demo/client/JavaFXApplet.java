@@ -32,7 +32,7 @@ import com.google.gwt.gwtai.applet.client.Width;
 @ImplementingClass(com.google.gwt.gwtai.demo.impl.JavaFXAppletStarter.class)
 @Height("230px")
 @Width("320px")
-@Archive("GwtAI-Core.jar, JavaFXDemo.jar, javafxrt.jar, javafxgui.jar, javafx-swing.jar, Scenario.jar")
+@Archive("GwtAI-Client.jar, JavaFXDemo.jar, javafxrt.jar, javafxgui.jar, javafx-swing.jar, Scenario.jar")
 @Params(names={"applicationclass", "draggable"}, values={"com.google.gwt.gwtai.demo.impl.JavaFXAppletImpl", "true"})
 public interface JavaFXApplet extends Applet {
 
