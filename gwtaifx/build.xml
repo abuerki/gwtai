@@ -15,7 +15,6 @@
 		<pathelement path="${lib.dir}/plugin.jar" />
 		<pathelement path="${gwt.dir}/gwt-dev-linux.jar" />
 		<pathelement path="${lib.dir}/GwtAI-Client.jar" />
-		<pathelement path="${lib.dir}/GwtAI-Core.jar" />
 		<pathelement path="${lib.dir}/javafxrt.jar" />
 		<pathelement path="${lib.dir}/javafxgui.jar" />
 		<pathelement path="${lib.dir}/javafx-swing.jar" />
@@ -81,7 +80,7 @@
 	<target name="preparetest" depends="package-jars">
 		<echo level="info">Preparing test env ${ant.project.name}</echo>
 
-		<copy file="${lib.dir}/GwtAI-Core.jar" todir="${out.www.dir}" />
+		<copy file="${lib.dir}/GwtAI-Client.jar" todir="${out.www.dir}" />
 		<copy file="${lib.dir}/javafxrt.jar" todir="${out.www.dir}" />
 		<copy file="${lib.dir}/javafxgui.jar" todir="${out.www.dir}" />
 		<copy file="${lib.dir}/javafx-swing.jar" todir="${out.www.dir}" />
