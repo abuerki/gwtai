@@ -35,6 +35,15 @@ public class AppletJSUtil {
 		CallbackUtil.defineBridgeMethod();
 	}
 
+	/**
+	 * Constructs an <code>HTML</code> element which contains an applet tag. The HTML specification
+	 * states that the <code>applet</code> tag is deprecated. But the browser support for the <code>object</code>
+	 * and <code>embed</code> tag is currently inconsistent. So using the <code>applet</code> tag is the only 
+	 * consistent way to deploy a Java Applet across browsers on all platforms.
+	 *
+	 * @param applet The <code>Applet</code> to take the information from.
+	 * @return An <code>HTML</code> element which contains an applet tag.
+	 */
 	public static Widget createAppletWidget(Applet applet) {
 		if (applet instanceof AppletAccomplice) {
 			AppletAccomplice aapplet = (AppletAccomplice) applet;
@@ -70,13 +79,14 @@ public class AppletJSUtil {
 
 			if (parameters != null && !parameters.isEmpty()) {
 				for (String name : parameters.keySet()) {
-					htmlCode += "<param name='";
-					htmlCode += name;
-					htmlCode += "' value='";
-					htmlCode += parameters.get(name);
-					htmlCode += "'>";
+					htmlCode += createParamTag(name, parameters.get(name));
 				}
 			}
+			
+			htmlCode += createParamTag("java_version", aapplet.getJavaVersion());
+			htmlCode += createParamTag("java_arguments", aapplet.getJavaArguments());
+			htmlCode += createParamTag("separate_jvm", aapplet.hasSeparateJVM());
+			htmlCode += createParamTag("image", aapplet.getLoadingImage());
 
 			htmlCode += "</applet>";
 
@@ -185,6 +195,17 @@ public class AppletJSUtil {
 		}
 	}
 
+	/**
+	 * Helper-method to create a param tag.
+	 */
+	private static String createParamTag(String name, Object value) {
+		if (value != null) {
+			return "<param name='" + name + "' value='" + value + "'>";	
+		}
+
+		return "";
+	}
+	
 	/**
 	 * Helper-method to do the actual calling.
 	 */

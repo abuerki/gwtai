@@ -79,7 +79,43 @@ public abstract class AppletAccomplice {
 	public String getArchive() {
 		return null;
 	}
-
+	
+	/**
+	 * Leveraging the new version selection mechanism.
+	 * 
+	 * @return A pattern to select the Java version.
+	 */
+	public String getJavaVersion() {
+		return null;
+	}
+	
+	/**
+	 * Command-line arguments to be used when executing this applet instance.
+	 *  
+	 * @return Java Command-line Argument.
+	 */
+	public String getJavaArguments() {
+		return null;
+	}
+	
+	/**
+	 * A boolean parameter specifying that a particular applet should run in its own JVM instance.
+	 *  
+	 * @return Java Command-line Argument.
+	 */
+	public Boolean hasSeparateJVM() {
+		return null;
+	}
+	
+	/**
+	 * A custom loading graphic show during applet startup. 
+	 *  
+	 * @return The name of the image to load.
+	 */
+	public String getLoadingImage() {
+		return null;
+	}
+	
 	public HashMap<String, String> getParameters() {
 		return null;
 	}
