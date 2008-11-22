@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="GwtAI-Demo" default="all" basedir=".">
+
+	<property name="web.dir" value="src/com/google/gwt/gwtai/demo/public" />
+	<property name="bin.dir" value="bin" />
+	<property name="src.dir" value="src" />
+	<property name="build.dir" value="build" />
+	<property name="lib.dir" value="lib" />
+	<property name="doc.dir" value="doc/api" />
+	<property name="out.www.dir" value="www/com.google.gwt.gwtai.demo.GwtAI" />
+	<property name="gwt.dir" value="/opt/gwt-linux-1.5.3" />
+
+	<path id="project.class.path">
+		<pathelement path="${java.class.path}/" />
+		<pathelement path="${gwt.dir}/gwt-user.jar" />
+		<pathelement path="${lib.dir}/plugin.jar" />
+		<pathelement path="${gwt.dir}/gwt-dev-windows.jar" />
+		<pathelement path="${gwt.dir}/gwt-dev-linux.jar" />
+		<pathelement path="${lib.dir}/jdic.jar" />
+		<pathelement path="${lib.dir}/GwtAI-Client.jar" />
+		<pathelement path="${lib.dir}/GwtAI-Core.jar" />
+	</path>
+
+	<target name="init" depends="clean">
+		<echo level="info">Initializing ${ant.project.name}</echo>
+
+		<tstamp prefix="start" />
+		<mkdir dir="${bin.dir}" />
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${out.www.dir}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<echo level="info">Compiling ${ant.project.name}</echo>
+
+		<mkdir dir="bin" />
+		<javac srcdir="src:test" destdir="bin" includes="**" debug="on" debuglevel="lines,vars,source">
+			<classpath refid="project.class.path" />
+		</javac>
+	</target>
+
+	<target name="gwt-compile" depends="compile">
+		<echo level="info">Compiling Java2JavaScript ${ant.project.name}</echo>
+		
+	    <java classname="com.google.gwt.dev.GWTCompiler" fork="true" failonerror="true">
+	    	<jvmarg value="-Xss64m" />
+			<jvmarg value="-Xms256m" /> 
+			<jvmarg value="-Xmx512m" /> 
+	        <classpath>
+				<pathelement path="${src.dir}" />
+	        	<pathelement path="${bin.dir}" />
+				<path refid="project.class.path" />
+	        </classpath>
+	        <arg value="-out" />
+	        <arg value="www" />
+	        <arg value="com.google.gwt.gwtai.demo.GwtAI" />
+	    </java>
+	</target> 
+
+	<target name="package" depends="preparetest">
+		<echo level="info">Packaging ${ant.project.name}</echo>
+
+		<war destfile="build/${ant.project.name}.war" webxml="${web.dir}/WEB-INF/web.xml" compress="true">
+			<manifest>
+				<attribute name="Built-By" value="Adrian Buerki"/>
+				<attribute name="Implementation-Vendor" value="GWT Advanced Integration" />
+				<attribute name="Implementation-Title" value="GwtAI Demo" />
+				<attribute name="Implementation-Version" value="0.2" />
+	    	</manifest>
+			<zipfileset dir="${out.www.dir}">
+				<include name="**"/>
+				<exclude name="WEB-INF/web.xml"/>
+			</zipfileset>
+		</war>
+	</target>
+	
+	<target name="preparetest" depends="sign-jars">
+		<echo level="info">Preparing test env ${ant.project.name}</echo>
+
+		<copy file="${lib.dir}/GwtAI-Core.jar" todir="${out.www.dir}" />
+		<copy file="${build.dir}/${ant.project.name}.jar" todir="${out.www.dir}" />
+	</target>
+
+	<target name="clean">
+		<echo level="info">Cleaning ${ant.project.name}</echo>
+
+		<delete file="${build.dir}/${ant.project.name}.war" failonerror="false" />
+		<delete file="${build.dir}/${ant.project.name}.jar" failonerror="false" />
+			
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${bin.dir}" />
+			<fileset dir="${out.www.dir}" />
+			<fileset dir="${web.dir}">
+				<include name="**.class" />
+			</fileset>
+		</delete>
+	</target>
+	
+	<target name="package-jars" depends="gwt-compile">
+		<echo level="info">Packaging jars ${ant.project.name}</echo>
+		
+		<mkdir dir="${build.dir}/tmp" />
+		<unzip src="${lib.dir}/jdic.jar" dest="${build.dir}/tmp">
+			<patternset>
+		        <include name="**/tray/**" />
+				<include name="**/init/**" />
+				<include name="**/browser/internal/**" />
+		    </patternset>
+		</unzip>
+		<copy todir="${build.dir}/tmp">
+		  <fileset dir="${lib.dir}">
+		  	<include name="**/*.jnilib" /> 
+		    <include name="**/*.so" /> 
+		  	<include name="**/*.dll" />
+		  	<include name="**/*.jar" />
+		  	<exclude name="**/GwtAI-Client.jar" />
+		  	<exclude name="**/GwtAI-Core.jar" />
+		  </fileset>
+		</copy>
+					
+		<jar destfile="${build.dir}/${ant.project.name}.jar" compress="true">
+			<fileset dir="${bin.dir}">
+				<include name="com/google/gwt/gwtai/demo/client/**Applet.*" />
+				<include name="com/google/gwt/gwtai/demo/impl/**" />
+				<include name="com/google/gwt/gwtai/trayicon/client/**Applet**" />
+				<include name="com/google/gwt/gwtai/trayicon/impl/**" />
+			</fileset>
+			<fileset dir="${src.dir}">
+				<include name="com/google/gwt/gwtai/trayicon/impl/**.gif" />
+			</fileset>
+			<fileset dir="${build.dir}/tmp" />
+			<manifest>
+				<attribute name="Built-By" value="Adrian Buerki" />
+			      <attribute name="Implementation-Vendor" value="GWT Advanced Integration" />
+			      <attribute name="Implementation-Title" value="GwtAI Demo" />
+			      <attribute name="Implementation-Version" value="0.2" />
+		    </manifest>
+		</jar>
+		
+		<delete dir="${build.dir}/tmp" includeemptydirs="true" failonerror="false" />
+    </target>
+	
+	<target name="sign-jars" depends="package-jars">
+		<echo level="info">Signing jars ${ant.project.name}</echo>
+
+		<signjar jar="${build.dir}/${ant.project.name}.jar" alias="Adrian Buerki" storepass="gwtaigwtai" keystore=".keystore" />
+	</target>
+
+	<target name="all" depends="package" />
+
+</project>
