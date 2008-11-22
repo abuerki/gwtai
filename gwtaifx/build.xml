@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<project name="JavaFXDemo" default="package-jars" basedir=".">
+<project name="JavaFXDemo" default="all" basedir=".">
 	
 	<property name="fx.dir" value="/home/kilkenny/.netbeans/6.1/javafx-sdk1.0pre1/bin" />
 	<property name="bin.dir" value="bin" />
@@ -100,5 +100,7 @@
 			</fileset>
 		</delete>
 	</target>
+	
+	<target name="all" depends="preparetest" />
 	
 </project>
