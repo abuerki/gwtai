@@ -17,7 +17,6 @@
 package com.google.gwt.gwtai.applet.generator;
 
 import java.io.PrintWriter;
-import java.util.HashMap;
 
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
@@ -35,7 +34,11 @@ import com.google.gwt.gwtai.applet.client.Archive;
 import com.google.gwt.gwtai.applet.client.Codebase;
 import com.google.gwt.gwtai.applet.client.Height;
 import com.google.gwt.gwtai.applet.client.ImplementingClass;
+import com.google.gwt.gwtai.applet.client.JavaArguments;
+import com.google.gwt.gwtai.applet.client.JavaVersion;
+import com.google.gwt.gwtai.applet.client.LoadingImage;
 import com.google.gwt.gwtai.applet.client.Params;
+import com.google.gwt.gwtai.applet.client.SeparateJVM;
 import com.google.gwt.gwtai.applet.client.Width;
 
 /**
@@ -46,18 +49,15 @@ import com.google.gwt.gwtai.applet.client.Width;
  * @author Adrian Buerki <a.buerki@gmail.com>
  */
 public class AppletProxyGenerator extends Generator {
-	private HashMap<String, String> _createdClassNames;
-
-	public AppletProxyGenerator() {
-		_createdClassNames = new HashMap<String, String>();
-	}
+	// private static HashMap<String, String> _createdClassNames = new HashMap<String, String>();;
 
 	public String generate(TreeLogger logger, GeneratorContext context,
 			String typeName) throws UnableToCompleteException {
 
-		String createdClassName = _createdClassNames.get(typeName);
 
-		if (null == createdClassName) {
+		// String createdClassName = _createdClassNames.get(typeName);
+
+		// if (null == createdClassName) {
 			JClassType classType;
 
 			try {
@@ -70,6 +70,15 @@ public class AppletProxyGenerator extends Generator {
 
 			String packageName = classType.getPackage().getName();
 			String simpleName = classType.getSimpleSourceName() + "Impl";
+			
+			PrintWriter printWriter = context.tryCreate(logger, packageName,
+					simpleName);
+			
+			if (printWriter == null) {
+				// Has already been created
+				return packageName +"." + simpleName;
+			}
+
 			ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(
 					packageName, simpleName);
 
@@ -82,9 +91,7 @@ public class AppletProxyGenerator extends Generator {
 			composer.addImplementedInterface(typeName);
 			composer
 					.setSuperclass("com.google.gwt.gwtai.applet.client.AppletAccomplice");
-
-			PrintWriter printWriter = context.tryCreate(logger, packageName,
-					simpleName);
+			
 			SourceWriter sw = composer.createSourceWriter(context, printWriter);
 
 			JMethod[] methods = classType.getOverridableMethods();
@@ -239,9 +246,68 @@ public class AppletProxyGenerator extends Generator {
 				sw.println("}");
 				sw.outdent();
 			}
+			
+			JavaVersion javaVersionAttribute = classType.getAnnotation(JavaVersion.class);
 
-			Codebase codeBaseAttribute = classType
-					.getAnnotation(Codebase.class);
+			if (null != javaVersionAttribute) {
+				sw.println();
+				sw.indent();
+				sw.println("public String getJavaVersion() {");
+				sw.indent();
+				sw.print("return \"");
+				sw.print(javaVersionAttribute.value());
+				sw.println("\";");
+				sw.outdent();
+				sw.println("}");
+				sw.outdent();
+			}
+			
+			JavaArguments javaArgumentsAttribute = classType.getAnnotation(JavaArguments.class);
+
+			if (null != javaArgumentsAttribute) {
+				sw.println();
+				sw.indent();
+				sw.println("public String getJavaArguments() {");
+				sw.indent();
+				sw.print("return \"");
+				sw.print(javaArgumentsAttribute.value());
+				sw.println("\";");
+				sw.outdent();
+				sw.println("}");
+				sw.outdent();
+			}
+			
+			SeparateJVM separateJVM = classType.getAnnotation(SeparateJVM.class);
+
+			if (null != separateJVM) {
+				sw.println();
+				sw.indent();
+				sw.println("public Boolean hasSeparateJVM() {");
+				sw.indent();
+				sw.print("return \"");
+				sw.print(javaArgumentsAttribute.value());
+				sw.println("\";");
+				sw.outdent();
+				sw.println("}");
+				sw.outdent();
+			}
+			
+			LoadingImage loadingImage = classType.getAnnotation(LoadingImage.class);
+
+			if (null != loadingImage) {
+				sw.println();
+				sw.indent();
+				sw.println("public String getLoadingImage() {");
+				sw.indent();
+				sw.print("return \"");
+				sw.print(loadingImage.value());
+				sw.println("\";");
+				sw.outdent();
+				sw.println("}");
+				sw.outdent();
+			}
+
+			Codebase codeBaseAttribute = classType.getAnnotation(Codebase.class);
 
 			if (null != codeBaseAttribute) {
 				sw.println();
@@ -287,10 +353,10 @@ public class AppletProxyGenerator extends Generator {
 
 			sw.commit(logger);
 
-			createdClassName = composer.getCreatedClassName();
+			String createdClassName = composer.getCreatedClassName();
 
-			_createdClassNames.put(typeName, createdClassName);
-		}
+			// _createdClassNames.put(typeName, createdClassName);
+		// }
 
 		return createdClassName;
 	}
