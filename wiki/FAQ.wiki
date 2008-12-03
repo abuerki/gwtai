@@ -21,3 +21,7 @@ On Linux please make sure you use a 32bit JDK, even on a 64bit platform you have
 back on a 32bit JDK. This is not a GwtAI but a GWT problem. See the [http://groups.google.com/group/Google-Web-Toolkit/search?group=Google-Web-Toolkit&q=64-bit+linux&qt_g=Search+this+group GWT Google Groups] for more information on that one.
 
 The {{{java.lang.StackOverflowError}}} seems to occure only on a 1.6 JDK version, so try using a 1.5 JDK to compile things. With JDK 1.6 you can try to increase the heap size with some JVM arguments (e.g. {{{-XX:PermSize=64M}}} and {{{-XX:MaxPermSize=256M}}}). Although the heap size increase is not guaranteed to work...
+
+== Where can I get help ==
+
+Please post questions and feedback to the [http://groups.google.com/group/gwtai GwtAI Google Group].
