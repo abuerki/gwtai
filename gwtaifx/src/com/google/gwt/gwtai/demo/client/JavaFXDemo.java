@@ -88,8 +88,8 @@ public class JavaFXDemo implements EntryPoint {
 			"@ImplementingClass(com.google.gwt.gwtai.demo.impl.JavaFXAppletStarter.class)\n" +
 			"@Height(\"230px\")\n" +
 			"@Width(\"320px\")\n" +
-			"@Archive(\"GwtAI-Core.jar, JavaFXDemo.jar, javafxc.jar, javafxgui.jar, javafx-swing.jar, Scenario.jar\")\n" +
-			"@Params(names={\"applicationclass\", \"draggable\"}, values={\"com.google.gwt.gwtai.demo.impl.JavaFXAppletImpl\", \"true\"})\n" +
+			"@Archive(\"GwtAI-Core.jar, JavaFXDemo.jar, javafxc.jar, javafxgui.jar, javafx-swing.jar, Scenario.jar, eula.jar\")\n" +
+			"@Params(names={\"MainJavaFXScript\", \"draggable\"}, values={\"com.google.gwt.gwtai.demo.impl.JavaFXAppletImpl\", \"true\"})\n" +
 			"public interface JavaFXApplet extends Applet { };\n" +
 			"</pre>" +
 			"<hr>" +
@@ -119,51 +119,59 @@ public class JavaFXDemo implements EntryPoint {
 		    "      values: o1 => 1.0 tween Interpolator.EASEBOTH}\n" +
 		    "    ]\n" +
 		    "}\n\n" +
-		    "t.start();\n\n" +
-		    "Application {\n" +
-		    "  stage: Stage {\n" +
-		    "  fill: Color.BLACK\n" +
-		    "  content:[\n" +
-            "    Group {\n" +
-		    "      transform: Transform.translate(0,5);\n" +
-            "      content:[\n" +
-            "        Rectangle {\n" +
-            "          x: 20.0\n" +
-            "          y: 20.0\n" +
-            "          fill: Color.WHITESMOKE\n" +
-            "          width: 280\n" +
-            "          height: 80\n" +
-            "          arcHeight: 15\n" +
-            "          arcWidth: 15\n" +
-            "          stroke: Color.ORANGE strokeWidth: 3\n" +
-            "        },\n" +
-            "        Text {\n" +
-            "          verticalAlignment: VerticalAlignment.BOTTOM\n" +
-            "          content: 'JavaFX rocks!'\n" +
-            "          font: Font {name: 'Verdana', style: FontStyle.BOLD, size: 30}\n" +
-            "          fill: Color.ORANGE\n" +
-            "          x: 45.0\n" +
-            "          y: 110.0\n" +
-            "        }\n" +
-            "      ]\n" +
-		    "      opacity: bind o1\n" +
-            "      effect:\n" +
-            "        Reflection {\n" +
-            "          fraction: 0.50\n" +
-            "          topOpacity: 0.8\n" +
-            "        }\n" +
-            "      },\n" +
-            "      Text {\n" +
-            "        verticalAlignment: VerticalAlignment.BOTTOM\n" +
-            "        content: 'GWT and JavaFX => http://code.google.com/p/gwtai/'\n" +
-            "        font: Font {name: 'Verdana', style: FontStyle.ITALIC, size: 10}\n" +
-            "        fill: Color.WHITESMOKE\n" +
-            "        x: 20.0\n" +
-            "        y: 210.0\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  }\n" +
-            "};" +
+		    "t.play();\n\n" +
+
+		    "Stage {\n" +
+		    "  title: \"GwtAI FX integration Demo\"\n" +
+		    "  width: 320\n" +
+		    "  height: 230\n" +
+		    "  scene: Scene {\n" +
+            "    fill: Color.BLACK\n" +
+            "    content: [\n" +
+            "      Group {\n" +
+            "        content: [\n" +
+            "          Rectangle {\n" +
+            "            x: 20.0\n" +
+            "            y: 20.0\n" +
+            "            fill: Color.WHITESMOKE\n" +
+            "            width: 280\n" +
+            "            height: 80\n" +
+            "            arcHeight: 15\n" +
+            "            arcWidth: 15\n" +
+            "            stroke: Color.ORANGE\n" +
+            "            strokeWidth: 3\n" +
+            "          },\n" +
+            "          Text {\n" +
+            "            content: 'JavaFX rocks!'\n" +
+            "            font: Font {\n" +
+            "              name: 'Verdana',\n" +
+            "              embolden: true,\n" +
+            "              size: 30\n" +
+            "            }\n" +
+            "            fill: Color.ORANGE\n" +
+            "            x: 55.0\n" +
+            "            y: 75.0\n" +
+		    "          }]\n" +
+		    "        effect: Reflection {\n" +
+		    "          fraction: 0.50\n" +
+		    "          topOpacity: 0.8\n" +
+		    "        }\n" +
+		    "        opacity: bind o1\n" +
+		    "      },\n" +
+		    "      Text {\n" +
+		    "        content: 'GWT and JavaFX => http://code.google.com/p/gwtai/'\n" +
+		    "        font: Font {\n" +
+		    "          name: 'Verdana',\n" +
+		    "          size: 9\n" +
+		    "          oblique: true\n" +
+		    "        }\n" +
+		    "        fill: Color.WHITESMOKE\n" +
+		    "        x: 20.0\n" +
+		    "        y: 175.0\n" +
+		    "      }\n" +
+		    "    ]\n" +
+		    "  }\n" +
+		    "}" +
 		    "</pre>";
 			
 		return new HTML(html);

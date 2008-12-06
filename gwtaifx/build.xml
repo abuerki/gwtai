@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="JavaFXDemo" default="all" basedir=".">
 	
-	<property name="fx.dir" value="/home/kilkenny/.netbeans/6.1/javafx-sdk1.0pre1/bin" />
+	<property name="fx.dir" value="/opt/javafx-sdk1.0/bin" />
 	<property name="bin.dir" value="bin" />
 	<property name="src.dir" value="src" />
 	<property name="build.dir" value="build" />
@@ -32,10 +32,13 @@
 	
 	<target name="compile-fx" depends="init">
 		<exec dir="${fx.dir}" executable="${fx.dir}/javafxc">
-			<arg value="-target 1.5" />
-			<arg value="-d ${basedir}/${bin.dir}" />
 		    <arg value="${basedir}/${src.dir}/com/google/gwt/gwtai/demo/impl/JavaFXAppletImpl.fx"/>
 		</exec>
+		<move todir="${basedir}/${bin.dir}">
+		    <fileset dir="${basedir}/${src.dir}">
+		      <include name="**/*.class" />
+		    </fileset>
+		  </move>
     </target>
 	
 	<target name="compile" depends="compile-fx">
@@ -63,7 +66,7 @@
 	    </java>
 	</target> 
 	
-	<target name="package-jars" depends="gwt-compile">
+	<target name="package-jar" depends="gwt-compile">
 		<echo level="info">Packaging jars ${ant.project.name}</echo>
 
 		<jar destfile="${build.dir}/${ant.project.name}.jar" compress="true">
@@ -77,7 +80,7 @@
 		</jar>
     </target>
 	
-	<target name="preparetest" depends="package-jars">
+	<target name="preparetest" depends="package-jar">
 		<echo level="info">Preparing test env ${ant.project.name}</echo>
 
 		<copy file="${lib.dir}/GwtAI-Client.jar" todir="${out.www.dir}" />
@@ -85,7 +88,15 @@
 		<copy file="${lib.dir}/javafxgui.jar" todir="${out.www.dir}" />
 		<copy file="${lib.dir}/javafx-swing.jar" todir="${out.www.dir}" />
 		<copy file="${lib.dir}/Scenario.jar" todir="${out.www.dir}" />
+		<copy file="${lib.dir}/eula.jar" todir="${out.www.dir}" />
 		<copy file="${build.dir}/${ant.project.name}.jar" todir="${out.www.dir}" />
+		
+		<signjar jar="${out.www.dir}/${ant.project.name}.jar" alias="Adrian Buerki" storepass="gwtaigwtai" keystore=".keystore" />
+		<signjar jar="${out.www.dir}/javafxrt.jar" alias="Adrian Buerki" storepass="gwtaigwtai" keystore=".keystore" />
+		<signjar jar="${out.www.dir}/javafxgui.jar" alias="Adrian Buerki" storepass="gwtaigwtai" keystore=".keystore" />
+		<signjar jar="${out.www.dir}/javafx-swing.jar" alias="Adrian Buerki" storepass="gwtaigwtai" keystore=".keystore" />
+		<signjar jar="${out.www.dir}/Scenario.jar" alias="Adrian Buerki" storepass="gwtaigwtai" keystore=".keystore" />
+		<signjar jar="${out.www.dir}/eula.jar" alias="Adrian Buerki" storepass="gwtaigwtai" keystore=".keystore" />
 	</target>
 
 	<target name="clean">
@@ -100,6 +111,7 @@
 			</fileset>
 		</delete>
 	</target>
+	
 	
 	<target name="all" depends="preparetest" />
 	
