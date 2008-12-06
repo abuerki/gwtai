@@ -22,7 +22,7 @@ import java.net.URL;
 
 import javax.swing.JButton;
 
-import javafx.application.Applet;
+import com.sun.javafx.runtime.adapter.Applet;
 
 import com.google.gwt.gwtai.demo.client.JavaFXApplet;
 
