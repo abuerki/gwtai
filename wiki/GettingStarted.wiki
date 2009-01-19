@@ -23,7 +23,7 @@ import com.google.gwt.gwtai.applet.client.*;
 @ImplementingClass(com.google.gwt.gwtai.demo.impl.CounterAppletImpl.class)
 @Height("60")
 @Width("350")
-@Archive("GwtAI-Core.jar,GwtAI-Demo.jar")
+@Archive("GwtAI-Client.jar,GwtAI-Demo.jar")
 public interface CounterApplet extends Applet {
                 
         public void increment();
@@ -112,3 +112,32 @@ Widget widgetApplet = AppletJSUtil.createAppletWidget(counterApplet);
 panelMain.add(widgetApplet);
 panelMain.add(buttonInc);
 }}}
+
+== Deploy the application ==
+
+The applet is started by the browser, thus runs in a JVM on the client machine. In order to load and start the applet the browser needs to have access to the applet classes and resources. There are two annotations in GwtAI to control from where and which resources are loaded by the browser.
+
+=== @Archive ===
+
+The `Archive` annotation tells the browser what resources to load. It takes a comma-separated list of archived files (usually Jar files).
+
+=== @Codebase ===
+
+The `Codebase` specifies the location from where the applet code and resources are loaded. The `Codebase` annotation is optional, if not specified the module root URL is used.
+
+Given the above Applet interface using the following an `Archive` annotation (Note that there is no Codebase annotation specified):
+{{{
+@Archive("GwtAI-Client.jar,GwtAI-Demo.jar")
+}}}
+
+The structure of the war file has to be like this:
+  * gwt
+    * standard
+    *...
+  * WEB-INF
+    * web.xml
+  * GwtAI.html
+  * GwtAI.css
+  * GwtAI-Client.jar
+  * GwtAI-Demo.jar
+  * ...
