@@ -1,27 +1,31 @@
 #summary Frequently Asked Questions
 
-== I run the GWT Shell and get a dialog that says _Java(TM) Plug-in Fatal Error_ ==
+== I run the GWT Shell and get a dialog that says _Java(TM) Plug-in Fatal Error_. ==
 
 Alas the GWT Shell can not handle embedded things like Flash or Applets. There is some restriction in the SWT component used to run a browser inside of the Shell application. To test your application you have to compile the code and run it in a browser.
 
 For more information see the [http://code.google.com/p/google-web-toolkit/issues/detail?id=283 GWT issue 283].
 
-== The GWT !Java2JavaScript compiler says _No source code is available for type javax.swing.JApplet_ ==
+== The GWT !Java2JavaScript compiler says _No source code is available for type javax.swing.JApplet_. ==
 
 You have your applet implementation class within you _client_ package, that does not work. You have to put the applet class into the _server package_, or in a package of its own.
 
-== I don't want my GWT application to include the Applet source code ==
+== I don't want my GWT application to include the Applet source code. ==
 
 During compilation the GWT !Java2JavaScript compiler needs to see the actual Applet implementation. But the respective annotation is compile time only. The GWT compiler only translates the files in the _client_ package. So decoupling works by placing the classes into different packages. Once you compiled your project the GWT compiler output won't contain any Applet classes.
 
 
-== I have problems compiling, the GWT compiler throws a !StackOverflowError ==
+== I have problems compiling, the GWT compiler throws a !StackOverflowError. ==
 
 On Linux please make sure you use a 32bit JDK, even on a 64bit platform you have to fall
 back on a 32bit JDK. This is not a GwtAI but a GWT problem. See the [http://groups.google.com/group/Google-Web-Toolkit/search?group=Google-Web-Toolkit&q=64-bit+linux&qt_g=Search+this+group GWT Google Groups] for more information on that one.
 
 The {{{java.lang.StackOverflowError}}} seems to occure only on a 1.6 JDK version, so try using a 1.5 JDK to compile things. With JDK 1.6 you can try to increase the heap size with some JVM arguments (e.g. {{{-XX:PermSize=64M}}} and {{{-XX:MaxPermSize=256M}}}). Although the heap size increase is not guaranteed to work...
 
-== Where can I get help ==
+== The source tree includes JDIC, why is that required? ==
+
+The {{{TrayIconApplet}}} example class uses the [https://jdic.dev.java.net/ JDesktop Integration Components (JDIC) project] to hook into the desktop tray. GwtAI itself does not depend on [https://jdic.dev.java.net/ JDIC].
+
+== Where can I get help? ==
 
 Please post questions and feedback to the [http://groups.google.com/group/gwtai GwtAI Google Group].
