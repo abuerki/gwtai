@@ -30,6 +30,13 @@ import com.google.gwt.user.client.Window;
  * @author Adrian Buerki <a.buerki@gmail.com>
  */
 public abstract class AppletAccomplice {
+	private static int _nextGobalId = 0;
+	private int _myId;
+	
+	public AppletAccomplice() {
+		_nextGobalId++;
+		_myId = _nextGobalId;
+	}
 
 	/**
 	 * The identifier of the applet DOM object, that allows it to be used from
@@ -135,9 +142,9 @@ public abstract class AppletAccomplice {
 		String tmp = getClass().getName();
 
 		if (tmp.lastIndexOf(".") > -1) {
-			return tmp.substring(tmp.lastIndexOf(".") + 1);
+			return tmp.substring(tmp.lastIndexOf(".") + 1) + _myId;
 		} else {
-			return tmp;
+			return tmp + _myId;
 		}
 	}
 
