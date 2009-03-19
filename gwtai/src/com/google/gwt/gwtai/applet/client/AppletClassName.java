@@ -21,20 +21,22 @@ import static java.lang.annotation.ElementType.TYPE;
 import java.lang.annotation.Target;
 
 /**
- * The type of the actual <code>Applet</code> implementation. Either this
- * Annotation or the <code>AppletClassName</code> one have to be set, without
- * the actual name of the concrete <code>Applet</code> class the
+ * The fully qualified name of the actual <code>Applet</code> implementation.
+ * Either this Annotation or the <code>ImplementingClass</code> one have to be
+ * set, without the actual name of the concrete <code>Applet</code> class the
  * <code>AppletProxyGenerator</code> can not perform its task. Note that the
  * <code>ImplementingClass</code> Annotation should be preferred, because it
  * checks for the existence of the given class and provides some more safety.
+ * Use the <code>AppletClassName</code> if you need to decouple the GWT and the
+ * Applet project, thus don't have the implementing class in your class path.
  * 
  * @author Adrian Buerki <a.buerki@gmail.com>
  * 
- * @see com.google.gwt.gwtai.applet.client.AppletClassName
+ * @see com.google.gwt.gwtai.applet.client.ImplementingClass
  */
 @Target(TYPE)
-public @interface ImplementingClass {
+public @interface AppletClassName {
 
-	Class<? extends Applet> value();
+	String value();
 
 }
