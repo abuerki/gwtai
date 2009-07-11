@@ -101,7 +101,11 @@ public class TrayIconAppletImpl extends JApplet implements TrayIconApplet {
 	}
 
 	public void stop() {
-		hideTrayIcon();
+		try {
+			hideTrayIcon();
+		} catch (Exception e) {
+			// Too bad, nothing we can do about
+		}
 	}
 
 	/**

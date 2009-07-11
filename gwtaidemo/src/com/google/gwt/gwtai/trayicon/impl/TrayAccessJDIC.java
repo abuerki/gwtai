@@ -51,6 +51,7 @@ public class TrayAccessJDIC extends JApplet implements TrayIconApplet {
 		try {
 			injectTrayNativLib();
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException(
 					"Can not add tray native library to the java.library.path", e);
 		}

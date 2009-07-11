@@ -17,8 +17,9 @@
 package com.google.gwt.gwtai.demo.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -47,20 +48,20 @@ public class CounterAppletTab extends Composite {
 		
 		final CounterApplet counterApplet = (CounterApplet) GWT.create(CounterApplet.class);
 		
-		buttonInc.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+		buttonInc.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				counterApplet.increment();
 			}
 		});
 
-		buttonDec.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+		buttonDec.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				counterApplet.decrement();
 			}
 		});
 
-		buttonGet.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+		buttonGet.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				Object value = counterApplet.getCurrentValue();
 				
 				DialogBox dialogBox = createDialogBox(value);
@@ -108,8 +109,8 @@ public class CounterAppletTab extends Composite {
 	    panelContent.setCellHorizontalAlignment(labelCurrentValue, VerticalPanel.ALIGN_CENTER);
 
 	    Button buttonCloseDlg = new Button("Close");
-	    buttonCloseDlg.addClickListener(new ClickListener() {
-	    	public void onClick(Widget sender) {
+	    buttonCloseDlg.addClickHandler(new ClickHandler() {
+	    	public void onClick(ClickEvent event) {
 	    		dialogBox.hide();
 	    	}
 	    });
