@@ -87,7 +87,8 @@ public class AppletJSUtil {
 			htmlCode += createParamTag("java_arguments", aapplet.getJavaArguments());
 			htmlCode += createParamTag("separate_jvm", aapplet.hasSeparateJVM());
 			htmlCode += createParamTag("image", aapplet.getLoadingImage());
-
+			htmlCode += createParamTag("applet_name", aapplet.getName());
+			
 			htmlCode += "</applet>";
 
 			return new HTML(htmlCode);

@@ -50,7 +50,7 @@ public class CallbackUtil {
 		} else if (callbackType.equals(Date.class.getName())) {
 			parsedCallbackValue = DATE_FORMAT.parse(callbackValue);
 		} else {
-			parsedCallbackValue = callbackValue;
+			parsedCallbackValue = Base64Util.decodeString(callbackValue);
 		}
 
 		if (null != appletCallback) {
