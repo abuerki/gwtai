@@ -20,6 +20,8 @@ import java.applet.Applet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.google.gwt.gwtai.applet.client.Base64Util;
+
 import netscape.javascript.JSObject;
 
 /**
@@ -107,7 +109,8 @@ public class AppletUtil {
 	 *            The value to send.
 	 */
 	public static void callback(Applet applet, String callbackValue) {
-		callback(applet, callbackValue, String.class.getName());
+		String encodedValue = Base64Util.encodeString(callbackValue);
+		callback(applet, encodedValue, String.class.getName());
 	}
 
 	/**
@@ -122,7 +125,7 @@ public class AppletUtil {
 	 */
 	private static void callback(Applet applet, String callbackValue,
 			String callbackType) {
-		String appletName = getAppletName(applet);
+		String appletName = applet.getParameter("applet_name");
 
 		String jsCmd = "callbackApplet(\"" + appletName + "\", \""
 				+ callbackValue + "\", \"" + callbackType + "\");";
@@ -148,16 +151,6 @@ public class AppletUtil {
 		}
 
 		return null;
-	}
-
-	private static String getAppletName(Applet applet) {
-		String tmp = applet.getClass().getName();
-
-		if (tmp.lastIndexOf(".") > -1) {
-			return tmp.substring(tmp.lastIndexOf(".") + 1);
-		} else {
-			return tmp;
-		}
 	}
 
 }

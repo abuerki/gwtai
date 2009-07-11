@@ -31,12 +31,12 @@ import com.google.gwt.user.client.Window;
  */
 public abstract class AppletAccomplice {
 	private static int _nextGobalId = 0;
-	private int _myId;
-	
-	public AppletAccomplice() {
-		_nextGobalId++;
-		_myId = _nextGobalId;
-	}
+    private int _myId;
+
+    public AppletAccomplice() {
+            _nextGobalId++;
+            _myId = _nextGobalId;
+    } 
 
 	/**
 	 * The identifier of the applet DOM object, that allows it to be used from
@@ -139,14 +139,14 @@ public abstract class AppletAccomplice {
 	};
 
 	public String getName() {
-		String tmp = getClass().getName();
+        String tmp = getClass().getName();
 
-		if (tmp.lastIndexOf(".") > -1) {
-			return tmp.substring(tmp.lastIndexOf(".") + 1) + _myId;
-		} else {
-			return tmp + _myId;
-		}
-	}
+        if (tmp.lastIndexOf(".") > -1) {
+                return tmp.substring(tmp.lastIndexOf(".") + 1) + _myId;
+        } else {
+                return tmp + _myId;
+        }
+	} 
 
 	/**
 	 * Detect if an <code>Applet</code> is ready. An <code>Applet</code> is

@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="GwtAI" default="all" basedir=".">
 
-	<property name="web.dir" value="src/com/google/gwt/gwtai/demo/public" />
 	<property name="bin.dir" value="bin" />
 	<property name="src.dir" value="src" />
 	<property name="demo.src.dir" value="../gwtaidemo/src" />
 	<property name="build.dir" value="build" />
 	<property name="lib.dir" value="lib" />
 	<property name="doc.dir" value="doc/api" />
-	<property name="out.www.dir" value="www/com.google.gwt.gwtai.demo.GwtAI" />
-	<property name="gwt.dir" value="/opt/gwt-linux-1.5.3" />
+	<property name="gwt.dir" value="/opt/eclipse_ganymede_sr2/plugins/com.google.gwt.eclipse.sdkbundle.linux_1.6.4.v200904062334/gwt-linux-1.6.4/" />
 
 	<path id="project.class.path">
 		<pathelement path="${java.class.path}/" />
@@ -25,7 +23,6 @@
 		<tstamp prefix="start" />
 		<mkdir dir="${bin.dir}" />
 		<mkdir dir="${build.dir}" />
-		<mkdir dir="${out.www.dir}" />
 		<mkdir dir="${doc.dir}"/>
 	</target>
 
@@ -33,7 +30,7 @@
 		<echo level="info">Compiling ${ant.project.name}</echo>
 
 		<mkdir dir="bin" />
-		<javac srcdir="src:test" destdir="bin" includes="**" debug="on" debuglevel="lines,vars,source">
+		<javac srcdir="src" destdir="bin" includes="**" debug="on" debuglevel="lines,vars,source">
 			<classpath refid="project.class.path" />
 		</javac>
 	</target>
@@ -46,10 +43,6 @@
 		
 		<delete includeemptydirs="true" failonerror="false">
 			<fileset dir="${bin.dir}" />
-			<fileset dir="${out.www.dir}" />
-			<fileset dir="${web.dir}">
-				<include name="**.class" />
-			</fileset>
 		</delete>
 	</target>
 	
@@ -74,19 +67,19 @@
 				<include name="com/google/gwt/gwtai/applet/AppletIntegration.gwt.xml" />
 				<include name="com/google/gwt/gwtai/applet/client/**" />
 				<include name="com/google/gwt/gwtai/applet/generator/**" />
-				<include name="com/google/gwt/gwtai/trayicon/TrayIconIntegration.gwt.xml" />
-				<include name="com/google/gwt/gwtai/trayicon/client/**"/>
+				<include name="com/google/gwt/gwtai/applet/linker/**" />
 			</fileset>
 			<fileset dir="${bin.dir}">
 				<include name="com/google/gwt/gwtai/applet/client/**" />
 				<include name="com/google/gwt/gwtai/trayicon/client/**"/>
 				<include name="com/google/gwt/gwtai/applet/generator/**" />
+				<include name="com/google/gwt/gwtai/applet/linker/**" />
 			</fileset>
 			<manifest>
 				<attribute name="Built-By" value="Adrian Buerki"/>
 			      <attribute name="Implementation-Vendor" value="GWT Advanced Integration"/>
 			      <attribute name="Implementation-Title" value="GwtAI Client"/>
-			      <attribute name="Implementation-Version" value="0.2"/>
+			      <attribute name="Implementation-Version" value="0.3"/>
 		    </manifest>
 		</jar>
 		
@@ -99,7 +92,7 @@
 			      <attribute name="Built-By" value="Adrian Buerki"/>
 			      <attribute name="Implementation-Vendor" value="GWT Advanced Integration"/>
 			      <attribute name="Implementation-Title" value="GwtAI Core"/>
-			      <attribute name="Implementation-Version" value="0.2"/>
+			      <attribute name="Implementation-Version" value="0.3"/>
 		    </manifest>
 		</jar>
 		
