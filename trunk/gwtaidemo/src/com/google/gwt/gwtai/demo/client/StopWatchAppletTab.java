@@ -17,9 +17,10 @@
 package com.google.gwt.gwtai.demo.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.gwtai.applet.client.AppletJSUtil;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -50,14 +51,14 @@ public class StopWatchAppletTab extends Composite {
 		final StopWatchApplet stopWatchApplet = (StopWatchApplet) GWT
 				.create(StopWatchApplet.class);
 
-		buttonStart.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+		buttonStart.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				stopWatchApplet.startWatch();
 			}
 		});
 
-		buttonStop.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+		buttonStop.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				stopWatchApplet.stopWatch();
 			}
 		});

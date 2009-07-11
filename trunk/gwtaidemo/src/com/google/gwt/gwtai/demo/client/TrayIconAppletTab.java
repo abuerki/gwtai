@@ -17,11 +17,12 @@
 package com.google.gwt.gwtai.demo.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.gwtai.applet.client.AppletJSUtil;
 import com.google.gwt.gwtai.trayicon.client.TrayIconApplet;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -68,9 +69,8 @@ public class TrayIconAppletTab extends Composite {
 
 		Button buttonAdd = new Button("Add menu item");
 
-		buttonAdd.addClickListener(new ClickListener() {
-
-			public void onClick(Widget sender) {
+		buttonAdd.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				String caption = boxCaption.getText();
 
 				if (null == caption || caption.length() < 1) {
@@ -86,16 +86,13 @@ public class TrayIconAppletTab extends Composite {
 					}
 				}
 			}
-
 		});
 
 		Button buttonSeparator = new Button("Add separator");
-		buttonSeparator.addClickListener(new ClickListener() {
-
-			public void onClick(Widget sender) {
+		buttonSeparator.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				_trayIconApplet.addSeparator();
 			}
-
 		});
 
 		panelItems.add(boxCaption);
