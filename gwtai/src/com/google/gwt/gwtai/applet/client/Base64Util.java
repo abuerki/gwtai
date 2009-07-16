@@ -1,12 +1,44 @@
+/*
+ * Copyright 2008 Adrian Buerki
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
+/*
+ * Copyright 2008 Adrian Buerki
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package com.google.gwt.gwtai.applet.client;
 
 /**
  * A Base64 Encoder/Decoder, adapted to work with GWT. This class is used to encode
  * and decode data in Base64 format as described in RFC 1521.
  * 
- * The code is based on a solution provided by Christian d'Heureuse ( 
+ * The code is based on a solution kindly provided by Christian d'Heureuse ( 
  * <a href="http://www.source-code.biz/snippets/java/2.htm">www.source-code.biz</a>)
- * under the <a href="http://www.gnu.org/licenses/lgpl.html">GNU/LGPL</a> license.
+ * multi-licensed under EPL, LGPL and AL.
  * The original code has been written for Java SE and had to be adapted in order
  * to cleanly compile to JS.
  * 
