@@ -20,7 +20,11 @@ During compilation the GWT !Java2JavaScript compiler needs to see the actual App
 On Linux please make sure you use a 32bit JDK, even on a 64bit platform you have to fall
 back on a 32bit JDK. This is not a GwtAI but a GWT problem. See the [http://groups.google.com/group/Google-Web-Toolkit/search?group=Google-Web-Toolkit&q=64-bit+linux&qt_g=Search+this+group GWT Google Groups] for more information on that one.
 
-The {{{java.lang.StackOverflowError}}} seems to occure only on a 1.6 JDK version, so try using a 1.5 JDK to compile things. With JDK 1.6 you can try to increase the heap size with some JVM arguments (e.g. {{{-XX:PermSize=64M}}} and {{{-XX:MaxPermSize=256M}}}). Although the heap size increase is not guaranteed to work...
+The {{{java.lang.StackOverflowError}}} seems to occure only on a 1.6 JDK version. The easiest workaround the {{{java.lang.StackOverflowError}}} is to use a JDK 1.5 compiler, instead of JDK 1.6. So try using a 1.5 JDK to compile your code. With JDK 1.6 you can try to increase the heap size with some JVM arguments (e.g. {{{-XX:PermSize=64M}}} and {{{-XX:MaxPermSize=256M}}}). Although the heap size increase is not guaranteed to work. 
+
+This is related to [http://code.google.com/p/google-web-toolkit/issues/detail?id=3510 GWT issue 3510].
+
+*Hint:* If you rely on some JDK 1.6 libraries, you can still use JDK 1.5 to compile. Just run {{{javac}}} with the JDK 1.6 {{{rt.jar}}} in the classpath.
 
 == The source tree includes JDIC, why is that required? ==
 
