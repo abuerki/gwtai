@@ -272,9 +272,6 @@ public class JarLinker extends AbstractLinker {
 	 * @return The list of full paths to the classes to include.
 	 */
 	private String[] resolveResources(TreeLogger logger, List<String> values){
-		if(values.size()==0)
-			values.add("applet");
-		
 		DefaultFilters defaultFilters = new DefaultFilters();
 		ResourceOracleImpl resourceOracle = new ResourceOracleImpl(logger);
 		PathPrefixSet pathPrefixSet = new PathPrefixSet();
