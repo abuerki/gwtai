@@ -13,8 +13,13 @@
 		<pathelement path="${java.class.path}/" />
 		<pathelement path="${gwt.dir}/gwt-user.jar" />
 		<pathelement path="${lib.dir}/plugin.jar" />
+		<pathelement path="${gwt.dir}/gwt-dev.jar" />
+		
+		<!-- These are for backward compatability to pre 2.0 versions -->
 		<pathelement path="${gwt.dir}/gwt-dev-windows.jar" />
 		<pathelement path="${gwt.dir}/gwt-dev-linux.jar" />
+		
+				
 	</path>
 
 	<target name="init" depends="clean">
