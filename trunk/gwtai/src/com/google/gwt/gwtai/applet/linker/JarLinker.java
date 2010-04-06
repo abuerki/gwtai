@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
@@ -65,7 +66,10 @@ public class JarLinker extends AbstractLinker {
 		 
 		for (ConfigurationProperty currentProperty: context.getConfigurationProperties()) {
 			String propName = currentProperty.getName();
-			String propValue = currentProperty.getValue();
+			List<String> propValues = currentProperty.getValues();
+			if(propValues.size()==0)
+				continue;
+			String propValue = propValues.get(0);
 			
 			if (propName != null) {
 				propName = propName.trim();
