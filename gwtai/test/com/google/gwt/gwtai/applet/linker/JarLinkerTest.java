@@ -105,7 +105,7 @@ public class JarLinkerTest extends TestCase {
 		ArtifactSet artifacts = new ArtifactSet();
 		
 		try {
-			ArtifactSet artifacts = jarLinker.link(logger, context, artifacts);
+			ArtifactSet retArtifacts = jarLinker.link(logger, context, artifacts);
 			//TODO Make this test make sense :)
 		} catch (UnableToCompleteException e) {
 			fail(e.getMessage());
