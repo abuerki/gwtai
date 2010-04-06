@@ -9,4 +9,11 @@
 	
 	<define-linker name="jarlinker" class="com.google.gwt.gwtai.applet.linker.JarLinker" />
 
+	<define-configuration-property name="jarlinker.resource" is-multi-valued="true" />
+  	<define-configuration-property name="jarlinker.name" is-multi-valued="false" />
+	<define-configuration-property name="jarlinker.keystore" is-multi-valued="false" />
+	<define-configuration-property name="jarlinker.alias" is-multi-valued="false" />
+	<define-configuration-property name="jarlinker.storepass" is-multi-valued="false" />
+	<define-configuration-property name="jarlinker.include" is-multi-valued="false" />
+  
 </module>
