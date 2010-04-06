@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
@@ -18,6 +20,12 @@ import com.google.gwt.core.ext.linker.AbstractLinker;
 import com.google.gwt.core.ext.linker.ArtifactSet;
 import com.google.gwt.core.ext.linker.ConfigurationProperty;
 import com.google.gwt.core.ext.linker.LinkerOrder;
+import com.google.gwt.dev.cfg.ModuleDef;
+import com.google.gwt.dev.resource.ResourceOracle;
+import com.google.gwt.dev.resource.impl.DefaultFilters;
+import com.google.gwt.dev.resource.impl.PathPrefix;
+import com.google.gwt.dev.resource.impl.PathPrefixSet;
+import com.google.gwt.dev.resource.impl.ResourceOracleImpl;
 
 /**
  * A GWT linker to create and sign a JAR file which contains all the Applet classes.
@@ -63,39 +71,47 @@ public class JarLinker extends AbstractLinker {
 		String keystore = null;
 		String alias = null;
 		String storepass = null;
-		 
+		boolean resourceSpecified=false;
+		
 		for (ConfigurationProperty currentProperty: context.getConfigurationProperties()) {
 			String propName = currentProperty.getName();
+			
+			//TODO Should we handle multiple values?
 			List<String> propValues = currentProperty.getValues();
 			if(propValues.size()==0)
 				continue;
-			String propValue = propValues.get(0);
+			String firstPropValue = propValues.get(0);
 			
 			if (propName != null) {
 				propName = propName.trim();
 			}
 			
-			if (propValue != null) {
-				propValue.trim();
+			if (firstPropValue != null) {
+				firstPropValue = firstPropValue.trim();
 			}
 			
 			if (propName.equalsIgnoreCase("jarlinker.name")) {
-				jarName = propValue;
+				jarName = firstPropValue;
 			} else if (propName.equalsIgnoreCase("jarlinker.include")) {
-				includeResources = propValue.split(",");
+				if(!resourceSpecified)
+					includeResources = firstPropValue.split(",");
+			} else if (propName.equalsIgnoreCase("jarlinker.resource")) {
+				logger.log(Type.INFO, "jarlinker.resource specified which will override jarlinker.include.");
+				resourceSpecified=true;
+				includeResources = resolveResources(logger,currentProperty.getValues());
 			} else if (propName.equalsIgnoreCase("jarlinker.jarsigner")) {
-				jarsignerPath = propValue;
+				jarsignerPath = firstPropValue;
 			} else if (propName.equalsIgnoreCase("jarlinker.keystore")) {
-				keystore = propValue;
+				keystore = firstPropValue;
 			} else if (propName.equalsIgnoreCase("jarlinker.storepass")) {
-				storepass = propValue;
+				storepass = firstPropValue;
 			} else if (propName.equalsIgnoreCase("jarlinker.alias")) {
-				alias = propValue;
+				alias = firstPropValue;
 			}
 		}
 		
 		if (includeResources == null) {
-			logger.log(Type.ERROR, "No resources to include, use <set-configuration-property name=\"jarlinker.include\" value=\"...\"/>.");
+			logger.log(Type.ERROR, "No resources to include, use <set-configuration-property name=\"jarlinker.resource\" value=\"...\"/>.");
 			
 			throw new UnableToCompleteException();
 		}
@@ -120,6 +136,7 @@ public class JarLinker extends AbstractLinker {
 			String cmd = javaHomeDir + fileSeparator + "bin" + fileSeparator + "jarsigner";
 			
 			try {
+				logger.log(Type.INFO, "Running jarsigner: "+cmd);
 				Runtime.getRuntime().exec(cmd);
 			
 				jarsignerPath = cmd;
@@ -128,6 +145,7 @@ public class JarLinker extends AbstractLinker {
 				cmd = javaHomeDir + fileSeparator +".." + fileSeparator + "bin" + fileSeparator + "jarsigner";
 				
 				try {
+					logger.log(Type.INFO, "Running jarsigner: "+cmd);
 					Runtime.getRuntime().exec(cmd);
 					
 					jarsignerPath = cmd;
@@ -241,6 +259,60 @@ public class JarLinker extends AbstractLinker {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Resolves the resources specified by values with the following syntax:
+	 * <root packagename>[::[include=<pattern>][;exclude=<pattern>]]
+	 * 
+	 * If no values are specified, 'applet, is used as default relative packagename.
+	 * This pattern is the same syntax as used by ant for inclusion and exclusion.
+	 * 
+	 * @param values The values to use for retrieval.
+	 * @return The list of full paths to the classes to include.
+	 */
+	private String[] resolveResources(TreeLogger logger, List<String> values){
+		if(values.size()==0)
+			values.add("applet");
+		
+		DefaultFilters defaultFilters = new DefaultFilters();
+		ResourceOracleImpl resourceOracle = new ResourceOracleImpl(logger);
+		PathPrefixSet pathPrefixSet = new PathPrefixSet();
+		
+		for(String value:values){
+			String[] valuedata = value.split("::");
+			String[] includes={};
+			String[] excludes={};
+			
+			if(valuedata.length>1){
+				List<String> incList = new ArrayList<String>();
+				List<String> exList = new ArrayList<String>();
+				String[] inclusiondata = valuedata[1].split(";");
+				
+				for(String inclusionElement:inclusiondata){
+					String[] elementData = inclusionElement.split("=");
+					if(elementData.length==2){
+						if("include".equals(elementData[0])){
+							incList.add(elementData[1]);
+						}
+						if("exclude".equals(elementData[0])){
+							exList.add(elementData[1]);
+						}
+					}
+				}
+				includes=incList.toArray(new String[0]);
+				excludes=exList.toArray(new String[0]);
+			}
+			
+			PathPrefix pathPrefix = new PathPrefix(valuedata[0], defaultFilters.customResourceFilter(includes, excludes, false, false));
+			pathPrefixSet.add(pathPrefix);
+			
+		}
+		
+		resourceOracle.setPathPrefixes(pathPrefixSet);
+		resourceOracle.refresh(logger);
+		
+		return resourceOracle.getPathNames().toArray(new String[0]);
 	}
 	
 	/**
