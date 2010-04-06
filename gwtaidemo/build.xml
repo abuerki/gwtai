@@ -13,11 +13,15 @@
 		<pathelement path="${java.class.path}/" />
 		<pathelement path="${gwt.dir}/gwt-user.jar" />
 		<pathelement path="${lib.dir}/plugin.jar" />
-		<pathelement path="${gwt.dir}/gwt-dev-windows.jar" />
-		<pathelement path="${gwt.dir}/gwt-dev-linux.jar" />
+		<pathelement path="${gwt.dir}/gwt-dev.jar" />
 		<pathelement path="${lib.dir}/jdic.jar" />
 		<pathelement path="${web.dir}/GwtAI-Client.jar" />
 		<pathelement path="${web.dir}/GwtAI-Core.jar" />
+
+		<!-- backwards compatible -->
+		<pathelement path="${gwt.dir}/gwt-dev-windows.jar" />
+		<pathelement path="${gwt.dir}/gwt-dev-linux.jar" />
+		
 	</path>
 
 	<target name="init" depends="clean">

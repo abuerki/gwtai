@@ -15,6 +15,13 @@
 
 	<add-linker name='jarlinker' />
 
+
+	<set-configuration-property name="jarlinker.resource" value="com/google/gwt/gwtai/demo/impl::include=**/*.class" />
+	<extend-configuration-property name="jarlinker.resource" value="com/google/gwt/gwtai/demo/client::include=**/CounterApplet.class;include=**/CallbackApplet.class;include=**/StopWatchApplet.class" />
+	<extend-configuration-property name="jarlinker.resource" value="com/google/gwt/gwtai/trayicon/impl::include=**/*.class;include=**/*.gif" />
+	<extend-configuration-property name="jarlinker.resource" value="com/google/gwt/gwtai/trayicon/client::include=**/TrayIconApplet.class" />
+
+
 	<set-configuration-property name="jarlinker.name" value="GwtAI-Demo.jar" />
 	<set-configuration-property name="jarlinker.keystore" value=".keystore" />
 	<set-configuration-property name="jarlinker.alias" value="Adrian Buerki" />
