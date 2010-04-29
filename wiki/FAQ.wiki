@@ -30,6 +30,20 @@ This is related to [http://code.google.com/p/google-web-toolkit/issues/detail?id
 
 The {{{TrayIconApplet}}} example class uses the [https://jdic.dev.java.net/ JDesktop Integration Components (JDIC) project] to hook into the desktop tray. GwtAI itself does not depend on [https://jdic.dev.java.net/ JDIC].
 
+== I get a !ClassNotFoundException when i try to run the Applet  ==
+
+This is because the browser can not find the classes and resources needed to start the Applet. Since Java Applets are executed in a sandbox the whole code and resource loading works a bit different. To learn more about Applets and the Applet runtime (browser plugin) see the Applets section in the [http://java.sun.com/docs/books/tutorial/deployment/applet/ The Java Tutorials].
+
+In order to make the Applet loading work in the browser, you have to make sure that all resources are in the right place. Take the following steps:
+
+*1.* Build one or multiple JAR files containing all classes and resources needed by your applet.
+
+*2.* Use the GwtAI _@Archive_ annotation to tell GwtAI how these JAR files are named.
+
+*3.* Place the JAR files such that the browser can see them. E.g. in the GWT output directory or inside the WAR file you want to deploy.
+
+*4.* Use the GwtAI _@Codebase_ annotation to tell GwtAI where the JAR files can be found.
+
 == Where can I get help? ==
 
 Please post questions and feedback to the [http://groups.google.com/group/gwtai GwtAI Google Group].
