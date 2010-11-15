@@ -8,20 +8,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
 import com.google.gwt.core.ext.LinkerContext;
 import com.google.gwt.core.ext.TreeLogger;
-import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.TreeLogger.Type;
+import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.linker.AbstractLinker;
 import com.google.gwt.core.ext.linker.ArtifactSet;
 import com.google.gwt.core.ext.linker.ConfigurationProperty;
 import com.google.gwt.core.ext.linker.LinkerOrder;
-import com.google.gwt.dev.cfg.ModuleDef;
-import com.google.gwt.dev.resource.ResourceOracle;
 import com.google.gwt.dev.resource.impl.DefaultFilters;
 import com.google.gwt.dev.resource.impl.PathPrefix;
 import com.google.gwt.dev.resource.impl.PathPrefixSet;
@@ -301,13 +298,13 @@ public class JarLinker extends AbstractLinker {
 				excludes=exList.toArray(new String[0]);
 			}
 			
-			PathPrefix pathPrefix = new PathPrefix(valuedata[0], defaultFilters.customResourceFilter(includes, excludes, false, false));
+			PathPrefix pathPrefix = new PathPrefix(valuedata[0], defaultFilters.customResourceFilter(includes, excludes, null, false, false));
 			pathPrefixSet.add(pathPrefix);
 			
 		}
 		
 		resourceOracle.setPathPrefixes(pathPrefixSet);
-		resourceOracle.refresh(logger);
+		ResourceOracleImpl.refresh(logger, resourceOracle);
 		
 		return resourceOracle.getPathNames().toArray(new String[0]);
 	}
