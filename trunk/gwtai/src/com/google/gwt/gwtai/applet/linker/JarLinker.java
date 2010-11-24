@@ -107,7 +107,7 @@ public class JarLinker extends AbstractLinker {
 			}
 		}
 		
-		if (includeResources == null) {
+		if (includeResources == null || includeResources.length == 0) {
 			logger.log(Type.ERROR, "No resources to include, use <set-configuration-property name=\"jarlinker.resource\" value=\"...\"/>.");
 			
 			throw new UnableToCompleteException();
@@ -188,6 +188,12 @@ public class JarLinker extends AbstractLinker {
 	 * Private helper-method to create and sign our JAR file.
 	 */
 	private byte[] createJar(TreeLogger logger, String includeResources[]) throws UnableToCompleteException {
+		if(includeResources.length == 0){
+			logger.log(Type.INFO, "No resources to add. JAR-file will not be created.");
+			return new byte[0];
+			
+		}
+		
 		logger.log(Type.INFO, "Adding " + includeResources.length + " resources to JAR file");
 		
 		ByteArrayOutputStream byteArrayOutStream = null;
@@ -298,12 +304,14 @@ public class JarLinker extends AbstractLinker {
 				excludes=exList.toArray(new String[0]);
 			}
 			
-			PathPrefix pathPrefix = new PathPrefix(valuedata[0], defaultFilters.customResourceFilter(includes, excludes, null, false, false));
+			PathPrefix pathPrefix = new PathPrefix(valuedata[0], 
+					defaultFilters.customResourceFilter(includes, excludes, new String[0], false, false));
 			pathPrefixSet.add(pathPrefix);
 			
 		}
 		
 		resourceOracle.setPathPrefixes(pathPrefixSet);
+		
 		ResourceOracleImpl.refresh(logger, resourceOracle);
 		
 		return resourceOracle.getPathNames().toArray(new String[0]);
