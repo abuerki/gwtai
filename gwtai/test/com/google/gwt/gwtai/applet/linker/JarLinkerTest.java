@@ -36,7 +36,7 @@ public class JarLinkerTest extends TestCase {
 			
 			cp = new com.google.gwt.dev.cfg.ConfigurationProperty("jarlinker.resource");
 			// <location>[::[include=**/applet/**.class][;exclude:**/applet.test.class]]"
-			cp.setValue("com/google/gwt/gwtai/applet::include=**/applet/util/*.class;exclude=**/applet/test.class");
+			cp.setValue("com/google/gwt/gwtai::include=**/*.class;exclude=**/applet/client/**");
 			set.add(new StandardConfigurationProperty(cp));
 			return set;
 		}
