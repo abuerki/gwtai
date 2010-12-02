@@ -7,7 +7,7 @@
 	<property name="doc.dir" value="doc/api" />
 	<property name="web.dir" value="war" />
 	<property name="bin.dir" value="${web.dir}/WEB-INF/classes" />
-	<property name="gwt.dir" value="/opt/eclipse_ganymede_sr2/plugins/com.google.gwt.eclipse.sdkbundle.linux_1.6.4.v200904062334/gwt-linux-1.6.4/" />
+	<property name="gwt.dir" value="/Users/kilkenny/Tools/Sdk/gwt-2.1.0" />
 
 	<path id="project.class.path">
 		<pathelement path="${java.class.path}/" />
@@ -17,11 +17,6 @@
 		<pathelement path="${lib.dir}/jdic.jar" />
 		<pathelement path="${web.dir}/GwtAI-Client.jar" />
 		<pathelement path="${web.dir}/GwtAI-Core.jar" />
-
-		<!-- backwards compatible -->
-		<pathelement path="${gwt.dir}/gwt-dev-windows.jar" />
-		<pathelement path="${gwt.dir}/gwt-dev-linux.jar" />
-		
 	</path>
 
 	<target name="init" depends="clean">

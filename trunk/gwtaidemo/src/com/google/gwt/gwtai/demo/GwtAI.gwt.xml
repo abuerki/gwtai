@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.6.4//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.6.4/distro-source/core/src/gwt-module.dtd">
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.1.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.1.0/distro-source/core/src/gwt-module.dtd">
 
 <module>
 
@@ -15,12 +15,10 @@
 
 	<add-linker name='jarlinker' />
 
-
 	<set-configuration-property name="jarlinker.resource" value="com/google/gwt/gwtai/demo/impl::include=**/*.class" />
 	<extend-configuration-property name="jarlinker.resource" value="com/google/gwt/gwtai/demo/client::include=**/CounterApplet.class;include=**/CallbackApplet.class;include=**/StopWatchApplet.class" />
 	<extend-configuration-property name="jarlinker.resource" value="com/google/gwt/gwtai/trayicon/impl::include=**/*.class;include=**/*.gif" />
 	<extend-configuration-property name="jarlinker.resource" value="com/google/gwt/gwtai/trayicon/client::include=**/TrayIconApplet.class" />
-
 
 	<set-configuration-property name="jarlinker.name" value="GwtAI-Demo.jar" />
 	<set-configuration-property name="jarlinker.keystore" value=".keystore" />
