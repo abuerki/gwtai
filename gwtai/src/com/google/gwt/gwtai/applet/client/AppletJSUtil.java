@@ -45,6 +45,25 @@ public class AppletJSUtil {
 	 * @return An <code>HTML</code> element which contains an applet tag.
 	 */
 	public static Widget createAppletWidget(Applet applet) {
+		String htmlCode = createAppletHTML(applet);
+		
+		if (htmlCode != null) {
+			return new HTML(htmlCode);
+		}
+
+		return null;
+	}
+	
+	/**
+	 * Constructs an applet tag. The HTML specification states that the <code>applet</code> tag is deprecated.
+	 * But the browser support for the <code>object</code> and <code>embed</code> tag is currently
+	 * inconsistent. So using the <code>applet</code> tag is the only consistent way to deploy a Java Applet
+	 * across browsers on all platforms.
+	 *
+	 * @param applet The <code>Applet</code> to take the information from.
+	 * @return The applet tag.
+	 */
+	public static String createAppletHTML(Applet applet) {
 		if (applet instanceof AppletAccomplice) {
 			AppletAccomplice aapplet = (AppletAccomplice) applet;
 
@@ -91,7 +110,7 @@ public class AppletJSUtil {
 			
 			htmlCode += "</applet>";
 
-			return new HTML(htmlCode);
+			return htmlCode;
 		}
 
 		return null;
@@ -148,9 +167,8 @@ public class AppletJSUtil {
 	 *            The <code>AppletCallback</code> instance to notify once a
 	 *            callback is coming.
 	 */
-	@SuppressWarnings("unchecked")
 	public static void registerAppletCallback(Applet applet,
-			AppletCallback appletCallback) {
+			AppletCallback<?> appletCallback) {
 		if (applet instanceof AppletAccomplice) {
 			AppletAccomplice aapplet = (AppletAccomplice) applet;
 
