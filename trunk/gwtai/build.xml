@@ -85,6 +85,7 @@
 		<jar destfile="${build.dir}/${ant.project.name}-Core.jar" compress="true">
 			<fileset dir="${bin.dir}">
 				<include name="com/google/gwt/gwtai/applet/client/Applet.*"/>
+				<include name="com/google/gwt/gwtai/applet/client/Base64Util.*"/>
 				<include name="com/google/gwt/gwtai/applet/util/**"/>
 			</fileset>
 			<manifest>

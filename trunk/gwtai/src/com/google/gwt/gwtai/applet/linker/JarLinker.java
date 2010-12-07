@@ -68,7 +68,6 @@ public class JarLinker extends AbstractLinker {
 		String keystore = null;
 		String alias = null;
 		String storepass = null;
-		boolean resourceSpecified=false;
 		
 		for (ConfigurationProperty currentProperty: context.getConfigurationProperties()) {
 			String propName = currentProperty.getName();
@@ -90,11 +89,22 @@ public class JarLinker extends AbstractLinker {
 			if (propName.equalsIgnoreCase("jarlinker.name")) {
 				jarName = firstPropValue;
 			} else if (propName.equalsIgnoreCase("jarlinker.include")) {
-				if(!resourceSpecified)
+				if (firstPropValue != null && firstPropValue.length() > 0) {
+					if (includeResources != null) {
+						logger.log(Type.ERROR, "Resources already specified. Please don't use jarlinker.resource and jarlinker.include at the same time.");
+						
+						throw new UnableToCompleteException();
+					}
+
 					includeResources = firstPropValue.split(",");
+				}
 			} else if (propName.equalsIgnoreCase("jarlinker.resource")) {
-				logger.log(Type.INFO, "jarlinker.resource specified which will override jarlinker.include.");
-				resourceSpecified=true;
+				if (includeResources != null) {
+					logger.log(Type.ERROR, "Resources already specified. Please don't use jarlinker.resource and jarlinker.include at the same time.");
+					
+					throw new UnableToCompleteException();
+				}
+				
 				includeResources = resolveResources(logger,currentProperty.getValues());
 			} else if (propName.equalsIgnoreCase("jarlinker.jarsigner")) {
 				jarsignerPath = firstPropValue;
