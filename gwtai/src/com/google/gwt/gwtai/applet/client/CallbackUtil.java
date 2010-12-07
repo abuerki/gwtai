@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 Adrian Buerki
+ * Copyright 2010 Adrian Buerki
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -26,21 +26,20 @@ import com.google.gwt.i18n.client.DateTimeFormat;
  * 
  * @author Adrian Buerki <a.buerki@gmail.com>
  */
-@SuppressWarnings("unchecked")
 public class CallbackUtil {
-	private static final DateTimeFormat DATE_FORMAT = DateTimeFormat
-			.getFormat("yyyy-MM-dd HH:mm:ss");
+	private static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
 
-	public static HashMap<String, AppletCallback> _appletCallbacks = new HashMap<String, AppletCallback>();
+	public static HashMap<String, AppletCallback<?>> _appletCallbacks = new HashMap<String, AppletCallback<?>>();
 
 	public static void registerCallback(String appletName,
-			AppletCallback appletCallback) {
+			AppletCallback<? extends Object> appletCallback) {
 		_appletCallbacks.put(appletName, appletCallback);
 	}
 
-	public static void callbackApplet(String appletName, String callbackValue,
-			String callbackType) {
-		AppletCallback appletCallback = _appletCallbacks.get(appletName);
+	public static void callbackApplet(String appletName, String callbackValue, String callbackType) {
+		@SuppressWarnings("unchecked")
+		AppletCallback<Object> appletCallback = (AppletCallback<Object>) _appletCallbacks.get(appletName);
+
 		Object parsedCallbackValue;
 
 		if (callbackType.equals(Integer.class.getName())) {
@@ -59,8 +58,8 @@ public class CallbackUtil {
 	}
 
 	public static native void defineBridgeMethod() /*-{
-	  	$wnd.callbackApplet = function(appletName, callbackValue, callbackType) {
-	    	@com.google.gwt.gwtai.applet.client.CallbackUtil::callbackApplet(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(appletName, callbackValue, callbackType);
+		$wnd.callbackApplet = function(appletName, callbackValue, callbackType) {
+			@com.google.gwt.gwtai.applet.client.CallbackUtil::callbackApplet(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(appletName, callbackValue, callbackType);
 		}
 	}-*/;
 

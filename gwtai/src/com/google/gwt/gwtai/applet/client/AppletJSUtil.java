@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 Adrian Buerki
+ * Copyright 2010 Adrian Buerki
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -46,14 +46,14 @@ public class AppletJSUtil {
 	 */
 	public static Widget createAppletWidget(Applet applet) {
 		String htmlCode = createAppletHTML(applet);
-		
+
 		if (htmlCode != null) {
 			return new HTML(htmlCode);
 		}
 
 		return null;
 	}
-	
+
 	/**
 	 * Constructs an applet tag. The HTML specification states that the <code>applet</code> tag is deprecated.
 	 * But the browser support for the <code>object</code> and <code>embed</code> tag is currently
@@ -168,7 +168,7 @@ public class AppletJSUtil {
 	 *            callback is coming.
 	 */
 	public static void registerAppletCallback(Applet applet,
-			AppletCallback<?> appletCallback) {
+			AppletCallback<? extends Object> appletCallback) {
 		if (applet instanceof AppletAccomplice) {
 			AppletAccomplice aapplet = (AppletAccomplice) applet;
 
