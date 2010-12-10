@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.google.gwt</groupId>
+  <artifactId>gwtai-client</artifactId>
+  <version>0.3-SNAPSHOT</version>
+  <versioning>
+    <versions>
+      <version>0.3-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20101210071823</lastUpdated>
+  </versioning>
+</metadata>
