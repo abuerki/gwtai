@@ -8,8 +8,7 @@
 	<property name="build.dir" value="build" />
 	<property name="lib.dir" value="lib" />
 	<property name="doc.dir" value="doc/api" />
-	<property name="gwt.dir" value="/Users/kilkenny/Tools/Sdk/gwt-2.1.0" />
-
+	
 	<artifact:pom id="pom_client" file="pom_client.xml" />
 	<artifact:pom id="pom_core" file="pom_core.xml" />
 
