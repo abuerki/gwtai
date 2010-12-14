@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 Adrian Buerki
+ * Copyright 2010 Adrian Buerki
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -30,6 +30,7 @@ import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.gwtai.applet.client.Align;
+import com.google.gwt.gwtai.applet.client.AppletClassName;
 import com.google.gwt.gwtai.applet.client.Archive;
 import com.google.gwt.gwtai.applet.client.Codebase;
 import com.google.gwt.gwtai.applet.client.Height;
@@ -156,11 +157,21 @@ public class AppletProxyGenerator extends Generator {
 			ImplementingClass implementingClass = classType
 					.getAnnotation(ImplementingClass.class);
 
-			if (null == implementingClass) {
-				logger.log(Type.ERROR,
-						"Implementing class annotation is missing.");
+			String appletName;
 
-				throw new UnableToCompleteException();
+			if (null == implementingClass) {
+				AppletClassName appletClassName = classType
+						.getAnnotation(AppletClassName.class);
+				
+				if (null == appletClassName) {
+					logger.log(Type.ERROR, "No Applet class name given, use the ImplementingClass or AppletClassName annotation.");
+
+					throw new UnableToCompleteException();
+				} else {
+					appletName = appletClassName.value();
+				}
+			} else {
+				appletName = implementingClass.value().getName();
 			}
 
 			sw.println();
@@ -168,7 +179,7 @@ public class AppletProxyGenerator extends Generator {
 			sw.println("public String getCode() {");
 			sw.indent();
 			sw.print("return \"");
-			sw.print(implementingClass.value().getName() + ".class");
+			sw.print(appletName + ".class");
 			sw.println("\";");
 			sw.outdent();
 			sw.println("}");
