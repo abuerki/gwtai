@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.1.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.1.0/distro-source/core/src/gwt-module.dtd">
+
+<module>
+
+	<inherits name='com.google.gwt.user.User' />
+	<inherits name='com.google.gwt.gwtai.applet.AppletIntegration' />
+	<inherits name='com.google.gwt.gwtai.trayicon.TrayIconIntegration' />
+
+	<inherits name='com.google.gwt.user.theme.standard.Standard' />
+
+	<entry-point class='com.google.gwt.gwtai.demo.client.GwtAI' />
+
+	<stylesheet src='GwtAI.css' />
+
+	<add-linker name='jarlinker' />
+
+	<set-configuration-property name="jarlinker.resource" value="com/google/gwt/gwtai/demo/impl::include=**/*.class" />
+	<extend-configuration-property name="jarlinker.resource" value="com/google/gwt/gwtai/demo/client::include=**/CounterApplet.class;include=**/CallbackApplet.class;include=**/StopWatchApplet.class" />
+	<extend-configuration-property name="jarlinker.resource" value="com/google/gwt/gwtai/trayicon/impl::include=**/*.class;include=**/*.gif" />
+	<extend-configuration-property name="jarlinker.resource" value="com/google/gwt/gwtai/trayicon/client::include=**/TrayIconApplet.class" />
+
+	<set-configuration-property name="jarlinker.name" value="GwtAI-Demo.jar" />
+	<set-configuration-property name="jarlinker.keystore" value=".keystore" />
+	<set-configuration-property name="jarlinker.alias" value="Adrian Buerki" />
+	<set-configuration-property name="jarlinker.storepass" value="gwtaigwtai" />
+	<!--set-configuration-property name="jarlinker.include" value="
+		com/google/gwt/gwtai/demo/impl/CounterAppletImpl.class,
+		com/google/gwt/gwtai/demo/client/CounterApplet.class,
+		com/google/gwt/gwtai/demo/impl/CallbackAppletImpl$1.class,
+		com/google/gwt/gwtai/demo/impl/CallbackAppletImpl.class,
+		com/google/gwt/gwtai/demo/impl/StopWatchAppletImpl.class,
+		com/google/gwt/gwtai/demo/impl/StopWatchAppletImpl$StopWatchLabel.class,
+		com/google/gwt/gwtai/demo/impl/StopWatchAppletImpl$1.class,
+		com/google/gwt/gwtai/demo/client/CallbackApplet.class,
+		com/google/gwt/gwtai/demo/client/StopWatchApplet.class,
+		com/google/gwt/gwtai/trayicon/impl/TrayIconAppletImpl.class,
+		com/google/gwt/gwtai/trayicon/client/TrayIconApplet.class,
+		com/google/gwt/gwtai/trayicon/impl/TrayIconAppletImpl$1.class,
+		com/google/gwt/gwtai/trayicon/impl/TrayAccessJDIC.class,
+		com/google/gwt/gwtai/trayicon/impl/TrayAccessJDIC$1.class,
+		com/google/gwt/gwtai/trayicon/impl/TrayAccess16.class,
+		com/google/gwt/gwtai/trayicon/impl/TrayAccess16$1.class,
+		com/google/gwt/gwtai/trayicon/impl/icon.gif"/-->
+
+</module>
