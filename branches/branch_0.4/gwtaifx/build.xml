@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="JavaFXDemo" default="all" basedir=".">
+	
+	<property name="fx.dir" value="/opt/javafx-sdk1.0/bin" />
+	<property name="bin.dir" value="bin" />
+	<property name="src.dir" value="src" />
+	<property name="build.dir" value="build" />
+	<property name="lib.dir" value="lib" />
+	<property name="out.www.dir" value="www/com.google.gwt.gwtai.demo.JavaFXDemo" />
+	<property name="gwt.dir" value="/opt/gwt-linux-1.5.3" />
+	
+	<path id="project.class.path">
+		<pathelement path="${java.class.path}/" />
+		<pathelement path="${gwt.dir}/gwt-user.jar" />
+		<pathelement path="${lib.dir}/plugin.jar" />
+		<pathelement path="${gwt.dir}/gwt-dev-linux.jar" />
+		<pathelement path="${lib.dir}/GwtAI-Client.jar" />
+		<pathelement path="${lib.dir}/javafxrt.jar" />
+		<pathelement path="${lib.dir}/javafxgui.jar" />
+		<pathelement path="${lib.dir}/javafx-swing.jar" />
+		<pathelement path="${lib.dir}/Scenario.jar" />
+	</path>
+	
+	<target name="init" depends="clean">
+		<echo level="info">Initializing ${ant.project.name}</echo>
+
+		<tstamp prefix="start" />
+		<mkdir dir="${bin.dir}" />
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${out.www.dir}" />
+	</target>
+	
+	<target name="compile-fx" depends="init">
+		<exec dir="${fx.dir}" executable="${fx.dir}/javafxc">
+		    <arg value="${basedir}/${src.dir}/com/google/gwt/gwtai/demo/impl/JavaFXAppletImpl.fx"/>
+		</exec>
+		<move todir="${basedir}/${bin.dir}">
+		    <fileset dir="${basedir}/${src.dir}">
+		      <include name="**/*.class" />
+		    </fileset>
+		  </move>
+    </target>
+	
+	<target name="compile" depends="compile-fx">
+		<echo level="info">Compiling ${ant.project.name}</echo>
+
+		<javac srcdir="src" destdir="bin" includes="**" debug="on" debuglevel="lines,vars,source">
+			<classpath refid="project.class.path" />
+		</javac>
+	</target>
+	
+	<target name="gwt-compile" depends="compile">
+		<echo level="info">Compiling Java2JavaScript ${ant.project.name}</echo>
+		
+	    <java classname="com.google.gwt.dev.GWTCompiler" fork="true" failonerror="true">
+			<jvmarg value="-Xms256m"  /> 
+			<jvmarg value="-Xmx512m"  /> 
+	        <classpath>
+				<pathelement path="${src.dir}" />
+	        	<pathelement path="${bin.dir}" />
+				<path refid="project.class.path" />
+	        </classpath>
+	        <arg value="-out" />
+	        <arg value="www" />
+	        <arg value="com.google.gwt.gwtai.demo.JavaFXDemo" />
+	    </java>
+	</target> 
+	
+	<target name="package-jar" depends="gwt-compile">
+		<echo level="info">Packaging jars ${ant.project.name}</echo>
+
+		<jar destfile="${build.dir}/${ant.project.name}.jar" compress="true">
+			<fileset dir="${bin.dir}" />
+			<manifest>
+			      <attribute name="Built-By" value="Adrian Buerki"/>
+			      <attribute name="Implementation-Vendor" value="GWT Advanced Integration"/>
+			      <attribute name="Implementation-Title" value="JavaFXDemo"/>
+			      <attribute name="Implementation-Version" value="0.1"/>
+		    </manifest>
+		</jar>
+    </target>
+	
+	<target name="preparetest" depends="package-jar">
+		<echo level="info">Preparing test env ${ant.project.name}</echo>
+
+		<copy file="${lib.dir}/GwtAI-Client.jar" todir="${out.www.dir}" />
+		<copy file="${lib.dir}/javafxrt.jar" todir="${out.www.dir}" />
+		<copy file="${lib.dir}/javafxgui.jar" todir="${out.www.dir}" />
+		<copy file="${lib.dir}/javafx-swing.jar" todir="${out.www.dir}" />
+		<copy file="${lib.dir}/Scenario.jar" todir="${out.www.dir}" />
+		<copy file="${lib.dir}/eula.jar" todir="${out.www.dir}" />
+		<copy file="${build.dir}/${ant.project.name}.jar" todir="${out.www.dir}" />
+		
+		<signjar jar="${out.www.dir}/${ant.project.name}.jar" alias="Adrian Buerki" storepass="gwtaigwtai" keystore=".keystore" />
+		<signjar jar="${out.www.dir}/javafxrt.jar" alias="Adrian Buerki" storepass="gwtaigwtai" keystore=".keystore" />
+		<signjar jar="${out.www.dir}/javafxgui.jar" alias="Adrian Buerki" storepass="gwtaigwtai" keystore=".keystore" />
+		<signjar jar="${out.www.dir}/javafx-swing.jar" alias="Adrian Buerki" storepass="gwtaigwtai" keystore=".keystore" />
+		<signjar jar="${out.www.dir}/Scenario.jar" alias="Adrian Buerki" storepass="gwtaigwtai" keystore=".keystore" />
+		<signjar jar="${out.www.dir}/eula.jar" alias="Adrian Buerki" storepass="gwtaigwtai" keystore=".keystore" />
+	</target>
+
+	<target name="clean">
+		<echo level="info">Cleaning ${ant.project.name}</echo>
+
+		<delete file="${build.dir}/${ant.project.name}.war" />
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${bin.dir}" />
+			<fileset dir="${out.www.dir}" />
+			<fileset dir="${web.dir}">
+				<include name="**.class" />
+			</fileset>
+		</delete>
+	</target>
+	
+	
+	<target name="all" depends="preparetest" />
+	
+</project>
