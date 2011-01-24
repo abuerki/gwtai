@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>net.java.dev.jdic</groupId>
+  <artifactId>jdic-solaris-x86</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-20060308</version>
+  <name>JDIC Solaris x86 native libs</name>
+  <description>To place into sunos/x86 below the directory where jdic.jar is installed</description>
+  <url>https://jdic.dev.java.net</url>
+  <licenses>
+    <license>
+      <name>GNU LESSER GENERAL PUBLIC LICENSE Version 2.1</name>
+      <url>http://www.opensource.org/licenses/lgpl-license.php</url>
+    </license>
+  </licenses>
+  <scm>
+    <!-- https://jdic.dev.java.net/files/documents/880/30794/jdic-20060308-src.zip -->
+    <url>https://jdic.dev.java.net/source/browse/jdic/</url>
+  </scm>
+</project>
