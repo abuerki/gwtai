@@ -33,7 +33,7 @@ import com.google.gwt.gwtai.applet.client.Width;
 @ImplementingClass(com.google.gwt.gwtai.demo.impl.CounterAppletImpl.class)
 @Height("60")
 @Width("350")
-@Archive("GwtAI-Core.jar,GwtAI-Demo.jar")
+@Archive("GwtAI-Core.jar,com.google.gwt.gwtai.demo.GwtAI/GwtAI-Demo.jar")
 @LoadingImage("loadingc.gif")
 public interface CounterApplet extends Applet {
 
