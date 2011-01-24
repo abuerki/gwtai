@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>net.java.dev.jdic</groupId>
+  <artifactId>jdic</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-20060308</version>
+  <name>Java Desktop Integration Components</name>
+  <description>JDIC provides Java applications with access to functionalities and facilities provided by the native desktop.</description>
+  <url>https://jdic.dev.java.net</url>
+  <licenses>
+    <license>
+      <name>GNU LESSER GENERAL PUBLIC LICENSE Version 2.1</name>
+      <url>http://www.opensource.org/licenses/lgpl-license.php</url>
+    </license>
+  </licenses>
+  <scm>
+    <!-- https://jdic.dev.java.net/files/documents/880/30794/jdic-20060308-src.zip -->
+    <url>https://jdic.dev.java.net/source/browse/jdic/</url>
+  </scm>
+
+  <dependencies/>
+
+  <profiles>
+    <profile>
+      <id>linux-x86</id>
+      <activation>
+        <os>
+          <family>unix</family>
+          <name>Linux</name>
+          <!--arch>x86</arch--> <!-- we need arch but what about specially crafted arch? e.g. i386, i586, i686 ?? -->
+        </os>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>net.java.dev.jdic</groupId>
+          <artifactId>jdic-linux-x86</artifactId>
+          <version>${version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>windows-i386</id>
+      <activation>
+        <os>
+          <family>windows</family>
+          <!--name>Windows</name-->
+          <arch>x86</arch>
+        </os>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>net.java.dev.jdic</groupId>
+          <artifactId>jdic-windows-x86</artifactId>
+          <version>${version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>sunos-i386</id>
+      <activation>
+        <os>
+          <family>unix</family>
+          <name>Solaris</name>
+          <arch>x86</arch>
+        </os>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>net.java.dev.jdic</groupId>
+          <artifactId>jdic-sunos-x86</artifactId>
+          <version>${version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>sunos-sparc</id>
+      <activation>
+        <os>
+          <family>unix</family>
+          <name>Solaris</name>
+          <arch>sparc</arch>
+        </os>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>net.java.dev.jdic</groupId>
+          <artifactId>jdic-sunos-sparc</artifactId>
+          <version>${version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
+</project>
