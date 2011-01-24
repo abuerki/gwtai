@@ -11,12 +11,11 @@ public class Base64UtilGWTTest extends GWTTestCase {
 	public static String TEST_INPUT = "abcdefg äöü éàè";
 	public static String TEST_OUTPUT ="YWJjZGVmZyDDpMO2w7wgw6nDoMOo";
 
-	//@Override
+	@Override
 	public String getModuleName() {
 		return "com.google.gwt.gwtai.applet.AppletIntegration";
 	}
-
-        
+	
 	public void testEncode() {
 		String gwtaiEncodedString = Base64Util.encodeString(TEST_INPUT);
 		

@@ -98,7 +98,6 @@ public class JarLinkerTest extends TestCase {
 	}
 	 
 	public void testLink() {
-            /*
 		JarLinker jarLinker = new JarLinker();
 		
 		TestLogger logger = new TestLogger();
@@ -110,7 +109,7 @@ public class JarLinkerTest extends TestCase {
 			//TODO Make this test make sense :)
 		} catch (UnableToCompleteException e) {
 			fail(e.getMessage());
-		}*/
+		}
 	}
 
 }
