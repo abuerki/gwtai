@@ -5,6 +5,8 @@
 
 package com.google.gwt.gwtai.applet.proxy;
 
+import com.google.gwt.gwtai.applet.client.GwtProxyTranslator;
+import com.google.gwt.gwtai.applet.client.ProxyRequest;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -37,20 +39,6 @@ public class PayloadTranslatorTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of encodePayload method, of class PayloadTranslator.
-     */
-    @Test
-    public void testEncodePayload() {
-        System.out.println("encodePayload");
-        Object data = null;
-        PayloadTranslator instance = new PayloadTranslator();
-        String expResult = "";
-        String result = instance.encodePayload(data);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
 
     /**
      * Test of decodeRequest method, of class PayloadTranslator.
@@ -59,7 +47,7 @@ public class PayloadTranslatorTest {
     public void testDecodeRequest() throws Exception {
         System.out.println("decodeRequest");
         String request = "myMethod|V|IA:1,2,3|SA:SGVsbG8=,V29ybGQh|S:SGVsbG8gV29ybGQh|B:92|BA:SGVsbG8gV29ybGQh";
-        PayloadTranslator instance = new PayloadTranslator();
+        GwtProxyTranslator instance = new GwtProxyTranslator();
         ProxyRequest result = instance.decodeRequest(request);
         assertEquals("myMethod", result.getMethod());
         assertEquals(Void.class, result.getReturnType());

@@ -11,7 +11,7 @@ import java.applet.Applet;
  *
  * @author krog
  */
-public class TestApplet extends Applet {
+public class MockApplet extends Applet {
         boolean invoked;
 
         public String handleByte2String(byte[] data) {

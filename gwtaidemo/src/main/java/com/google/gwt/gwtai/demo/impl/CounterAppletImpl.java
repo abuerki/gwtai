@@ -74,4 +74,8 @@ public class CounterAppletImpl extends JApplet implements CounterApplet {
 		return _tfCounter.getText();
 	}
 
+        public void setValue(Integer value) {
+            _tfCounter.setText(value + "");
+        }
+
 }

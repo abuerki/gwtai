@@ -68,7 +68,7 @@
         
         <dependency>
             <groupId>com.google.gwt</groupId>
-            <artifactId>gwtai-shared</artifactId>
+            <artifactId>gwtai-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

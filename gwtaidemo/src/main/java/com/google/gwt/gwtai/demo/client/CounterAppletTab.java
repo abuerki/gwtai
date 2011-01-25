@@ -43,6 +43,7 @@ public class CounterAppletTab extends Composite {
 		panelMain.setSpacing(4);
 		
 		Button buttonInc = new Button("Increment");
+		Button buttonSet = new Button("Set to 10");
 		Button buttonDec = new Button("Decrement");
 		Button buttonGet = new Button("Get current count");
 		
@@ -60,6 +61,12 @@ public class CounterAppletTab extends Composite {
 			}
 		});
 
+                buttonSet.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				counterApplet.setValue(10);
+			}
+		});
+
 		buttonGet.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				Object value = counterApplet.getCurrentValue();
@@ -74,6 +81,7 @@ public class CounterAppletTab extends Composite {
 		buttonPanel.setSpacing(4);
 		buttonPanel.add(buttonInc);
 		buttonPanel.add(buttonDec);
+		buttonPanel.add(buttonSet);
 		buttonPanel.add(buttonGet);
 		
 		Widget widgetApplet = AppletJSUtil.createAppletWidget(counterApplet);

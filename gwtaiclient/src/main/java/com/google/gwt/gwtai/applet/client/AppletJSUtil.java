@@ -31,6 +31,9 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class AppletJSUtil {
 
+        private static final String PROXYCLASS = "com.google.gwt.gwtai.applet.proxy.AppletProxy";
+        private static final String PROXYCLASSPARAM = "classname";
+
 	static {
 		CallbackUtil.defineBridgeMethod();
 	}
@@ -60,16 +63,20 @@ public class AppletJSUtil {
 	 * inconsistent. So using the <code>applet</code> tag is the only consistent way to deploy a Java Applet
 	 * across browsers on all platforms.
 	 *
+         * In order to support more rich datatype flow between GWT and the Applet this tag loads a proxy applet which
+         * in turn will load the real applet. The real applet class will be specified via a parameter in the applet tag.
+         *
 	 * @param applet The <code>Applet</code> to take the information from.
 	 * @return The applet tag.
 	 */
 	public static String createAppletHTML(Applet applet) {
 		if (applet instanceof AppletAccomplice) {
+
 			AppletAccomplice aapplet = (AppletAccomplice) applet;
 
 			String htmlCode = "<applet mayscript='true'"
 					+ " code='"
-					+ aapplet.getCode()
+                                        + PROXYCLASS
 					+ "' width='"
 					+ aapplet.getWidth()
 					+ "' height='"
@@ -95,6 +102,9 @@ public class AppletJSUtil {
 			htmlCode += ">";
 
 			HashMap<String, String> parameters = aapplet.getParameters();
+
+                        //Add parameter for proxy
+                        htmlCode+=createParamTag(PROXYCLASSPARAM, aapplet.getCode());
 
 			if (parameters != null && !parameters.isEmpty()) {
 				for (String name : parameters.keySet()) {
@@ -132,9 +142,9 @@ public class AppletJSUtil {
 				htmlCode += "archive:'" + aapplet.getArchive() + "', ";
 			}
 
-			htmlCode += "code:'" + aapplet.getCode() + "', width:'"
+			htmlCode += "code:'" + PROXYCLASS + "', width:'"
 					+ aapplet.getWidth() + "', Height:'" + aapplet.getHeight()
-					+ "'}, null, '" + forceJavaVersion + "');"
+					+ "'}, {"+PROXYCLASSPARAM+":"+aapplet.getCode()+"}, '" + forceJavaVersion + "');"
 					+ "</script></p>";
 
 			return new HTML(htmlCode);

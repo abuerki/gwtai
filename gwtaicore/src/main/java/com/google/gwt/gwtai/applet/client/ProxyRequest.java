@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.google.gwt.gwtai.applet.proxy;
+package com.google.gwt.gwtai.applet.client;
 
 import java.util.List;
 import org.apache.naming.java.javaURLContextFactory;
