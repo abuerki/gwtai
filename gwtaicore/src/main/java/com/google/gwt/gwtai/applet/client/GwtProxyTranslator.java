@@ -30,7 +30,7 @@ public class GwtProxyTranslator {
     public String encodeRequest(ProxyRequest request) {
         String encoded = request.getMethod()+"|"+typeFromClass(request.getReturnType());
         for(Object o : request.getParameters())
-            encoded+=encodeParameter(o);
+            encoded+="|"+encodeParameter(o);
         return encoded;
     }
 
@@ -79,6 +79,8 @@ public class GwtProxyTranslator {
             definedType = array ? new String[0].getClass():String.class;
         if("V".equals(type))
             definedType = Void.class;
+        if("v".equals(type))
+            definedType = void.class;
 
         if(definedType == null) {
             throw new ParseException("Could not parse datatype[type="+type+"]", 0);
@@ -108,6 +110,8 @@ public class GwtProxyTranslator {
             definedType = "S";
         if(Void.class==type)
             definedType = "V";
+        if(void.class==type)
+            definedType = "v";
 
         if(definedType == null) {
             throw new IllegalArgumentException("Class is not supported [type="+type+"]");

@@ -106,6 +106,7 @@ public class AppletProxyGenerator extends Generator {
         sw.println("private native String requestApplet(String data) ");
         sw.println(" /*-{");
         sw.indent();
+        //sw.println("alert('requestApplet('+data+')');");
         sw.println("var id = this.@" + packageName + "." + simpleName + "::getName()();");
         sw.println("var gwtElem = @com.google.gwt.user.client.DOM::getElementById(Ljava/lang/String;)(id);");
         sw.println("return gwtElem['handleRequest'](data);");
@@ -136,12 +137,16 @@ public class AppletProxyGenerator extends Generator {
             JType type = method.getReturnType();
 
             sw.println();
+            sw.println("String encodedRequest=null;");
+            sw.println("try{");
             sw.println("ProxyRequest proxyRequest = new ProxyRequest(\""+method.getName()+"\", "+type.getQualifiedSourceName()+".class , params);");
-            sw.println("String encodedRequest = translator.encodeRequest(proxyRequest);");
+            sw.println("encodedRequest = translator.encodeRequest(proxyRequest);");
+            sw.println("} catch(Exception ex){com.google.gwt.user.client.Window.alert(ex.getMessage());}");
+
             sw.println();
 
             if (!type.getSimpleSourceName().equals("void")) {
-                sw.println("return translator.decodeResponse(requestApplet(encodedRequest));");
+                sw.println("return ("+type.getSimpleSourceName()+")translator.decodeResponse(requestApplet(encodedRequest));");
             } else {
                 sw.println("requestApplet(encodedRequest);");
             }

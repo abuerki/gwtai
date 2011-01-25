@@ -23,6 +23,16 @@ import com.google.gwt.dev.resource.impl.DefaultFilters;
 import com.google.gwt.dev.resource.impl.PathPrefix;
 import com.google.gwt.dev.resource.impl.PathPrefixSet;
 import com.google.gwt.dev.resource.impl.ResourceOracleImpl;
+import com.google.gwt.gwtai.applet.client.Applet;
+import com.google.gwt.gwtai.applet.client.Base64Util;
+import com.google.gwt.gwtai.applet.client.GwtProxyTranslator;
+import com.google.gwt.gwtai.applet.client.ProxyRequest;
+import com.google.gwt.gwtai.applet.proxy.AppletProxy;
+import com.google.gwt.gwtai.applet.proxy.RequestInvoker;
+import com.google.gwt.gwtai.applet.util.AppletUtil;
+import com.google.gwt.gwtai.applet.util.JavaLibraryPath;
+import com.google.gwt.gwtai.applet.util.LibraryElement;
+import java.util.Arrays;
 
 /**
  * A GWT linker to create and sign a JAR file which contains all the Applet classes.
@@ -46,6 +56,17 @@ import com.google.gwt.dev.resource.impl.ResourceOracleImpl;
  */
 @LinkerOrder(LinkerOrder.Order.POST)
 public class JarLinker extends AbstractLinker {
+    private static final Class[] DEFAULTRESOURCES = {
+                    AppletProxy.class,
+                    AppletUtil.class,
+                    JavaLibraryPath.class,
+                    LibraryElement.class,
+                    Applet.class,
+                    Base64Util.class,
+                    GwtProxyTranslator.class,
+                    ProxyRequest.class,
+                    RequestInvoker.class
+    };
 
 	/**
 	 * Returns a human-readable String describing the Linker.
@@ -203,7 +224,9 @@ public class JarLinker extends AbstractLinker {
 			return new byte[0];
 			
 		}
-		
+
+                includeResources = mergeResourcesWithDefault(includeResources);
+
 		logger.log(Type.INFO, "Adding " + includeResources.length + " resources to JAR file");
 		
 		ByteArrayOutputStream byteArrayOutStream = null;
@@ -214,6 +237,8 @@ public class JarLinker extends AbstractLinker {
 			jarOutStream = new JarOutputStream(byteArrayOutStream);
 			
 			for (String includeResource: includeResources) {
+                            logger.log(Type.DEBUG, "Adding "+includeResource);
+
 				addEntryToJar(jarOutStream, includeResource.trim());
 			}
 		
@@ -274,6 +299,21 @@ public class JarLinker extends AbstractLinker {
 		}
 	}
 	
+        /**
+         * Merges an array of resources to merge with the default set of resources.
+         * @return The merged array.
+         */
+        private String[] mergeResourcesWithDefault(String[] resources) {
+            List<String> merged = new ArrayList<String>();
+            merged.addAll(Arrays.asList(resources));
+
+            for(Class clazz : DEFAULTRESOURCES) {
+                merged.add(clazz.getName().replace('.', '/')+".class");
+            }
+            return merged.toArray(new String[0]);
+
+        }
+
 	/**
 	 * Resolves the resources specified by values with the following syntax:
 	 * <root packagename>[::[include=<pattern>][;exclude=<pattern>]]
