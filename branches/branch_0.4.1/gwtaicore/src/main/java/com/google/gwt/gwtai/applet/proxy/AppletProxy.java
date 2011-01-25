@@ -5,6 +5,8 @@
 
 package com.google.gwt.gwtai.applet.proxy;
 
+import com.google.gwt.gwtai.applet.client.GwtProxyTranslator;
+import com.google.gwt.gwtai.applet.client.ProxyRequest;
 import java.applet.Applet;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
@@ -16,18 +18,19 @@ import java.util.logging.Logger;
  */
 public class AppletProxy extends Applet {
 
+    public static final String CLASSNAMEPARAM = "classname";
+
     private Applet proxyFor;
     private RequestInvoker invoker;
-    private PayloadDecoder decoder = new PayloadTranslator();
-    private PayloadEncoder encoder = new PayloadTranslator();
+    private GwtProxyTranslator translator = new GwtProxyTranslator();
     private String className = null;
 
     @Override
     public void init() {
         try {
             try{
-                if(getParameter("classname")!=null)
-                    className = getParameter("classname");
+                if(getParameter(CLASSNAMEPARAM)!=null)
+                    className = getParameter(CLASSNAMEPARAM);
             } catch(Exception ex) { }
 
             proxyFor = (Applet) Class.forName(className).newInstance();
@@ -58,9 +61,9 @@ public class AppletProxy extends Applet {
     }
 
     public String handleMethodCall(String data) throws Exception {
-        ProxyRequest request = decoder.decodeRequest(data);
+        ProxyRequest request = translator.decodeRequest(data);
         Object result = invoker.invoke(request);
-        return encoder.encodePayload(result);
+        return translator.encodeResponse(result);
     }
 
 }

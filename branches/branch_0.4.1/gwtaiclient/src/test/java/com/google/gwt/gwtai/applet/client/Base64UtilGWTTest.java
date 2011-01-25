@@ -1,6 +1,5 @@
 package com.google.gwt.gwtai.applet.client;
 
-import com.google.gwt.gwtai.applet.client.Base64Util;
 import com.google.gwt.junit.client.GWTTestCase;
 
 /**

@@ -43,4 +43,5 @@ public interface CounterApplet extends Applet {
 
 	public Object getCurrentValue();
 
+        public void setValue(Integer value);
 }

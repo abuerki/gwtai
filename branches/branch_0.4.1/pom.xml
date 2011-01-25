@@ -78,11 +78,9 @@
     </properties>
 
     <modules>
-        <module>gwtaiclient</module>
         <module>gwtaicore</module>
-        <module>gwtaishared</module>
+        <module>gwtaiclient</module>
         <module>gwtaidemo</module>
-        <!--module>gwtaifx</module-->
     </modules>
 </project>
 

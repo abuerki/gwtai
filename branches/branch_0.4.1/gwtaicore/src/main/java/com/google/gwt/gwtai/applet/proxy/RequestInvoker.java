@@ -5,6 +5,7 @@
 
 package com.google.gwt.gwtai.applet.proxy;
 
+import com.google.gwt.gwtai.applet.client.ProxyRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;

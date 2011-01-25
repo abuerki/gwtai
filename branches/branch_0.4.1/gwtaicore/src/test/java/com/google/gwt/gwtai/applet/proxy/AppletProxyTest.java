@@ -51,13 +51,13 @@ public class AppletProxyTest {
         String data = "handleByte2String|S|BA:"+expResult;
 
         AppletProxy instance = new AppletProxy();
-        instance.setClassName("com.google.gwt.gwtai.applet.proxy.TestApplet");
+        instance.setClassName(MockApplet.class.getName());
         instance.init();
 
         
         String result = instance.handleMethodCall(data);
-        assertEquals(expResult, result);
-        assertTrue(((TestApplet)instance.getProxyFor()).isInvoked());
+        assertEquals("S:"+expResult, result);
+        assertTrue(((MockApplet)instance.getProxyFor()).isInvoked());
     }
 
         /**
@@ -69,12 +69,12 @@ public class AppletProxyTest {
         String data = "handleBoolean2boolean|Z|Z:1";
 
         AppletProxy instance = new AppletProxy();
-        instance.setClassName("com.google.gwt.gwtai.applet.proxy.TestApplet");
+        instance.setClassName(MockApplet.class.getName());
         instance.init();
 
         String result = instance.handleMethodCall(data);
-        assertEquals("1", result);
-        assertTrue(((TestApplet)instance.getProxyFor()).isInvoked());
+        assertEquals("Z:1", result);
+        assertTrue(((MockApplet)instance.getProxyFor()).isInvoked());
     }
 
        /**
@@ -86,12 +86,12 @@ public class AppletProxyTest {
         String data = "handleLong|L|L:1000000000";
 
         AppletProxy instance = new AppletProxy();
-        instance.setClassName("com.google.gwt.gwtai.applet.proxy.TestApplet");
+        instance.setClassName(MockApplet.class.getName());
         instance.init();
 
         String result = instance.handleMethodCall(data);
-        assertEquals("1000000000", result);
-        assertTrue(((TestApplet)instance.getProxyFor()).isInvoked());
+        assertEquals("L:1000000000", result);
+        assertTrue(((MockApplet)instance.getProxyFor()).isInvoked());
     }
 
 
@@ -104,11 +104,11 @@ public class AppletProxyTest {
         String data = "handleDouble|D|D:10000.000001";
 
         AppletProxy instance = new AppletProxy();
-        instance.setClassName("com.google.gwt.gwtai.applet.proxy.TestApplet");
+        instance.setClassName(MockApplet.class.getName());
         instance.init();
 
         String result = instance.handleMethodCall(data);
-        assertEquals("10000.000001", result);
-        assertTrue(((TestApplet)instance.getProxyFor()).isInvoked());
+        assertEquals("D:10000.000001", result);
+        assertTrue(((MockApplet)instance.getProxyFor()).isInvoked());
     }
 }
