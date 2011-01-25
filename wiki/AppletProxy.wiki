@@ -28,7 +28,7 @@ Name: SGDP (Simple Gwtai Data Protocol)
   * D = Double
   * C = Char
   * Z = Boolean
-  * V = Void
+  * V = Void (return type only)
   * A appendix = Array (fx. SA for String[])
 
 ==Parameter==
@@ -39,10 +39,11 @@ The syntax of the parameter is:
 
 ===data===
 The data differs on the datatype.
-  * Byte, Integer, Long, Char: The number represented by the parameter, fx. '45'.
-  * Float, Double: The number represented by the parameter, fx. '23.45'.
-  * Boolean: The value represented by the parameter as '0'(false) or '1'(true)
-  * 
+  * Integer, Long, Char: The number represented by the parameter, fx. '45'. Arrays are commaseperated fx. '45,51'
+  * Float, Double: The number represented by the parameter, fx. '23.45'. Arrays are commaseperated fx. '23.45,51.34'
+  * Boolean: The value represented by the parameter as '0'(false) or '1'(true). Arrays are commaseperated fx. '0,0,1,0,1'
+  * String: The base64 encoded String. Arrays are commaseparated base64 encoded Strings.
+  * Byte: The number represented by the parameter, fx. '45'. Arrays are base64 encoded.
 
 
 ==Request Syntax==
@@ -62,4 +63,6 @@ The datatype the method must has as return type in its signature.
 {{{
 sumNumbers|I|I:1|I:3
 mergeArrays|IA|IA:1,2,3|IA:3,5,23
+displayStrings|V|SA:SGVsbG8=,V29ybGQh
+acceptBytes|B|BA:SGVsbG8gV29ybGQh
 }}}
