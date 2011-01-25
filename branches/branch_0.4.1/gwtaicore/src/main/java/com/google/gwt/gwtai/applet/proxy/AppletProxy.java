@@ -8,6 +8,7 @@ package com.google.gwt.gwtai.applet.proxy;
 import com.google.gwt.gwtai.applet.client.GwtProxyTranslator;
 import com.google.gwt.gwtai.applet.client.ProxyRequest;
 import java.applet.Applet;
+import java.applet.AppletStub;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,6 +38,7 @@ public class AppletProxy extends Applet {
             System.out.println("init:"+className);
 
             proxyFor = (Applet) Class.forName(className).newInstance();
+            proxyFor.setStub(new AppletProxyStub(this));
             invoker = new RequestInvoker(proxyFor);
             proxyFor.init();
             add(proxyFor);
