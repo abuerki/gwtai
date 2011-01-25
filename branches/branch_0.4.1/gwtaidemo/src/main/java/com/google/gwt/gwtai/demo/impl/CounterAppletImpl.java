@@ -70,7 +70,7 @@ public class CounterAppletImpl extends JApplet implements CounterApplet {
 		_tfCounter.setText(currentCount + "");
 	}
 
-	public Object getCurrentValue() {
+	public String getCurrentValue() {
 		return _tfCounter.getText();
 	}
 

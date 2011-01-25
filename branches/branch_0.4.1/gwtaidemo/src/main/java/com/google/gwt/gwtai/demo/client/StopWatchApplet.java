@@ -33,7 +33,7 @@ import com.google.gwt.gwtai.applet.client.Width;
 @ImplementingClass(com.google.gwt.gwtai.demo.impl.StopWatchAppletImpl.class)
 @Height("100")
 @Width("350")
-@Archive("GwtAI-Core.jar,com.google.gwt.gwtai.demo.GwtAI/GwtAI-Demo.jar")
+@Archive("com.google.gwt.gwtai.demo.GwtAI/GwtAI-Demo.jar")
 @LoadingImage("loadings.gif")
 public interface StopWatchApplet extends Applet {
 	

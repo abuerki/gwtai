@@ -55,7 +55,7 @@ public class AppletProxyTest {
         instance.init();
 
         
-        String result = instance.handleMethodCall(data);
+        String result = instance.handleRequest(data);
         assertEquals("S:"+expResult, result);
         assertTrue(((MockApplet)instance.getProxyFor()).isInvoked());
     }
@@ -72,7 +72,7 @@ public class AppletProxyTest {
         instance.setClassName(MockApplet.class.getName());
         instance.init();
 
-        String result = instance.handleMethodCall(data);
+        String result = instance.handleRequest(data);
         assertEquals("Z:1", result);
         assertTrue(((MockApplet)instance.getProxyFor()).isInvoked());
     }
@@ -89,7 +89,7 @@ public class AppletProxyTest {
         instance.setClassName(MockApplet.class.getName());
         instance.init();
 
-        String result = instance.handleMethodCall(data);
+        String result = instance.handleRequest(data);
         assertEquals("L:1000000000", result);
         assertTrue(((MockApplet)instance.getProxyFor()).isInvoked());
     }
@@ -107,7 +107,7 @@ public class AppletProxyTest {
         instance.setClassName(MockApplet.class.getName());
         instance.init();
 
-        String result = instance.handleMethodCall(data);
+        String result = instance.handleRequest(data);
         assertEquals("D:10000.000001", result);
         assertTrue(((MockApplet)instance.getProxyFor()).isInvoked());
     }

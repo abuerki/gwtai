@@ -11,6 +11,7 @@ import java.applet.Applet;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -33,10 +34,15 @@ public class AppletProxy extends Applet {
                     className = getParameter(CLASSNAMEPARAM);
             } catch(Exception ex) { }
 
+            System.out.println("init:"+className);
+
             proxyFor = (Applet) Class.forName(className).newInstance();
             invoker = new RequestInvoker(proxyFor);
             proxyFor.init();
             add(proxyFor);
+
+            System.out.println( "inited.");
+
         } catch (Exception ex) {
             Logger.getLogger(AppletProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -60,7 +66,8 @@ public class AppletProxy extends Applet {
         proxyFor.stop();
     }
 
-    public String handleMethodCall(String data) throws Exception {
+    public String handleRequest(String data) throws Exception {
+        System.out.println("handling method call:"+data);
         ProxyRequest request = translator.decodeRequest(data);
         Object result = invoker.invoke(request);
         return translator.encodeResponse(result);

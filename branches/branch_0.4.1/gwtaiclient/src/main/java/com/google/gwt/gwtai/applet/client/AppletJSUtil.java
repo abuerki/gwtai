@@ -104,7 +104,10 @@ public class AppletJSUtil {
 			HashMap<String, String> parameters = aapplet.getParameters();
 
                         //Add parameter for proxy
-                        htmlCode+=createParamTag(PROXYCLASSPARAM, aapplet.getCode());
+                        String classname = aapplet.getCode();
+                        if(classname.endsWith(".class"))
+                            classname = classname.substring(0,classname.length()-6);
+                        htmlCode+=createParamTag(PROXYCLASSPARAM, classname);
 
 			if (parameters != null && !parameters.isEmpty()) {
 				for (String name : parameters.keySet()) {
