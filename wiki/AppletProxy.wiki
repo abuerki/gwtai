@@ -33,7 +33,7 @@ Name: SGDP (Simple Gwtai Data Protocol)
 
 ==Parameter==
 The syntax of the parameter is:
-<datatype>:<data>
+{{{<datatype>:<data>}}}
 
 ===data===
 The data differs on the datatype.
@@ -45,7 +45,7 @@ The data differs on the datatype.
 
 ==Request Syntax==
 The syntax of the protocol is like this:
-<method>|<return type>[|<parameter>][|<parameter>]
+{{{<method>|<return type>[|<parameter>][|<parameter>]}}}
 
 ===Method===
 The name of the method to call.
@@ -55,5 +55,7 @@ The datatype the method must has as return type in its signature.
 
 
 ===Example===
+{{{
 sumNumbers|I|I:1|I:3
 mergeArrays|IA|IA:1,2,3|IA:3,5,23
+}}}
