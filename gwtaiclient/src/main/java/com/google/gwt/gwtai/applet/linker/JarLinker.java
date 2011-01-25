@@ -28,6 +28,7 @@ import com.google.gwt.gwtai.applet.client.Base64Util;
 import com.google.gwt.gwtai.applet.client.GwtProxyTranslator;
 import com.google.gwt.gwtai.applet.client.ProxyRequest;
 import com.google.gwt.gwtai.applet.proxy.AppletProxy;
+import com.google.gwt.gwtai.applet.proxy.AppletProxyStub;
 import com.google.gwt.gwtai.applet.proxy.RequestInvoker;
 import com.google.gwt.gwtai.applet.util.AppletUtil;
 import com.google.gwt.gwtai.applet.util.JavaLibraryPath;
@@ -58,6 +59,7 @@ import java.util.Arrays;
 public class JarLinker extends AbstractLinker {
     private static final Class[] DEFAULTRESOURCES = {
                     AppletProxy.class,
+                    AppletProxyStub.class,
                     AppletUtil.class,
                     JavaLibraryPath.class,
                     LibraryElement.class,
