@@ -8,11 +8,8 @@ package com.google.gwt.gwtai.applet.proxy;
 import com.google.gwt.gwtai.applet.client.GwtProxyTranslator;
 import com.google.gwt.gwtai.applet.client.ProxyRequest;
 import java.applet.Applet;
-import java.applet.AppletStub;
-import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -70,9 +67,16 @@ public class AppletProxy extends Applet {
 
     public String handleRequest(String data) throws Exception {
         System.out.println("handling method call:"+data);
-        ProxyRequest request = translator.decodeRequest(data);
-        Object result = invoker.invoke(request);
-        return translator.encodeResponse(result);
+        try{
+            ProxyRequest request = translator.decodeRequest(data);
+            Object result = invoker.invoke(request);
+            String returnVar = translator.encodeResponse(result);
+            System.out.println("returnValue:"+returnVar);
+            return returnVar;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw ex;
+        }
     }
 
 }

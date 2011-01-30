@@ -125,13 +125,15 @@ public class GwtProxyTranslator {
     }
 
     private Object decodeParameter(String data) throws ParseException {
-        String[] paramElements = data.split(":");
-        if(paramElements.length < 2) {
-            throw new ParseException("Parameter must contain at least 2 elements(type and data.)", 0);
-        }
+        String[] paramElements = data.split(":",2);
+        //if(paramElements.length < 2) {
+        //    throw new ParseException("Parameter must contain at least 2 elements(type and data.)", 0);
+        //}
 
         Class paramType = typeFromString(paramElements[0]);
-        return decodeData(paramType, paramElements[1]);
+        String elementData = paramElements.length<2 ? "" : paramElements[1];
+        Object paramData = decodeData(paramType, elementData);
+        return paramData;
     }
 
     private String encodeParameter(Object data) {
@@ -139,6 +141,9 @@ public class GwtProxyTranslator {
     }
 
     private Object decodeData(Class type, String data) {
+        if("<null>".equals(data))
+            return null;
+
         if(type.isArray()) {
             if(type.getComponentType() == Byte.class) {
                 return Base64Util.decode(data);
@@ -206,6 +211,9 @@ public class GwtProxyTranslator {
     }
 
     private String encodeData(Object data) {
+        if(data == null)
+            return "<null>";
+        
         Class type = data.getClass();
         if(type.isArray()) {
             if(type.getComponentType() == Byte.class) {
@@ -247,9 +255,9 @@ public class GwtProxyTranslator {
     private String encodeData(Object[] data) {
         String encoded="";
         for(int i=0;i<data.length;i++) {
-            if(i==0)
+            if(i>0)
                 encoded+=",";
-            encoded+=","+encodeData(data[i]);
+            encoded+=encodeData(data[i]);
         }
 
         return encoded;
