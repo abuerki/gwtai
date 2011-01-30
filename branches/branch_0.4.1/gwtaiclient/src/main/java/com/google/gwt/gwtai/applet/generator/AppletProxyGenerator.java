@@ -106,7 +106,6 @@ public class AppletProxyGenerator extends Generator {
         sw.println("private native String requestApplet(String data) ");
         sw.println(" /*-{");
         sw.indent();
-        //sw.println("alert('requestApplet('+data+')');");
         sw.println("var id = this.@" + packageName + "." + simpleName + "::getName()();");
         sw.println("var gwtElem = @com.google.gwt.user.client.DOM::getElementById(Ljava/lang/String;)(id);");
         sw.println("return gwtElem['handleRequest'](data);");
