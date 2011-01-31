@@ -5,6 +5,7 @@
 
 package com.google.gwt.gwtai.applet.client;
 
+import com.google.gwt.user.server.Base64Utils;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.List;
  * @author krog
  */
 public class GwtProxyTranslator {
+
+    private static final String encoding = "utf-8";
 
     public String encodeResponse(Object data) {
         return encodeParameter(data);
@@ -146,7 +149,7 @@ public class GwtProxyTranslator {
 
         if(type.isArray()) {
             if(type.getComponentType() == Byte.class) {
-                return Base64Util.decode(data);
+                return Base64Utils.fromBase64(data);//decode(data);
             }
             return decodeData(type, data.split(","));
         }
@@ -156,7 +159,7 @@ public class GwtProxyTranslator {
         }
         
         if(type == String.class){
-            return Base64Util.decodeString(data);
+            return new String(Base64Utils.fromBase64(data));
         }
         
         if(type == Integer.class){
