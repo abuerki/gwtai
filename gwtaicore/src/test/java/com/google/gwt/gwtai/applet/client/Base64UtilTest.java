@@ -1,5 +1,6 @@
 package com.google.gwt.gwtai.applet.client;
 
+import com.google.gwt.user.server.Base64Utils;
 import java.io.UnsupportedEncodingException;
 import org.apache.catalina.util.Base64;
 
@@ -12,38 +13,62 @@ import junit.framework.TestCase;
  */
 public class Base64UtilTest extends TestCase {
 	public static String TEST_INPUT = "abcdefg \u00d8\u00c8 \u00f8\u00c5";
-	public static String TEST_OUTPUT ="YWJjZGVmZyD[DmMOIw7jDhQ==]";
+	public static String TEST_OUTPUT ="YWJjZGVmZyDDmMOIIMO4w4U=";
+        public static String TEST_LONG_STRING = "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp "+
+                "asdlqdløpe3l2lø3p223lø l23l4 234øp l234ølr æræ lf24æl dfæ34l 2øædlÆL23 Ædl 23rl23ælr23ÆLrqwL   asdlqdløpe3l2lø3p223lø l23l4 234øp ";
 
-        public void testDummy(){}
-	/*public void testEncode() throws UnsupportedEncodingException {
+        public void testEncode() throws UnsupportedEncodingException {
+                
 		String gwtaiEncodedString = Base64Util.encodeString(TEST_INPUT);
-		String catalinaEncodedString = new String(Base64.encode(TEST_INPUT.getBytes()));
-		
+		String catalinaEncodedString = Base64Utils.toBase64(TEST_INPUT.getBytes("utf-8"));
+		System.out.print(gwtaiEncodedString);
 		assertEquals(catalinaEncodedString, gwtaiEncodedString);		
 	}
 	
 	public void testDecode() throws UnsupportedEncodingException {
 		String gwtaiDecodedString = Base64Util.decodeString(TEST_OUTPUT);
-		String catalinaDecodedString = new String(Base64.decode(TEST_OUTPUT.getBytes("utf-8")));
+		String catalinaDecodedString = new String(Base64Utils.fromBase64(TEST_OUTPUT),"utf-8");
 		
 		assertEquals(catalinaDecodedString, gwtaiDecodedString);
 	}
 	
-	public void testByteArrayToString() {
-		byte[] bytes = Base64Util.convertStringToByteArray(TEST_INPUT);
-		String output = Base64Util.convertByteArrayToString(bytes);
-		
-		assertEquals(new String(bytes), output);
+        public void testLongString() throws UnsupportedEncodingException {
+		String encodedString = Base64Util.encodeString(TEST_LONG_STRING);
+		String decodedString = new String(Base64Utils.fromBase64(encodedString), "utf-8");
+
+		assertEquals(TEST_LONG_STRING, decodedString);
 	}
-	
-	public void testStringToByteArray() {
-		byte[] bytes = Base64Util.convertStringToByteArray(TEST_INPUT);
-		
-		assertEquals(TEST_INPUT.getBytes().length, bytes.length);
-		
-		for (int i = 0; i < bytes.length; i++) {
-			assertEquals(TEST_INPUT.getBytes()[i], bytes[i]);
-		}
-	}*/
+
+        public void testLongString2() throws UnsupportedEncodingException {
+		String encodedString = Base64Utils.toBase64(TEST_LONG_STRING.getBytes("utf-8"));
+		String decodedString = Base64Util.decodeString(encodedString);
+
+		assertEquals(TEST_LONG_STRING, decodedString);
+	}
+
+        public void testLongString3() throws UnsupportedEncodingException {
+		String encodedString = Base64Util.encodeString(TEST_LONG_STRING);
+		String decodedString = Base64Util.decodeString(encodedString);
+
+		assertEquals(TEST_LONG_STRING, decodedString);
+	}
 
 }
