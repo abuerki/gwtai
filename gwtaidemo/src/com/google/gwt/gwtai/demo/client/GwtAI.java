@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 Adrian Buerki
+ * Copyright 2010 Adrian Buerki
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,11 +18,13 @@ package com.google.gwt.gwtai.demo.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.gwtai.applet.client.AppletCallback;
 import com.google.gwt.gwtai.applet.client.AppletJSUtil;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.DecoratedTabPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -37,10 +39,8 @@ public class GwtAI implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		DecoratedTabPanel tabPanel = new DecoratedTabPanel();
+		TabLayoutPanel tabPanel = new TabLayoutPanel(30, Unit.PX);
 		tabPanel.setWidth("600px");
-
-		tabPanel.getDeckPanel().setAnimationEnabled(true);
 
 		tabPanel.add(new CounterAppletTab(), "Counter");
 		tabPanel.add(new StopWatchAppletTab(), "Stop Watch");
@@ -49,9 +49,9 @@ public class GwtAI implements EntryPoint {
 
 		tabPanel.selectTab(0);
 
-		RootPanel.get().add(tabPanel);
+		RootLayoutPanel.get().add(tabPanel);
 	}
-	
+
 	private Widget createCallbackApplet() {
 		CallbackApplet  applet = (CallbackApplet) GWT.create(CallbackApplet.class);
 		Widget widgetAppletOne = AppletJSUtil.createAppletWidget(applet);
@@ -62,7 +62,7 @@ public class GwtAI implements EntryPoint {
 				Window.alert("Received: "+callbackValue);
 			}
 		});
-		
+
 		return widgetAppletOne;
 	}
 
