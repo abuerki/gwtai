@@ -31,7 +31,7 @@ import com.google.gwt.gwtai.applet.client.Width;
  * @author Adrian Buerki <a.buerki@gmail.com>
  */
 @ImplementingClass(com.google.gwt.gwtai.demo.impl.CounterAppletImpl.class)
-@Height("60")
+@Height("100")
 @Width("350")
 @Archive("GwtAI-Core.jar,com.google.gwt.gwtai.demo.GwtAI/GwtAI-Demo.jar")
 @LoadingImage("loadingc.gif")
