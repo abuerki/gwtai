@@ -44,7 +44,7 @@ public class AppletProxyTest {
      * Test of handleMethodCall method, of class AppletProxy.
      */
     @Test
-    public void testHandleMethodCallByte2String() throws Exception {
+    public void testHandleMethodCallByte2String() throws Throwable {
         System.out.println("handleMethodCall");
 
         String expResult = "SGVsbG8gV29ybGQh";
@@ -64,7 +64,7 @@ public class AppletProxyTest {
      * Test of handleMethodCall method, of class AppletProxy.
      */
     @Test
-    public void testHandleMethodCallBoolean2boolean() throws Exception {
+    public void testHandleMethodCallBoolean2boolean() throws Throwable {
 
         String data = "handleBoolean2boolean|Z|Z:1";
 
@@ -81,7 +81,7 @@ public class AppletProxyTest {
      * Test of handleMethodCall method, of class AppletProxy.
      */
     @Test
-    public void testHandleMethodCallLong() throws Exception {
+    public void testHandleMethodCallLong() throws Throwable {
 
         String data = "handleLong|L|L:1000000000";
 
@@ -99,7 +99,7 @@ public class AppletProxyTest {
      * Test of handleMethodCall method, of class AppletProxy.
      */
     @Test
-    public void testHandleMethodCalldouble() throws Exception {
+    public void testHandleMethodCalldouble() throws Throwable {
 
         String data = "handleDouble|D|D:10000.000001";
 

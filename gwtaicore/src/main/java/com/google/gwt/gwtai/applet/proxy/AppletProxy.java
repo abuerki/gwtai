@@ -65,17 +65,18 @@ public class AppletProxy extends Applet {
         proxyFor.stop();
     }
 
-    public String handleRequest(String data) throws Exception {
+    public String handleRequest(String data) throws Throwable {
         System.out.println("handling method call:"+data);
         try{
             ProxyRequest request = translator.decodeRequest(data);
             Object result = invoker.invoke(request);
+
             String returnVar = translator.encodeResponse(result);
             System.out.println("returnValue:"+returnVar);
             return returnVar;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw ex;
+        } catch (Throwable t) {
+            t.printStackTrace();
+            throw t;
         }
     }
 

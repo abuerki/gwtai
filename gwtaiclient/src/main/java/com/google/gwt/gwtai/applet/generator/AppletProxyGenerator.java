@@ -40,7 +40,6 @@ import com.google.gwt.gwtai.applet.client.LoadingImage;
 import com.google.gwt.gwtai.applet.client.Params;
 import com.google.gwt.gwtai.applet.client.SeparateJVM;
 import com.google.gwt.gwtai.applet.client.Width;
-import com.google.gwt.gwtai.applet.client.ProxyRequest;
 
 /**
  * GWT Generator that creates the proxy classes to access the applet. The proxy

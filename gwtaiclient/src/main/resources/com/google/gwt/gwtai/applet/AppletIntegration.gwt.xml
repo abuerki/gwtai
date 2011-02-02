@@ -9,6 +9,9 @@
 	
 	<define-linker name="jarlinker" class="com.google.gwt.gwtai.applet.linker.JarLinker" />
 
+        <source path="client"/>
+        <source path="com.google.gwt.server" includes="**/Base64Utils.*" />
+
 	<define-configuration-property name="jarlinker.resource" is-multi-valued="true" />
   	<define-configuration-property name="jarlinker.name" is-multi-valued="false" />
 	<define-configuration-property name="jarlinker.keystore" is-multi-valued="false" />

@@ -111,6 +111,7 @@ public class Base64Util {
 		char[] out = new char[oLen];
 		int ip = 0;
 		int op = 0;
+                
 		while (ip < iLen) {
 			int i0 = in[ip++] & 0xff;
 			int i1 = ip < iLen ? in[ip++] & 0xff : 0;
