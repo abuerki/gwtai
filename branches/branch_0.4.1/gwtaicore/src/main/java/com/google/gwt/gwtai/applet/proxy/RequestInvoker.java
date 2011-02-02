@@ -30,7 +30,19 @@ public class RequestInvoker {
             paramTypes.add(object.getClass());
         }
 
-        Method method = invokeObject.getClass().getMethod(request.getMethod(), paramTypes.toArray(new Class[0]));
-        return method.invoke(invokeObject, request.getParameters().toArray());
+        for(Method method : invokeObject.getClass().getMethods()) {
+            if(method.getName().equals(request.getMethod()) &&
+                    method.getParameterTypes().length == request.getParameters().size()) {
+                return method.invoke(invokeObject, request.getParameters().toArray());
+            }
+        }
+
+        throw new RuntimeException("Method '"+request.getMethod()+"' not found.");
+
+        //Method method = invokeObject.getClass().getMethod(request.getMethod(), paramTypes.toArray(new Class[0]));
+        //return method.invoke(invokeObject, request.getParameters().toArray());
     }
+
+
+    
 }

@@ -5,7 +5,6 @@
 
 package com.google.gwt.gwtai.applet.client;
 
-import com.google.gwt.user.server.Base64Utils;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -128,11 +127,12 @@ public class GwtProxyTranslator {
     }
 
     private Object decodeParameter(String data) throws ParseException {
-        String[] paramElements = data.split(":",2);
-        //if(paramElements.length < 2) {
-        //    throw new ParseException("Parameter must contain at least 2 elements(type and data.)", 0);
-        //}
+        if("null".equals(data)) {
+            return null;
+        }
 
+        String[] paramElements = data.split(":",2);
+        
         Class paramType = typeFromString(paramElements[0]);
         String elementData = paramElements.length<2 ? "" : paramElements[1];
         Object paramData = decodeData(paramType, elementData);
@@ -140,6 +140,8 @@ public class GwtProxyTranslator {
     }
 
     private String encodeParameter(Object data) {
+        if(data==null)
+            return "null";
         return typeFromClass(data.getClass())+":"+encodeData(data);
     }
 
@@ -149,7 +151,7 @@ public class GwtProxyTranslator {
 
         if(type.isArray()) {
             if(type.getComponentType() == Byte.class) {
-                return Base64Utils.fromBase64(data);//decode(data);
+                return Base64Util.decode(data);
             }
             return decodeData(type, data.split(","));
         }
@@ -159,7 +161,7 @@ public class GwtProxyTranslator {
         }
         
         if(type == String.class){
-            return new String(Base64Utils.fromBase64(data));
+            return new String(Base64Util.decode(data));
         }
         
         if(type == Integer.class){
