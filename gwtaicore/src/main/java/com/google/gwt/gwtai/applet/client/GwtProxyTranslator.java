@@ -65,6 +65,8 @@ public class GwtProxyTranslator {
         boolean array = type.length() == 2 && type.endsWith("A");
         type = type.substring(0,1);
 
+        if("E".equals(type))
+            definedType = Exception.class;
         if("B".equals(type))
             definedType = array ? new Byte[0].getClass():Byte.class;
         if("I".equals(type))
@@ -96,6 +98,8 @@ public class GwtProxyTranslator {
         boolean array = type.isArray();
         type = array ? type.getComponentType() : type;
 
+        if(Exception.class == type)
+            definedType = "E";
         if(Byte.class == type)
             definedType = "B";
         if(Integer.class == type)
@@ -142,6 +146,7 @@ public class GwtProxyTranslator {
     private String encodeParameter(Object data) {
         if(data==null)
             return "null";
+
         return typeFromClass(data.getClass())+":"+encodeData(data);
     }
 
@@ -155,6 +160,11 @@ public class GwtProxyTranslator {
             }
             return decodeData(type, data.split(","));
         }
+
+        if(type == Exception.class){
+            return new Exception(new String(Base64Util.decode(data)));
+        }
+
 
         if(type == Byte.class) {
             return Byte.parseByte(data);
@@ -225,6 +235,10 @@ public class GwtProxyTranslator {
                 return new String(Base64Util.encode((byte[])data));
             }
             return encodeData((Object[])data);
+        }
+
+        if(type == Exception.class) {
+            return Base64Util.encodeString(((Throwable)data).getMessage());
         }
 
         if(type == Byte.class) {
