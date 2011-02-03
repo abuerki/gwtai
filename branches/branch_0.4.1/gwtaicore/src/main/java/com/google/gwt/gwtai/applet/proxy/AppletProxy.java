@@ -76,7 +76,7 @@ public class AppletProxy extends Applet {
             return returnVar;
         } catch (Throwable t) {
             t.printStackTrace();
-            throw t;
+            return translator.encodeResponse(new Exception(t));
         }
     }
 

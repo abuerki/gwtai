@@ -41,6 +41,16 @@ public class GwtProxyTranslatorTest {
     }
 
     @Test
+    public void testExceptionReturn() {
+        Exception ex = new Exception("No way hosay");
+        GwtProxyTranslator instance = new GwtProxyTranslator();
+        String encoded = instance.encodeResponse(ex);
+        Exception result = (Exception)instance.decodeResponse(encoded);
+        assertEquals(ex.getMessage(), result.getMessage());
+
+    }
+
+    @Test
     public void testStringReturn() {
         String data = "Test123";
         GwtProxyTranslator instance = new GwtProxyTranslator();

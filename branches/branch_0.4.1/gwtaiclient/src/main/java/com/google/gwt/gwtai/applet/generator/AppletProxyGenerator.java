@@ -15,6 +15,8 @@
  */
 package com.google.gwt.gwtai.applet.generator;
 
+import com.google.gwt.core.ext.BadPropertyValueException;
+import com.google.gwt.core.ext.ConfigurationProperty;
 import java.io.PrintWriter;
 
 import com.google.gwt.core.ext.Generator;
@@ -40,6 +42,8 @@ import com.google.gwt.gwtai.applet.client.LoadingImage;
 import com.google.gwt.gwtai.applet.client.Params;
 import com.google.gwt.gwtai.applet.client.SeparateJVM;
 import com.google.gwt.gwtai.applet.client.Width;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * GWT Generator that creates the proxy classes to access the applet. The proxy
@@ -59,6 +63,12 @@ public class AppletProxyGenerator extends Generator {
 
         // if (null == createdClassName) {
         JClassType classType;
+        
+        String jarname = getJarName(context);
+        if(jarname == null) {
+            logger.log(Type.ERROR, "jarlinker.name missing fro config.");
+            throw new UnableToCompleteException();
+        }
 
         try {
             classType = context.getTypeOracle().getType(typeName);
@@ -90,6 +100,7 @@ public class AppletProxyGenerator extends Generator {
         composer.addImport("java.util.List");
         composer.addImport("com.google.gwt.dom.client.Element");
         composer.addImport("com.google.gwt.user.client.DOM");
+        composer.addImport("com.google.gwt.core.client.GWT");
         composer.addImport("com.google.gwt.gwtai.applet.proxy.AppletProxy");
 
         composer.addImplementedInterface(typeName);
@@ -141,12 +152,14 @@ public class AppletProxyGenerator extends Generator {
             sw.println("encodedRequest = translator.encodeRequest(proxyRequest);");
             sw.println("} catch(Exception ex){com.google.gwt.user.client.Window.alert(ex.getMessage());}");
 
-            sw.println();
+            sw.println("Object result = translator.decodeResponse(requestApplet(encodedRequest));");
+            sw.println("if(result instanceof Exception) {");
+            sw.println("    throw new RuntimeException((Exception)result);");
+            sw.println("}");
+
 
             if (!type.getSimpleSourceName().equals("void")) {
-                sw.println("return ("+type.getSimpleSourceName()+")translator.decodeResponse(requestApplet(encodedRequest));");
-            } else {
-                sw.println("requestApplet(encodedRequest);");
+                sw.println("return ("+type.getSimpleSourceName()+")result;");
             }
 
             sw.outdent();
@@ -252,20 +265,21 @@ public class AppletProxyGenerator extends Generator {
             sw.outdent();
         }
 
-        Archive archiveAttribute = classType.getAnnotation(Archive.class);
+        //Archive archiveAttribute = classType.getAnnotation(Archive.class);
 
-        if (null != archiveAttribute) {
+        //if (null != archiveAttribute) {
             sw.println();
             sw.indent();
             sw.println("public String getArchive() {");
             sw.indent();
-            sw.print("return \"");
-            sw.print(archiveAttribute.value());
+            sw.print("return GWT.getModuleBaseURL() + \"");
+            sw.print(jarname);
+            //sw.print(archiveAttribute.value());
             sw.println("\";");
             sw.outdent();
             sw.println("}");
             sw.outdent();
-        }
+        //}
 
         JavaVersion javaVersionAttribute = classType.getAnnotation(JavaVersion.class);
 
@@ -378,5 +392,17 @@ public class AppletProxyGenerator extends Generator {
         // }
 
         return createdClassName;
+    }
+
+    private String getJarName(GeneratorContext context){
+        try {
+            ConfigurationProperty prop = context.getPropertyOracle().getConfigurationProperty("jarlinker.name");
+            if(prop.getValues().isEmpty())
+                return null;
+            return prop.getValues().get(0);
+        } catch (BadPropertyValueException ex) {
+            return null;
+        }
+
     }
 }

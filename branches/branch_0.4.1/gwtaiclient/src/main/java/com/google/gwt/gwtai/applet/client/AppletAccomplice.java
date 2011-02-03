@@ -85,7 +85,7 @@ public abstract class AppletAccomplice {
 
 	public String getArchive() {
 		return null;
-	}
+        }
 	
 	/**
 	 * Leveraging the new version selection mechanism.
