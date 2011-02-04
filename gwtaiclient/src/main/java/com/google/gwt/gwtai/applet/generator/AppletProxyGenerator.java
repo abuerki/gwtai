@@ -32,7 +32,6 @@ import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.gwtai.applet.client.Align;
 import com.google.gwt.gwtai.applet.client.AppletClassName;
-import com.google.gwt.gwtai.applet.client.Archive;
 import com.google.gwt.gwtai.applet.client.Codebase;
 import com.google.gwt.gwtai.applet.client.Height;
 import com.google.gwt.gwtai.applet.client.ImplementingClass;
@@ -42,8 +41,6 @@ import com.google.gwt.gwtai.applet.client.LoadingImage;
 import com.google.gwt.gwtai.applet.client.Params;
 import com.google.gwt.gwtai.applet.client.SeparateJVM;
 import com.google.gwt.gwtai.applet.client.Width;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * GWT Generator that creates the proxy classes to access the applet. The proxy
@@ -265,21 +262,16 @@ public class AppletProxyGenerator extends Generator {
             sw.outdent();
         }
 
-        //Archive archiveAttribute = classType.getAnnotation(Archive.class);
-
-        //if (null != archiveAttribute) {
-            sw.println();
-            sw.indent();
-            sw.println("public String getArchive() {");
-            sw.indent();
-            sw.print("return GWT.getModuleBaseURL() + \"");
-            sw.print(jarname);
-            //sw.print(archiveAttribute.value());
-            sw.println("\";");
-            sw.outdent();
-            sw.println("}");
-            sw.outdent();
-        //}
+        sw.println();
+        sw.indent();
+        sw.println("public String getArchive() {");
+        sw.indent();
+        sw.print("return GWT.getModuleBaseURL() + \"");
+        sw.print(jarname);
+        sw.println("\";");
+        sw.outdent();
+        sw.println("}");
+        sw.outdent();
 
         JavaVersion javaVersionAttribute = classType.getAnnotation(JavaVersion.class);
 

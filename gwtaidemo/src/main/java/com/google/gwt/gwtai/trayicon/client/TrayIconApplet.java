@@ -17,7 +17,6 @@
 package com.google.gwt.gwtai.trayicon.client;
 
 import com.google.gwt.gwtai.applet.client.Applet;
-import com.google.gwt.gwtai.applet.client.Archive;
 import com.google.gwt.gwtai.applet.client.Height;
 import com.google.gwt.gwtai.applet.client.ImplementingClass;
 import com.google.gwt.gwtai.applet.client.Width;
@@ -35,7 +34,6 @@ import com.google.gwt.gwtai.applet.client.Width;
 @ImplementingClass(com.google.gwt.gwtai.trayicon.impl.TrayIconAppletImpl.class)
 @Height("70")
 @Width("200")
-@Archive("com.google.gwt.gwtai.demo.GwtAI/GwtAI-Demo.jar")
 public interface TrayIconApplet extends Applet {
 
     public void showTrayIcon();
