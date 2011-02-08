@@ -24,16 +24,18 @@ import com.google.gwt.dev.resource.impl.PathPrefix;
 import com.google.gwt.dev.resource.impl.PathPrefixSet;
 import com.google.gwt.dev.resource.impl.ResourceOracleImpl;
 import com.google.gwt.gwtai.applet.client.Applet;
-import com.google.gwt.gwtai.applet.client.Base64Util;
-import com.google.gwt.gwtai.applet.client.GwtProxyTranslator;
-import com.google.gwt.gwtai.applet.client.ProxyRequest;
-import com.google.gwt.gwtai.applet.client.StringUtil;
 import com.google.gwt.gwtai.applet.proxy.AppletProxy;
 import com.google.gwt.gwtai.applet.proxy.AppletProxyStub;
-import com.google.gwt.gwtai.applet.proxy.RequestInvoker;
 import com.google.gwt.gwtai.applet.util.AppletUtil;
 import com.google.gwt.gwtai.applet.util.JavaLibraryPath;
 import com.google.gwt.gwtai.applet.util.LibraryElement;
+import com.google.gwt.user.client.rpc.IsSerializable;
+import com.google.gwt.user.client.rpc.SerializationStreamReader;
+import com.google.gwt.user.client.rpc.impl.AbstractSerializationStreamReader;
+import com.google.gwt.user.server.Base64Utils;
+import com.google.gwt.user.server.rpc.SerializationPolicy;
+import com.google.gwt.user.server.rpc.SerializationPolicyProvider;
+import com.google.gwt.user.server.rpc.UnexpectedException;
 import java.util.Arrays;
 
 /**
@@ -58,21 +60,42 @@ import java.util.Arrays;
  */
 @LinkerOrder(LinkerOrder.Order.POST)
 public class JarLinker extends AbstractLinker {
-    private static final Class[] DEFAULTRESOURCES = {
-                    AppletProxy.class,
-                    AppletProxyStub.class,
-                    AppletUtil.class,
-                    JavaLibraryPath.class,
-                    LibraryElement.class,
-                    Applet.class,
-                    GwtProxyTranslator.class,
-                    ProxyRequest.class,
-                    RequestInvoker.class,
-                    Base64Util.class,
-                    StringUtil.class
-    };
+    private static final String[] DEFAULTINCLUDES = {
+                        "com/google/gwt/user/server::"+
+                                "include=**/rpc/**/*.class;"+
+                                "include=**/Base64Utils*.class;"+
+                                "exclude=**Servlet.class",
+                        "com/google/gwt/user/client::"+
+                                "include=**/AsyncCaalback.class;"+
+                                "include=**/IsSerializable.class;"+
+                                "include=**/RemoteService.class;"+
+                                "include=**/rpc/impl/Abstract*.class;"+
+                                "include=**/rpc/**/*Exception.class;"+
+                                "include=**/core/java/math/*.class;"+
+                                "include=**/core/java/lang/*.class;"+
+                                "include=**/rpc/Serialization*.class",
+                        "com/google/gwt/gwtai/applet::"+
+                                "include=**/proxy/AppletProxy*.class;"+
+                                "include=**/Applet.class;"+
+                                "include=**/AppletUtil.class;"+
+                                "include=**/LibraryElement.class;"+
+                                "include=**/JavaLibraryPath.class;"+
+                                "include=**/Base64Util.class;"+
+                                "include=**/StringUtil.class",
+                        "com/google/gwt/core/client::"+
+                                "include=**/GWT*.class"
+                    };
 
-	/**
+    /*
+     * import com.google.gwt.gwtai.applet.client.Applet;
+import com.google.gwt.gwtai.applet.proxy.AppletProxy;
+import com.google.gwt.gwtai.applet.proxy.AppletProxyStub;
+import com.google.gwt.gwtai.applet.util.AppletUtil;
+import com.google.gwt.gwtai.applet.util.JavaLibraryPath;
+import com.google.gwt.gwtai.applet.util.LibraryElement;
+     */
+
+    	/**
 	 * Returns a human-readable String describing the Linker.
 	 */
 	@Override
@@ -93,6 +116,9 @@ public class JarLinker extends AbstractLinker {
 		String keystore = null;
 		String alias = null;
 		String storepass = null;
+
+                
+
 		
 		for (ConfigurationProperty currentProperty: context.getConfigurationProperties()) {
 			String propName = currentProperty.getName();
@@ -129,8 +155,9 @@ public class JarLinker extends AbstractLinker {
 					
 					throw new UnableToCompleteException();
 				}
-				
-				includeResources = resolveResources(logger,currentProperty.getValues());
+				List<String> resourceList = currentProperty.getValues();
+                                resourceList.addAll(Arrays.asList(DEFAULTINCLUDES));
+				includeResources = resolveResources(logger,resourceList);
 			} else if (propName.equalsIgnoreCase("jarlinker.jarsigner")) {
 				jarsignerPath = firstPropValue;
 			} else if (propName.equalsIgnoreCase("jarlinker.keystore")) {
@@ -229,9 +256,7 @@ public class JarLinker extends AbstractLinker {
 			
 		}
 
-                includeResources = mergeResourcesWithDefault(includeResources);
-
-		logger.log(Type.INFO, "Adding " + includeResources.length + " resources to JAR file");
+                logger.log(Type.INFO, "Adding " + includeResources.length + " resources to JAR file");
 		
 		ByteArrayOutputStream byteArrayOutStream = null;
 		JarOutputStream jarOutStream = null;
@@ -307,7 +332,7 @@ public class JarLinker extends AbstractLinker {
          * Merges an array of resources to merge with the default set of resources.
          * @return The merged array.
          */
-        private String[] mergeResourcesWithDefault(String[] resources) {
+        /*private String[] mergeResourcesWithDefault(String[] resources) {
             List<String> merged = new ArrayList<String>();
             merged.addAll(Arrays.asList(resources));
 
@@ -316,7 +341,7 @@ public class JarLinker extends AbstractLinker {
             }
             return merged.toArray(new String[0]);
 
-        }
+        }*/
 
 	/**
 	 * Resolves the resources specified by values with the following syntax:

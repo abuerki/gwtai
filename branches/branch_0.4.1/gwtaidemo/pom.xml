@@ -47,6 +47,8 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <generateDirectory> ${project.build.directory}/generated-sources/gwt</generateDirectory>
+                    <runTarget>/com.google.gwt.gwtai.demo.GwtAI/GwtAI.html</runTarget>
                     <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
                 </configuration>
             </plugin>
@@ -88,7 +90,6 @@
             </plugin>
 
         </plugins>
-        <finalName>GwtAIDemo</finalName>
         
     </build>
     <dependencies>

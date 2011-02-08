@@ -19,6 +19,7 @@ package com.google.gwt.gwtai.demo.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.gwtai.applet.client.AppletCallback;
+import com.google.gwt.gwtai.applet.client.AppletDefTarget;
 import com.google.gwt.gwtai.applet.client.AppletJSUtil;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
@@ -53,11 +54,12 @@ public class GwtAI implements EntryPoint {
 	}
 	
 	private Widget createCallbackApplet() {
-		CallbackApplet  applet = (CallbackApplet) GWT.create(CallbackApplet.class);
-		Widget widgetAppletOne = AppletJSUtil.createAppletWidget(applet);
+		CallbackAppletAsync applet = GWT.create(CallbackApplet.class);
+                AppletDefTarget defTarget = (AppletDefTarget)applet;
+		Widget widgetAppletOne = AppletJSUtil.createAppletWidget(defTarget);
 		RootPanel.get().add(widgetAppletOne);
 		
-		AppletJSUtil.registerAppletCallback(applet, new AppletCallback<String>() {
+		AppletJSUtil.registerAppletCallback(defTarget, new AppletCallback<String>() {
 			public void callback(String callbackValue) {
 				Window.alert("Received: "+callbackValue);
 			}

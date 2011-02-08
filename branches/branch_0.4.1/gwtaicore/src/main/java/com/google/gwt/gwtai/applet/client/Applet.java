@@ -16,6 +16,8 @@
 
 package com.google.gwt.gwtai.applet.client;
 
+import com.google.gwt.user.client.rpc.RemoteService;
+
 /**
  * A tag interface that facilitates compile-time creation of an handle objects
  * for Java Applet classes. Such a handle can be used to call methods in the
@@ -30,6 +32,6 @@ package com.google.gwt.gwtai.applet.client;
  * 
  * @author Adrian Buerki <a.buerki@gmail.com>
  */
-public interface Applet {
+public interface Applet extends RemoteService {
 
 }
