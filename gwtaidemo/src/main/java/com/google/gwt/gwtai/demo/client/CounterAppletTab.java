@@ -19,6 +19,7 @@ package com.google.gwt.gwtai.demo.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.gwtai.applet.client.AppletDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -29,6 +30,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.gwtai.applet.client.AppletJSUtil;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  * The content of the <code>CounterApplet</code> demo tab.
@@ -36,6 +39,19 @@ import com.google.gwt.gwtai.applet.client.AppletJSUtil;
  * @author Adrian Buerki <a.buerki@gmail.com>
  */
 public class CounterAppletTab extends Composite {
+
+    private abstract class ErrorHandlingCallback<T> implements AsyncCallback<T> {
+
+        public void onFailure(Throwable caught) {
+            Window.alert(caught.getMessage());
+        }
+
+    }
+
+    private class DevNullCallback extends ErrorHandlingCallback<Void> {
+
+        public void onSuccess(Void result) { }
+    }
 
 	public CounterAppletTab() {
 		VerticalPanel panelMain = new VerticalPanel();
@@ -47,33 +63,38 @@ public class CounterAppletTab extends Composite {
 		Button buttonDec = new Button("Decrement");
 		Button buttonGet = new Button("Get current count");
 		
-		final CounterApplet counterApplet = (CounterApplet) GWT.create(CounterApplet.class);
+		final CounterAppletAsync counterApplet = GWT.create(CounterApplet.class);
 		
 		buttonInc.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				counterApplet.increment();
+				counterApplet.increment(new DevNullCallback());
 			}
 		});
 
 		buttonDec.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				counterApplet.decrement();
+				counterApplet.decrement(new DevNullCallback());
 			}
 		});
 
                 buttonSet.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				counterApplet.setValue(10);
+				counterApplet.setValue(10, new DevNullCallback());
 			}
 		});
 
 		buttonGet.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				Object value = counterApplet.getCurrentValue();
+				counterApplet.getCurrentValue(new ErrorHandlingCallback<String>() {
+
+                                    public void onSuccess(String result) {
+                                        DialogBox dialogBox = createDialogBox(result);
+                                        dialogBox.center();
+                                        dialogBox.show();
+                                    }
+                                });
 				
-				DialogBox dialogBox = createDialogBox(value);
-				dialogBox.center();
-				dialogBox.show();
+				
 			}
 		});
 		
@@ -83,8 +104,9 @@ public class CounterAppletTab extends Composite {
 		buttonPanel.add(buttonDec);
 		buttonPanel.add(buttonSet);
 		buttonPanel.add(buttonGet);
-		
-		Widget widgetApplet = AppletJSUtil.createAppletWidget(counterApplet);
+
+                AppletDefTarget defTarget = (AppletDefTarget)counterApplet;
+		Widget widgetApplet = AppletJSUtil.createAppletWidget(defTarget);
 		Label labelTitle = new Label("To call a method on an applet object from within your GWT code - a piece of cake!");
 		DisclosurePanel panelCode = new DisclosurePanel("View code");
 		panelCode.setWidth("100%");

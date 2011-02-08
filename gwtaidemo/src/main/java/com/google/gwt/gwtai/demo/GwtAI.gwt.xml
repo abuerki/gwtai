@@ -24,23 +24,6 @@
 	<set-configuration-property name="jarlinker.keystore" value=".keystore" />
 	<set-configuration-property name="jarlinker.alias" value="Adrian Buerki" />
 	<set-configuration-property name="jarlinker.storepass" value="gwtaigwtai" />
-	<!--set-configuration-property name="jarlinker.include" value="
-		com/google/gwt/gwtai/demo/impl/CounterAppletImpl.class,
-		com/google/gwt/gwtai/demo/client/CounterApplet.class,
-		com/google/gwt/gwtai/demo/impl/CallbackAppletImpl$1.class,
-		com/google/gwt/gwtai/demo/impl/CallbackAppletImpl.class,
-		com/google/gwt/gwtai/demo/impl/StopWatchAppletImpl.class,
-		com/google/gwt/gwtai/demo/impl/StopWatchAppletImpl$StopWatchLabel.class,
-		com/google/gwt/gwtai/demo/impl/StopWatchAppletImpl$1.class,
-		com/google/gwt/gwtai/demo/client/CallbackApplet.class,
-		com/google/gwt/gwtai/demo/client/StopWatchApplet.class,
-		com/google/gwt/gwtai/trayicon/impl/TrayIconAppletImpl.class,
-		com/google/gwt/gwtai/trayicon/client/TrayIconApplet.class,
-		com/google/gwt/gwtai/trayicon/impl/TrayIconAppletImpl$1.class,
-		com/google/gwt/gwtai/trayicon/impl/TrayAccessJDIC.class,
-		com/google/gwt/gwtai/trayicon/impl/TrayAccessJDIC$1.class,
-		com/google/gwt/gwtai/trayicon/impl/TrayAccess16.class,
-		com/google/gwt/gwtai/trayicon/impl/TrayAccess16$1.class,
-		com/google/gwt/gwtai/trayicon/impl/icon.gif"/-->
+	
 
 </module>

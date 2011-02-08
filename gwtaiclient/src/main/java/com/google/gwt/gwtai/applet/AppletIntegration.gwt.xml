@@ -3,10 +3,11 @@
 
 <module>
 
-	<generate-with class='com.google.gwt.gwtai.applet.generator.AppletProxyGenerator'>
+	<generate-with class='com.google.gwt.gwtai.applet.generator.AppletInterfaceProxyGenerator'>
 		<when-type-assignable class='com.google.gwt.gwtai.applet.client.Applet' />
-        </generate-with>
-	
+	</generate-with>
+
+        
 	<define-linker name="jarlinker" class="com.google.gwt.gwtai.applet.linker.JarLinker" />
 
 	<define-configuration-property name="jarlinker.resource" is-multi-valued="true" />

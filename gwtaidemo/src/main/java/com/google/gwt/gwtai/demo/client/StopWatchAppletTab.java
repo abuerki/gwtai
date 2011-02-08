@@ -19,7 +19,10 @@ package com.google.gwt.gwtai.demo.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.gwtai.applet.client.AppletDefTarget;
 import com.google.gwt.gwtai.applet.client.AppletJSUtil;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -36,6 +39,19 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class StopWatchAppletTab extends Composite {
 
+    private abstract class ErrorHandlingCallback<T> implements AsyncCallback<T> {
+
+        public void onFailure(Throwable caught) {
+            Window.alert(caught.getMessage());
+        }
+
+    }
+
+    private class DevNullCallback extends ErrorHandlingCallback<Void> {
+
+        public void onSuccess(Void result) { }
+    }
+
 	public StopWatchAppletTab() {
 		VerticalPanel panelMain = new VerticalPanel();
 		panelMain.setWidth("100%");
@@ -48,18 +64,18 @@ public class StopWatchAppletTab extends Composite {
 		Button buttonStart = new Button("Start");
 		Button buttonStop = new Button("Stop");
 
-		final StopWatchApplet stopWatchApplet = (StopWatchApplet) GWT
+		final StopWatchAppletAsync stopWatchApplet = GWT
 				.create(StopWatchApplet.class);
 
 		buttonStart.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				stopWatchApplet.startWatch();
+				stopWatchApplet.startWatch(new DevNullCallback());
 			}
 		});
 
 		buttonStop.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				stopWatchApplet.stopWatch();
+				stopWatchApplet.stopWatch(new DevNullCallback());
 			}
 		});
 
@@ -68,8 +84,9 @@ public class StopWatchAppletTab extends Composite {
 		buttonPanel.add(buttonStart);
 		buttonPanel.add(buttonStop);
 
-		Widget widgetApplet = AppletJSUtil.createAppletWidget(stopWatchApplet);
-		AppletJSUtil.registerAppletCallback(stopWatchApplet,
+                AppletDefTarget defTarget = (AppletDefTarget)stopWatchApplet;
+		Widget widgetApplet = AppletJSUtil.createAppletWidget(defTarget);
+		AppletJSUtil.registerAppletCallback(defTarget,
 				new StopWatchCallback(panelLaps));
 
 		Label labelTitle = new Label(

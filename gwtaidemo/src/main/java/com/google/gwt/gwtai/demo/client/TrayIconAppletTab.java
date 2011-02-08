@@ -19,9 +19,12 @@ package com.google.gwt.gwtai.demo.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.gwtai.applet.client.AppletDefTarget;
 import com.google.gwt.gwtai.applet.client.AppletJSUtil;
 import com.google.gwt.gwtai.trayicon.client.TrayIconApplet;
+import com.google.gwt.gwtai.trayicon.client.TrayIconAppletAsync;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -39,16 +42,29 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Adrian Buerki <a.buerki@gmail.com>
  */
 public class TrayIconAppletTab extends Composite {
-	private TrayIconApplet _trayIconApplet;
+	private TrayIconAppletAsync _trayIconApplet;
+
+         private abstract class ErrorHandlingCallback<T> implements AsyncCallback<T> {
+
+        public void onFailure(Throwable caught) {
+            Window.alert(caught.getMessage());
+        }
+
+    }
+
+    private class DevNullCallback extends ErrorHandlingCallback<Void> {
+
+        public void onSuccess(Void result) { }
+    }
 
 	public TrayIconAppletTab() {
 		VerticalPanel panelMain = new VerticalPanel();
 		panelMain.setWidth("100%");
 		panelMain.setSpacing(4);
 
-		_trayIconApplet = (TrayIconApplet) GWT.create(TrayIconApplet.class);
-
-		Widget widgetApplet = AppletJSUtil.createAppletWidget(_trayIconApplet);
+		_trayIconApplet = GWT.create(TrayIconApplet.class);
+                AppletDefTarget defTarget = (AppletDefTarget)_trayIconApplet;
+		Widget widgetApplet = AppletJSUtil.createAppletWidget(defTarget);
 
 		Label labelTitle = new Label(
 				"Hook into the desktop tray from a GWT application. This is a 'Proof of Concept', the feature is not finished yet.");
@@ -80,9 +96,9 @@ public class TrayIconAppletTab extends Composite {
 							.getSelectedIndex());
 
 					if (itemType.equals("CheckBox")) {
-						_trayIconApplet.addCheckBoxItem(caption);
+						_trayIconApplet.addCheckBoxItem(caption, new DevNullCallback());
 					} else {
-						_trayIconApplet.addTextItem(caption);
+						_trayIconApplet.addTextItem(caption, new DevNullCallback());
 					}
 				}
 			}
@@ -91,7 +107,7 @@ public class TrayIconAppletTab extends Composite {
 		Button buttonSeparator = new Button("Add separator");
 		buttonSeparator.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				_trayIconApplet.addSeparator();
+				_trayIconApplet.addSeparator(new DevNullCallback());
 			}
 		});
 

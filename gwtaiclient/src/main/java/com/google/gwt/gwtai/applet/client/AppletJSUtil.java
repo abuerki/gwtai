@@ -47,8 +47,8 @@ public class AppletJSUtil {
 	 * @param applet The <code>Applet</code> to take the information from.
 	 * @return An <code>HTML</code> element which contains an applet tag.
 	 */
-	public static Widget createAppletWidget(Applet applet) {
-		String htmlCode = createAppletHTML(applet);
+	public static Widget createAppletWidget(AppletDefTarget defTarget) {
+		String htmlCode = createAppletHTML(defTarget);
 
 		if (htmlCode != null) {
 			return new HTML(htmlCode);
@@ -69,42 +69,41 @@ public class AppletJSUtil {
 	 * @param applet The <code>Applet</code> to take the information from.
 	 * @return The applet tag.
 	 */
-	public static String createAppletHTML(Applet applet) {
-		if (applet instanceof AppletAccomplice) {
-
-			AppletAccomplice aapplet = (AppletAccomplice) applet;
+	public static String createAppletHTML(AppletDefTarget defTarget) {
+		
+			
 
 			String htmlCode = "<applet mayscript='true'"
 					+ " code='"
                                         + PROXYCLASS
 					+ "' width='"
-					+ aapplet.getWidth()
+					+ defTarget.getWidth()
 					+ "' height='"
-					+ aapplet.getHeight()
+					+ defTarget.getHeight()
 					+ "' name='"
-					+ aapplet.getName()
+					+ defTarget.getName()
 					+ "' id='"
-					+ aapplet.getName()
+					+ defTarget.getName()
 					+ "' alt='Java Runtime Environment is not working on your system'";
 
-			if (null != aapplet.getCodebase()) {
-				htmlCode += "codebase='" + aapplet.getCodebase() + "'";
+			if (null != defTarget.getCodebase()) {
+				htmlCode += "codebase='" + defTarget.getCodebase() + "'";
 			}
 
-			if (null != aapplet.getArchive()) {
-				htmlCode += "archive='" + aapplet.getArchive() + "'";
+			if (null != defTarget.getArchive()) {
+				htmlCode += "archive='" + defTarget.getArchive() + "'";
 			}
 
-			if (null != aapplet.getAlign()) {
-				htmlCode += "align='" + aapplet.getAlign() + "'";
+			if (null != defTarget.getAlign()) {
+				htmlCode += "align='" + defTarget.getAlign() + "'";
 			}
 
 			htmlCode += ">";
 
-			HashMap<String, String> parameters = aapplet.getParameters();
+			HashMap<String, String> parameters = defTarget.getParameters();
 
                         //Add parameter for proxy
-                        String classname = aapplet.getCode();
+                        String classname = defTarget.getCode();
                         if(classname.endsWith(".class"))
                             classname = classname.substring(0,classname.length()-6);
                         htmlCode+=createParamTag(PROXYCLASSPARAM, classname);
@@ -115,25 +114,21 @@ public class AppletJSUtil {
 				}
 			}
 			
-			htmlCode += createParamTag("java_version", aapplet.getJavaVersion());
-			htmlCode += createParamTag("java_arguments", aapplet.getJavaArguments());
-			htmlCode += createParamTag("separate_jvm", aapplet.hasSeparateJVM());
-			htmlCode += createParamTag("image", aapplet.getLoadingImage());
-			htmlCode += createParamTag("applet_name", aapplet.getName());
+			htmlCode += createParamTag("java_version", defTarget.getJavaVersion());
+			htmlCode += createParamTag("java_arguments", defTarget.getJavaArguments());
+			htmlCode += createParamTag("separate_jvm", defTarget.hasSeparateJVM());
+			htmlCode += createParamTag("image", defTarget.getLoadingImage());
+			htmlCode += createParamTag("applet_name", defTarget.getName());
 			
 			htmlCode += "</applet>";
 
 			return htmlCode;
-		}
-
-		return null;
+		
 	}
 
-	public static Widget createAppletWidget(Applet applet,
+	public static Widget createAppletWidget(AppletDefTarget defTarget,
 			String forceJavaVersion) {
-		if (applet instanceof AppletAccomplice) {
-			AppletAccomplice aapplet = (AppletAccomplice) applet;
-
+		
 			String codebase = GWT.getModuleBaseURL();
 
 			String htmlCode = "<p style='text-align: center;'><script src='http://java.com/js/deployJava.js'></script>"
@@ -141,19 +136,17 @@ public class AppletJSUtil {
 					+ codebase
 					+ "', ";
 
-			if (null != aapplet.getArchive()) {
-				htmlCode += "archive:'" + aapplet.getArchive() + "', ";
+			if (null != defTarget.getArchive()) {
+				htmlCode += "archive:'" + defTarget.getArchive() + "', ";
 			}
 
 			htmlCode += "code:'" + PROXYCLASS + "', width:'"
-					+ aapplet.getWidth() + "', Height:'" + aapplet.getHeight()
-					+ "'}, {"+PROXYCLASSPARAM+":"+aapplet.getCode()+"}, '" + forceJavaVersion + "');"
+					+ defTarget.getWidth() + "', Height:'" + defTarget.getHeight()
+					+ "'}, {"+PROXYCLASSPARAM+":"+defTarget.getCode()+"}, '" + forceJavaVersion + "');"
 					+ "</script></p>";
 
 			return new HTML(htmlCode);
-		}
-
-		return null;
+		
 	}
 
 	/**
@@ -180,13 +173,11 @@ public class AppletJSUtil {
 	 *            The <code>AppletCallback</code> instance to notify once a
 	 *            callback is coming.
 	 */
-	public static void registerAppletCallback(Applet applet,
+	public static void registerAppletCallback(AppletDefTarget defTarget,
 			AppletCallback<? extends Object> appletCallback) {
-		if (applet instanceof AppletAccomplice) {
-			AppletAccomplice aapplet = (AppletAccomplice) applet;
-
-			CallbackUtil.registerCallback(aapplet.getName(), appletCallback);
-		}
+			
+			CallbackUtil.registerCallback(defTarget.getName(), appletCallback);
+		
 	}
 
 	/**
@@ -198,13 +189,12 @@ public class AppletJSUtil {
 	 * @param methodName -
 	 *            The name of the method to call.
 	 */
-	public static void call(Applet applet, String methodName) {
-		if (applet instanceof AppletAccomplice) {
-			String id = ((AppletAccomplice) applet).getId();
-			Element elem = DOM.getElementById(id);
+	public static void call(AppletDefTarget target, String methodName) {
+                String id = target.getId();
+                Element elem = DOM.getElementById(id);
 
-			call(elem, methodName);
-		}
+                call(elem, methodName);
+
 	}
 
 	/**
@@ -218,13 +208,12 @@ public class AppletJSUtil {
 	 * @param args -
 	 *            The method arguments.
 	 */
-	public static void call(Applet applet, String methodName, Object[] args) {
-		if (applet instanceof AppletAccomplice) {
-			String id = ((AppletAccomplice) applet).getId();
-			Element elem = DOM.getElementById(id);
+	public static void call(AppletDefTarget target, String methodName, Object[] args) {
+            String id = target.getId();
+            Element elem = DOM.getElementById(id);
 
-			call(elem, methodName, args);
-		}
+            call(elem, methodName, args);
+
 	}
 
 	/**

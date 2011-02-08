@@ -5,8 +5,8 @@
 
 package com.google.gwt.gwtai.applet.proxy;
 
-import com.google.gwt.gwtai.applet.client.GwtProxyTranslator;
-import com.google.gwt.gwtai.applet.client.ProxyRequest;
+import com.google.gwt.user.server.rpc.RPC;
+import com.google.gwt.user.server.rpc.RPCRequest;
 import java.applet.Applet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,8 +20,6 @@ public class AppletProxy extends Applet {
     public static final String CLASSNAMEPARAM = "classname";
 
     private Applet proxyFor;
-    private RequestInvoker invoker;
-    private GwtProxyTranslator translator = new GwtProxyTranslator();
     private String className = null;
 
     @Override
@@ -36,7 +34,6 @@ public class AppletProxy extends Applet {
 
             proxyFor = (Applet) Class.forName(className).newInstance();
             proxyFor.setStub(new AppletProxyStub(this));
-            invoker = new RequestInvoker(proxyFor);
             proxyFor.init();
             add(proxyFor);
 
@@ -67,16 +64,17 @@ public class AppletProxy extends Applet {
 
     public String handleRequest(String data) throws Throwable {
         System.out.println("handling method call:"+data);
+        RPCRequest rpcRequest = null;
         try{
-            ProxyRequest request = translator.decodeRequest(data);
-            Object result = invoker.invoke(request);
+            rpcRequest = RPC.decodeRequest(data);
+            Object result = rpcRequest.getMethod().invoke(proxyFor, rpcRequest.getParameters());
+            String returnVar = RPC.encodeResponseForSuccess(rpcRequest.getMethod(), result);
 
-            String returnVar = translator.encodeResponse(result);
             System.out.println("returnValue:"+returnVar);
             return returnVar;
         } catch (Throwable t) {
             t.printStackTrace();
-            return translator.encodeResponse(new Exception(t));
+            return RPC.encodeResponseForFailure(rpcRequest.getMethod(), t);
         }
     }
 
