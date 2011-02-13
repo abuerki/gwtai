@@ -69,10 +69,12 @@ public class JarLinker extends AbstractLinker {
                                 "include=**/AsyncCaalback.class;"+
                                 "include=**/IsSerializable.class;"+
                                 "include=**/RemoteService.class;"+
+                                "include=**/GwtTransient.class;"+
                                 "include=**/rpc/impl/Abstract*.class;"+
                                 "include=**/rpc/**/*Exception.class;"+
                                 "include=**/core/java/math/*.class;"+
                                 "include=**/core/java/lang/*.class;"+
+                                "include=**/core/java/util/*.class;"+
                                 "include=**/rpc/Serialization*.class",
                         "com/google/gwt/gwtai/applet::"+
                                 "include=**/proxy/AppletProxy*.class;"+

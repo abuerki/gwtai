@@ -5,9 +5,12 @@
 
 package com.google.gwt.gwtai.applet.proxy;
 
+import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.server.rpc.RPC;
 import com.google.gwt.user.server.rpc.RPCRequest;
 import java.applet.Applet;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,20 +65,33 @@ public class AppletProxy extends Applet {
         proxyFor.stop();
     }
 
-    public String handleRequest(String data) throws Throwable {
+    public String handleRequest(final String data) throws Throwable {
         System.out.println("handling method call:"+data);
-        RPCRequest rpcRequest = null;
-        try{
-            rpcRequest = RPC.decodeRequest(data);
-            Object result = rpcRequest.getMethod().invoke(proxyFor, rpcRequest.getParameters());
-            String returnVar = RPC.encodeResponseForSuccess(rpcRequest.getMethod(), result);
 
-            System.out.println("returnValue:"+returnVar);
-            return returnVar;
-        } catch (Throwable t) {
-            t.printStackTrace();
-            return RPC.encodeResponseForFailure(rpcRequest.getMethod(), t);
-        }
+        return AccessController.doPrivileged(new PrivilegedAction<String>() {
+
+            public String run() {
+                RPCRequest rpcRequest = null;
+                try{
+                    rpcRequest = RPC.decodeRequest(data);
+                    Object result = rpcRequest.getMethod().invoke(proxyFor, rpcRequest.getParameters());
+                    String returnVar = RPC.encodeResponseForSuccess(rpcRequest.getMethod(), result);
+
+                    System.out.println("returnValue:"+returnVar);
+                    return returnVar;
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                    try {
+                        return RPC.encodeResponseForFailure(rpcRequest.getMethod(), t);
+                    } catch (SerializationException ex) {
+                        Logger.getLogger(AppletProxy.class.getName()).log(Level.SEVERE, null, ex);
+                        return null;
+                    }
+                }
+            }
+        });
+
+        
     }
 
 }
