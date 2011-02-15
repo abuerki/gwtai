@@ -24,6 +24,8 @@ public class AppletProxy extends Applet {
 
     private Applet proxyFor;
     private String className = null;
+    private AppletProxySerializationPolicyProvider policyProvider = new AppletProxySerializationPolicyProvider();
+    private AppletProxySerializationPolicy policy = new AppletProxySerializationPolicy();
 
     @Override
     public void init() {
@@ -73,9 +75,9 @@ public class AppletProxy extends Applet {
             public String run() {
                 RPCRequest rpcRequest = null;
                 try{
-                    rpcRequest = RPC.decodeRequest(data);
+                    rpcRequest = RPC.decodeRequest(data, null, policyProvider);
                     Object result = rpcRequest.getMethod().invoke(proxyFor, rpcRequest.getParameters());
-                    String returnVar = RPC.encodeResponseForSuccess(rpcRequest.getMethod(), result);
+                    String returnVar = RPC.encodeResponseForSuccess(rpcRequest.getMethod(), result, policy);
 
                     System.out.println("returnValue:"+returnVar);
                     return returnVar;
