@@ -105,8 +105,7 @@ public class AppletProxyCreator extends ProxyCreator {
         w.print("protected native boolean isAppletActive()");
         w.println(" /*-{");
         w.indent();
-        w.print("var id = '");
-        w.println(simpleName + "';");
+        w.println("var id = this.@" + packageName + "." + simpleName + "::getName()();");
         w.println("var gwtElem = @com.google.gwt.user.client.DOM::getElementById(Ljava/lang/String;)(id);");
         w.println("return gwtElem['isActive']();");
         w.outdent();
