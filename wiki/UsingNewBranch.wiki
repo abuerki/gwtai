@@ -6,10 +6,17 @@ The new branch introduces some new stuff:
   * Maven build process
   * GWT-RPC communication with applet allowing full object graph.
 
+But because of the new build process you might want some insight into using it. Read on! :)
 
-= Details =
+= Prerequisites =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+Your development environment needs to support maven and preferably have some GWT support to make your life easier.
+
+  * Netbeans: Supports maven but you wanna [http://netbeans.org/kb/docs/web/quickstart-webapps-gwt.html install GWT4NB]. 
+  * Eclipse: You need to [http://m2eclipse.sonatype.org/installing-m2eclipse.html install m2clipse] for maven support and the [http://code.google.com/intl/da/eclipse/docs/getting_started.html Google Eclipse Plugin] for som GWT support.
+
+= Opening the project =
+When you have [http://code.google.com/p/gwtai/source/checkout checked out the code] you open the outer/parent project 'gwtai'. The subfolders, gwtaicore, gwtaiclient and gwtaidemo are all subproject to the parent project which you can open as modules inside you IDE.
+
+
+=TO BE CONTINUED=
