@@ -1,5 +1,7 @@
 #summary Describes the communication between GWT and Applet
 
+=THIS PAGE IS OUTDATED=
+
 = Introduction =
 
 It is only possible to call methods on an applet with String arguments. If other types are used they may/will be converted to string by the browser. To support more types a protocol must be implemented and handled by a proxy between GWT and the Applet. The proxy is implemented as an Applet it self which embeds the real applet.
