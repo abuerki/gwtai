@@ -29,6 +29,16 @@ public interface AppletDefTarget {
 	 */
 	String getCodebase();
 
+        /**
+	 * The codebase lokoup specifies wether the applet classloader should look
+         * for classes in the codebase if not found in the loaded jar.
+	 * This attribute is optional, if not specified the value is true.
+	 *
+	 * @return Wether codebase lookup shouldbe used by the applet.
+	 */
+	boolean getCodebaseLookup();
+
+
 	/**
 	 * The fully qualified name of the class representing this applet. The
 	 * implementation used here must be a subclass of

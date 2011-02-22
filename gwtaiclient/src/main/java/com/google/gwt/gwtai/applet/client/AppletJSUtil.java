@@ -119,7 +119,8 @@ public class AppletJSUtil {
 			htmlCode += createParamTag("separate_jvm", defTarget.hasSeparateJVM());
 			htmlCode += createParamTag("image", defTarget.getLoadingImage());
 			htmlCode += createParamTag("applet_name", defTarget.getName());
-			
+			htmlCode += createParamTag("codebase_lookup", defTarget.getCodebaseLookup());
+
 			htmlCode += "</applet>";
 
 			return htmlCode;
