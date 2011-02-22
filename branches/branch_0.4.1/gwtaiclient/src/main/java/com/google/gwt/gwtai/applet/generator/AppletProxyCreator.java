@@ -20,6 +20,7 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.gwtai.applet.client.Align;
 import com.google.gwt.gwtai.applet.client.AppletClassName;
 import com.google.gwt.gwtai.applet.client.Codebase;
+import com.google.gwt.gwtai.applet.client.CodebaseLookup;
 import com.google.gwt.gwtai.applet.client.Height;
 import com.google.gwt.gwtai.applet.client.ImplementingClass;
 import com.google.gwt.gwtai.applet.client.JavaArguments;
@@ -295,6 +296,24 @@ public class AppletProxyCreator extends ProxyCreator {
             w.println("\";");
         } else {
             w.println("return null;");
+        }
+        w.outdent();
+        w.println();
+        w.println("}");
+        w.outdent();
+
+        CodebaseLookup codeBaseLookupAttribute = serviceIntf.getAnnotation(CodebaseLookup.class);
+
+        w.println();
+        w.indent();
+        w.println("public boolean getCodebaseLookup() {");
+        w.indent();
+        if (null != codeBaseLookupAttribute) {
+            w.print("return ");
+            w.print(Boolean.toString(codeBaseLookupAttribute.value()));
+            w.println(";");
+        } else {
+            w.println("return true;");
         }
         w.outdent();
         w.println();

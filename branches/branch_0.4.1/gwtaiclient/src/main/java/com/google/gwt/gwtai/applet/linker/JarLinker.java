@@ -419,6 +419,9 @@ import com.google.gwt.gwtai.applet.util.LibraryElement;
 				logger.log(Type.ERROR, "Keystore does not exist");
 			}
 		}
+
+                logger.log(Type.INFO, "Keystore: "+ksFile);
+
 		
 		File tmpFile = null;
 		FileOutputStream tmpFileOutStream = null;
@@ -428,6 +431,7 @@ import com.google.gwt.gwtai.applet.util.LibraryElement;
 		try {	
 			tmpFile = File.createTempFile(System.currentTimeMillis() +"", ".jar");
 			tmpFileOutStream = new FileOutputStream(tmpFile);
+                        logger.log(Type.INFO, "Writing temp jar: "+tmpFile);
 			
 			tmpFileOutStream.write(jarContent);
 			tmpFileOutStream.close();
@@ -441,7 +445,8 @@ import com.google.gwt.gwtai.applet.util.LibraryElement;
 					tmpFile.getAbsolutePath(),
 					alias
 			};
-			
+
+                        logger.log(Type.INFO, "Command for signing: "+Arrays.toString(cmd));
 			Process p = Runtime.getRuntime().exec(cmd);
 			p.waitFor();
 			
