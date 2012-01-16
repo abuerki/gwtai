@@ -4,12 +4,7 @@
  */
 package com.google.gwt.gwtai.applet.generator;
 
-import com.google.gwt.core.ext.BadPropertyValueException;
-import com.google.gwt.core.ext.ConfigurationProperty;
-import com.google.gwt.core.ext.GeneratorContext;
-import com.google.gwt.core.ext.PropertyOracle;
-import com.google.gwt.core.ext.TreeLogger;
-import com.google.gwt.core.ext.UnableToCompleteException;
+import com.google.gwt.core.ext.*;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.user.rebind.rpc.SerializableTypeOracle;
@@ -51,17 +46,17 @@ public class AppletProxyCreator extends ProxyCreator {
     }
 
     @Override
-    public String create(TreeLogger logger, GeneratorContext context) throws UnableToCompleteException {
+    public String create(TreeLogger logger, GeneratorContextExt context) throws UnableToCompleteException {
         jarname = getJarName(context);
         if (jarname == null) {
             logger.log(TreeLogger.Type.ERROR, "jarlinker.name missing from config.");
             throw new UnableToCompleteException();
         }
-
+        
         return super.create(logger, context);
-
-
     }
+    
+    
 
     /**
      * Generate the proxy constructor and delegate to the superclass constructor
@@ -83,8 +78,8 @@ public class AppletProxyCreator extends ProxyCreator {
     }
 
     @Override
-    protected void generateProxyMethods(SourceWriter w, SerializableTypeOracle serializableTypeOracle, Map<JMethod, JMethod> syncMethToAsyncMethMap) {
-        super.generateProxyMethods(w, serializableTypeOracle, syncMethToAsyncMethMap);
+    protected void generateProxyMethods(SourceWriter w, SerializableTypeOracle serializableTypeOracle, TypeOracle typeOracle, Map<JMethod, JMethod> syncMethToAsyncMethMap) {
+        super.generateProxyMethods(w, serializableTypeOracle, typeOracle, syncMethToAsyncMethMap);
 
         String packageName = serviceIntf.getPackage().getName();
         String simpleName = serviceIntf.getSimpleSourceName() + "_Proxy";
