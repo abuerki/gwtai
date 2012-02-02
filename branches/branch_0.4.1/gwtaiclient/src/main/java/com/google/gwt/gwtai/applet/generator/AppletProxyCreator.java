@@ -14,6 +14,7 @@ import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.gwtai.applet.client.Align;
 import com.google.gwt.gwtai.applet.client.AppletClassName;
+import com.google.gwt.gwtai.applet.client.Archive;
 import com.google.gwt.gwtai.applet.client.Codebase;
 import com.google.gwt.gwtai.applet.client.CodebaseLookup;
 import com.google.gwt.gwtai.applet.client.Height;
@@ -195,16 +196,31 @@ public class AppletProxyCreator extends ProxyCreator {
         w.println("}");
         w.outdent();
 
-        w.println();
-        w.indent();
-        w.println("public String getArchive() {");
-        w.indent();
-        w.print("return GWT.getModuleBaseURL() + \"");
-        w.print(jarname);
-        w.println("\";");
-        w.outdent();
-        w.println("}");
-        w.outdent();
+        Archive archiveAttribute = serviceIntf.getAnnotation(Archive.class);
+
+        if (null != archiveAttribute) {
+            w.println();
+            w.indent();
+            w.println("public String getArchive() {");
+            w.indent();
+            w.print("return \"");
+            w.print(archiveAttribute.value());
+            w.println("\";");
+            w.outdent();
+            w.println("}");
+            w.outdent();
+        } else {
+            w.println();
+            w.indent();
+            w.println("public String getArchive() {");
+            w.indent();
+            w.print("return GWT.getModuleBaseURL() + \"");
+            w.print(jarname);
+            w.println("\";");
+            w.outdent();
+            w.println("}");
+            w.outdent();
+        }
 
         JavaVersion javaVersionAttribute = serviceIntf.getAnnotation(JavaVersion.class);
 
@@ -364,3 +380,4 @@ public class AppletProxyCreator extends ProxyCreator {
 
     }
 }
+
