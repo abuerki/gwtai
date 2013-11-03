@@ -66,7 +66,7 @@ public class JarLinker extends AbstractLinker {
                                 "include=**/Base64Utils*.class;"+
                                 "exclude=**Servlet.class",
                         "com/google/gwt/user/client::"+
-                                "include=**/AsyncCaalback.class;"+
+                                "include=**/AsyncCallback.class;"+
                                 "include=**/IsSerializable.class;"+
                                 "include=**/RemoteService.class;"+
                                 "include=**/GwtTransient.class;"+
@@ -75,7 +75,8 @@ public class JarLinker extends AbstractLinker {
                                 "include=**/core/java/math/*.class;"+
                                 "include=**/core/java/lang/*.class;"+
                                 "include=**/core/java/util/*.class;"+
-                                "include=**/rpc/Serialization*.class",
+                                "include=**/rpc/Serialization*.class;"+
+                                "include=**/rpc/CustomFieldSerializer*.class",
                         "com/google/gwt/gwtai/applet::"+
                                 "include=**/proxy/AppletProxy*.class;"+
                                 "include=**/Applet.class;"+
