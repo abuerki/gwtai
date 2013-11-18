@@ -44,6 +44,48 @@ In order to make the Applet loading work in the browser, you have to make sure t
 
 *4.* Use the GwtAI _@Codebase_ annotation to tell GwtAI where the JAR files can be found.
 
+== I get an "`[ERROR] Unable to locate jarsigner`" message followed by an !UnableToCompleteException when building my project ==
+
+What is happening is that the java executable from the JRE is being used to run the GWT build, which sets its "java.home" property to point to the JRE's home.  Since jarsigner is not included in the JRE, it will not be found.  To fix this, set the JAVA_HOME environment variable to point to where the java JDK is installed, and set JRE_HOME to point to the "jre" directory under the location where the JDK is installed.  To make sure that the JDK's executables are used, set the PATH environment variable to start with the bin directory under JAVA_HOME and then the bin directory under JRE_HOME.  The below subsections describe how to do this under Linux, Windows XP, and Windows 7.
+
+=== Setting Environment Variables Under Linux ===
+
+Either type the following at the bash prompt, or add them to your .bash_profile or .bashrc file:
+
+`    export JAVA_HOME=/path/to/jdk`
+
+`    export JRE_HOME=$JAVA_HOME/jre`
+
+`    export PATH="$JAVA_HOME/bin:$JRE_HOME/bin:$PATH"`
+
+=== Setting Environment Variables from Windows Command Line ===
+
+If you are building from the command line (cmd.exe), you can do the following:
+
+`    set JAVA_HOME="C:\path\to\jdk"`
+
+`    set JRE_HOME="%JAVA_HOME%\jre"`
+
+`    set PATH="%JAVA_HOME%\bin;%JRE_HOME%\bin;%PATH%"`
+
+=== Setting Environment Variables from Windows XP ===
+ * Right-click My Computer, and then click Properties.
+ * Click the Advanced tab.
+ * Click Environment variables.
+ * Create or set the `JAVA_HOME` environment variable to the path where your JDK is installed.
+ * Create or set the `JRE_HOME` environment variable to "`%JAVA_HOME%\jre`".
+ * Edit the `PATH` environment variable, placing "`%JAVA_HOME%\bin;%JRE_HOME%\bin;`" at the beginning.
+
+=== Setting Environment Variables from Windows 7 ===
+
+ * Click Start, Control Panel, User Accounts and Family Safety, User Accounts.
+ * In the task list at the left side, click Change My Environment Variables.
+ * Create or set the `JAVA_HOME` environment variable to the path where your JDK is installed.
+ * Create or set the `JRE_HOME` environment variable to "`%JAVA_HOME%\jre`".
+ * Edit the `Path` environment variable, placing "`%JAVA_HOME%\bin;%JRE_HOME%\bin;`" at the beginning.
+
+If you are not an administrator, you will be able to edit only the upper (personal) environment variable list.
+
 == Where can I get help? ==
 
 Please post questions and feedback to the [http://groups.google.com/group/gwtai GwtAI Google Group].
