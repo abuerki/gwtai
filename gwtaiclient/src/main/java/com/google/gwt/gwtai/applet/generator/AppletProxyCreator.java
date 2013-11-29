@@ -35,349 +35,372 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * 
  * @author michaelzachariassenkrog
  */
 public class AppletProxyCreator extends ProxyCreator {
 
-    private String jarname;
+	private String jarname;
 
-    public AppletProxyCreator(JClassType remoteService) {
-        super(remoteService);
-    }
+	public AppletProxyCreator(JClassType remoteService) {
+		super(remoteService);
+	}
 
-    @Override
-    public String create(TreeLogger logger, GeneratorContextExt context) throws UnableToCompleteException {
-        jarname = getJarName(context);
-        if (jarname == null) {
-            logger.log(TreeLogger.Type.ERROR, "jarlinker.name missing from config.");
-            throw new UnableToCompleteException();
-        }
-        
-        return super.create(logger, context);
-    }
-    
-    
+	@Override
+	public String create(TreeLogger logger, GeneratorContextExt context)
+			throws UnableToCompleteException {
+		Archive archiveAttribute = serviceIntf.getAnnotation(Archive.class);
 
-    /**
-     * Generate the proxy constructor and delegate to the superclass constructor
-     * using the default address for the
-     * {@link com.google.gwt.user.client.rpc.RemoteService RemoteService}.
-     */
-    @Override
-    protected void generateProxyContructor(SourceWriter srcWriter) {
+		jarname = getJarName(context);
 
-        srcWriter.println("public " + getProxySimpleName() + "() {");
-        srcWriter.indent();
-        srcWriter.println("super(");
-        srcWriter.indent();
-        srcWriter.println("SERIALIZATION_POLICY, ");
-        srcWriter.println("SERIALIZER);");
-        srcWriter.outdent();
-        srcWriter.outdent();
-        srcWriter.println("}");
-    }
+		if (null == archiveAttribute && null == jarname) {
+			logger.log(TreeLogger.Type.ERROR,
+					"jarlinker.name missing from config, and no @Archive "
+							+ "annotation was specified.");
+			throw new UnableToCompleteException();
+		} else if (null != archiveAttribute && null == jarname) {
+			logger.log(
+					TreeLogger.Type.WARN,
+					"jarlinker.name missing from config, but an @Archive "
+							+ "annotation was specified.\nIf @Archive is "
+							+ "used instead of the jarlinker, then ALL of "
+							+ "the applet implementation classes, and their "
+							+ "dependencies, MUST be located in the .jar files "
+							+ "listed in the @Archive annotation, otherwise, "
+							+ "they will not be available at runtime.");
+		}
 
-    @Override
-    protected void generateProxyMethods(SourceWriter w, SerializableTypeOracle serializableTypeOracle, TypeOracle typeOracle, Map<JMethod, JMethod> syncMethToAsyncMethMap) {
-        super.generateProxyMethods(w, serializableTypeOracle, typeOracle, syncMethToAsyncMethMap);
+		return super.create(logger, context);
+	}
 
-        String packageName = serviceIntf.getPackage().getName();
-        String simpleName = serviceIntf.getSimpleSourceName() + "_Proxy";
+	/**
+	 * Generate the proxy constructor and delegate to the superclass constructor
+	 * using the default address for the
+	 * {@link com.google.gwt.user.client.rpc.RemoteService RemoteService}.
+	 */
+	@Override
+	protected void generateProxyContructor(SourceWriter srcWriter) {
 
-        w.println();
-        w.indent();
-        w.println("protected native String requestApplet(String data) ");
-        w.println(" /*-{");
-        w.indent();
-        w.println("var id = this.@" + packageName + "." + simpleName + "::getName()();");
-        w.println("var gwtElem = @com.google.gwt.user.client.DOM::getElementById(Ljava/lang/String;)(id);");
-        w.println("return gwtElem['handleRequest'](data);");
-        w.outdent();
-        w.println("}-*/;");
-        w.outdent();
+		srcWriter.println("public " + getProxySimpleName() + "() {");
+		srcWriter.indent();
+		srcWriter.println("super(");
+		srcWriter.indent();
+		srcWriter.println("SERIALIZATION_POLICY, ");
+		srcWriter.println("SERIALIZER);");
+		srcWriter.outdent();
+		srcWriter.outdent();
+		srcWriter.println("}");
+	}
 
-        w.println();
-        w.indent();
-        w.print("protected native boolean isAppletActive()");
-        w.println(" /*-{");
-        w.indent();
-        w.println("var id = this.@" + packageName + "." + simpleName + "::getName()();");
-        w.println("var gwtElem = @com.google.gwt.user.client.DOM::getElementById(Ljava/lang/String;)(id);");
-        w.println("return gwtElem['isActive']();");
-        w.outdent();
-        w.println("}-*/;");
-        w.outdent();
+	@Override
+	protected void generateProxyMethods(SourceWriter w,
+			SerializableTypeOracle serializableTypeOracle,
+			TypeOracle typeOracle, Map<JMethod, JMethod> syncMethToAsyncMethMap) {
+		super.generateProxyMethods(w, serializableTypeOracle, typeOracle,
+				syncMethToAsyncMethMap);
 
-        ImplementingClass implementingClass = serviceIntf.getAnnotation(ImplementingClass.class);
+		String packageName = serviceIntf.getPackage().getName();
+		String simpleName = serviceIntf.getSimpleSourceName() + "_Proxy";
 
-        String appletName;
+		w.println();
+		w.indent();
+		w.println("protected native String requestApplet(String data) ");
+		w.println(" /*-{");
+		w.indent();
+		w.println("var id = this.@" + packageName + "." + simpleName
+				+ "::getName()();");
+		w.println("var gwtElem = @com.google.gwt.user.client.DOM::getElementById(Ljava/lang/String;)(id);");
+		w.println("return gwtElem['handleRequest'](data);");
+		w.outdent();
+		w.println("}-*/;");
+		w.outdent();
 
-        if (null == implementingClass) {
-            AppletClassName appletClassName = serviceIntf.getAnnotation(AppletClassName.class);
+		w.println();
+		w.indent();
+		w.print("protected native boolean isAppletActive()");
+		w.println(" /*-{");
+		w.indent();
+		w.println("var id = this.@" + packageName + "." + simpleName
+				+ "::getName()();");
+		w.println("var gwtElem = @com.google.gwt.user.client.DOM::getElementById(Ljava/lang/String;)(id);");
+		w.println("return gwtElem['isActive']();");
+		w.outdent();
+		w.println("}-*/;");
+		w.outdent();
 
-            if (null == appletClassName) {
-                //logger.log(Type.ERROR, "No Applet class name given, use the ImplementingClass or AppletClassName annotation.");
+		ImplementingClass implementingClass = serviceIntf
+				.getAnnotation(ImplementingClass.class);
 
-                throw new RuntimeException("No Applet class name given, use the ImplementingClass or AppletClassName annotation.");
-            } else {
-                appletName = appletClassName.value();
-            }
-        } else {
-            appletName = implementingClass.value().getName();
-        }
+		String appletName;
 
-        w.println();
-        w.indent();
-        w.println("public String getCode() {");
-        w.indent();
-        w.print("return \"");
-        w.print(appletName + ".class");
-        w.println("\";");
-        w.outdent();
-        w.println("}");
-        w.outdent();
+		if (null == implementingClass) {
+			AppletClassName appletClassName = serviceIntf
+					.getAnnotation(AppletClassName.class);
 
-        Width widthAttribute = serviceIntf.getAnnotation(Width.class);
+			if (null == appletClassName) {
+				// logger.log(Type.ERROR,
+				// "No Applet class name given, use the ImplementingClass or AppletClassName annotation.");
 
-        w.println();
-        w.indent();
-        w.println("public String getWidth() {");
-        w.indent();
-        w.print("return ");
+				throw new RuntimeException(
+						"No Applet class name given, use the ImplementingClass or AppletClassName annotation.");
+			} else {
+				appletName = appletClassName.value();
+			}
+		} else {
+			appletName = implementingClass.value().getName();
+		}
 
-        if (null == widthAttribute) {
-            // Default to 350
-            w.print("\"350\"");
-        } else {
-            w.print("\"" + widthAttribute.value() + "\"");
-        }
+		w.println();
+		w.indent();
+		w.println("public String getCode() {");
+		w.indent();
+		w.print("return \"");
+		w.print(appletName + ".class");
+		w.println("\";");
+		w.outdent();
+		w.println("}");
+		w.outdent();
 
-        w.println(";");
-        w.outdent();
-        w.println("}");
-        w.outdent();
+		Width widthAttribute = serviceIntf.getAnnotation(Width.class);
 
-        Height heigthAttribute = serviceIntf.getAnnotation(Height.class);
+		w.println();
+		w.indent();
+		w.println("public String getWidth() {");
+		w.indent();
+		w.print("return ");
 
-        w.println();
-        w.indent();
-        w.println("public String getHeight() {");
-        w.indent();
-        w.print("return ");
+		if (null == widthAttribute) {
+			// Default to 350
+			w.print("\"350\"");
+		} else {
+			w.print("\"" + widthAttribute.value() + "\"");
+		}
 
-        if (null == heigthAttribute) {
-            // Default to 350
-            w.print("\"350\"");
-        } else {
-            w.print("\"" + heigthAttribute.value() + "\"");
-        }
+		w.println(";");
+		w.outdent();
+		w.println("}");
+		w.outdent();
 
-        w.println(";");
-        w.outdent();
-        w.println("}");
-        w.outdent();
+		Height heigthAttribute = serviceIntf.getAnnotation(Height.class);
 
-        Align alignAttribute = serviceIntf.getAnnotation(Align.class);
+		w.println();
+		w.indent();
+		w.println("public String getHeight() {");
+		w.indent();
+		w.print("return ");
 
-        w.println();
-        w.indent();
-        w.println("public String getAlign() {");
-        w.indent();
-        if (null != alignAttribute) {
-            w.print("return \"");
-            w.print(alignAttribute.value().name());
-            w.println("\";");
-        } else {
-            w.println("return null;");
-        }
-        w.outdent();
-        w.println();
-        w.println("}");
-        w.outdent();
+		if (null == heigthAttribute) {
+			// Default to 350
+			w.print("\"350\"");
+		} else {
+			w.print("\"" + heigthAttribute.value() + "\"");
+		}
 
-        Archive archiveAttribute = serviceIntf.getAnnotation(Archive.class);
+		w.println(";");
+		w.outdent();
+		w.println("}");
+		w.outdent();
 
-        if (null != archiveAttribute) {
-            w.println();
-            w.indent();
-            w.println("public String getArchive() {");
-            w.indent();
-            w.print("return \"");
-            w.print(archiveAttribute.value());
-            w.println("\";");
-            w.outdent();
-            w.println("}");
-            w.outdent();
-        } else {
-            w.println();
-            w.indent();
-            w.println("public String getArchive() {");
-            w.indent();
-            w.print("return GWT.getModuleBaseURL() + \"");
-            w.print(jarname);
-            w.println("\";");
-            w.outdent();
-            w.println("}");
-            w.outdent();
-        }
+		Align alignAttribute = serviceIntf.getAnnotation(Align.class);
 
-        JavaVersion javaVersionAttribute = serviceIntf.getAnnotation(JavaVersion.class);
+		w.println();
+		w.indent();
+		w.println("public String getAlign() {");
+		w.indent();
+		if (null != alignAttribute) {
+			w.print("return \"");
+			w.print(alignAttribute.value().name());
+			w.println("\";");
+		} else {
+			w.println("return null;");
+		}
+		w.outdent();
+		w.println();
+		w.println("}");
+		w.outdent();
 
-        w.println();
-        w.indent();
-        w.println("public String getJavaVersion() {");
-        w.indent();
-        if (null != javaVersionAttribute) {
-            w.print("return \"");
-            w.print(javaVersionAttribute.value());
-            w.println("\";");
-        } else {
-            w.println("return null;");
+		Archive archiveAttribute = serviceIntf.getAnnotation(Archive.class);
 
-        }
-        w.outdent();
-        w.println("}");
-        w.outdent();
+		if (null != archiveAttribute) {
+			w.println();
+			w.indent();
+			w.println("public String getArchive() {");
+			w.indent();
+			w.print("return \"");
+			w.print(archiveAttribute.value());
+			w.println("\";");
+			w.outdent();
+			w.println("}");
+			w.outdent();
+		} else {
+			w.println();
+			w.indent();
+			w.println("public String getArchive() {");
+			w.indent();
+			w.print("return GWT.getModuleBaseURL() + \"");
+			w.print(jarname);
+			w.println("\";");
+			w.outdent();
+			w.println("}");
+			w.outdent();
+		}
 
-        JavaArguments javaArgumentsAttribute = serviceIntf.getAnnotation(JavaArguments.class);
+		JavaVersion javaVersionAttribute = serviceIntf
+				.getAnnotation(JavaVersion.class);
 
-        w.println();
-        w.indent();
-        w.println("public String getJavaArguments() {");
-        w.indent();
-        if (null != javaArgumentsAttribute) {
-            w.print("return \"");
-            w.print(javaArgumentsAttribute.value());
-            w.println("\";");
-        } else {
-            w.println("return null;");
-        }
-        w.outdent();
-        w.println("}");
-        w.outdent();
+		w.println();
+		w.indent();
+		w.println("public String getJavaVersion() {");
+		w.indent();
+		if (null != javaVersionAttribute) {
+			w.print("return \"");
+			w.print(javaVersionAttribute.value());
+			w.println("\";");
+		} else {
+			w.println("return null;");
 
+		}
+		w.outdent();
+		w.println("}");
+		w.outdent();
 
-        SeparateJVM separateJVM = serviceIntf.getAnnotation(SeparateJVM.class);
+		JavaArguments javaArgumentsAttribute = serviceIntf
+				.getAnnotation(JavaArguments.class);
 
-        w.println();
-        w.indent();
-        w.println("public Boolean hasSeparateJVM() {");
-        w.indent();
-        if (null != separateJVM) {
-            w.print("return \"");
-            w.print(javaArgumentsAttribute.value());
-            w.println("\";");
-        } else {
-            w.println("return null;");
-        }
-        w.outdent();
-        w.println("}");
-        w.outdent();
+		w.println();
+		w.indent();
+		w.println("public String getJavaArguments() {");
+		w.indent();
+		if (null != javaArgumentsAttribute) {
+			w.print("return \"");
+			w.print(javaArgumentsAttribute.value());
+			w.println("\";");
+		} else {
+			w.println("return null;");
+		}
+		w.outdent();
+		w.println("}");
+		w.outdent();
 
+		SeparateJVM separateJVM = serviceIntf.getAnnotation(SeparateJVM.class);
 
-        LoadingImage loadingImage = serviceIntf.getAnnotation(LoadingImage.class);
+		w.println();
+		w.indent();
+		w.println("public Boolean hasSeparateJVM() {");
+		w.indent();
+		if (null != separateJVM) {
+			w.print("return \"");
+			w.print(javaArgumentsAttribute.value());
+			w.println("\";");
+		} else {
+			w.println("return null;");
+		}
+		w.outdent();
+		w.println("}");
+		w.outdent();
 
-        w.println();
-        w.indent();
-        w.println("public String getLoadingImage() {");
-        w.indent();
-        if (null != loadingImage) {
-            w.print("return \"");
-            w.print(loadingImage.value());
-            w.println("\";");
-        } else {
-            w.println("return null;");
+		LoadingImage loadingImage = serviceIntf
+				.getAnnotation(LoadingImage.class);
 
-        }
-        w.outdent();
-        w.println("}");
-        w.outdent();
+		w.println();
+		w.indent();
+		w.println("public String getLoadingImage() {");
+		w.indent();
+		if (null != loadingImage) {
+			w.print("return \"");
+			w.print(loadingImage.value());
+			w.println("\";");
+		} else {
+			w.println("return null;");
 
+		}
+		w.outdent();
+		w.println("}");
+		w.outdent();
 
-        Codebase codeBaseAttribute = serviceIntf.getAnnotation(Codebase.class);
+		Codebase codeBaseAttribute = serviceIntf.getAnnotation(Codebase.class);
 
-        w.println();
-        w.indent();
-        w.println("public String getCodebase() {");
-        w.indent();
-        if (null != codeBaseAttribute) {
-            w.print("return \"");
-            w.print(codeBaseAttribute.value());
-            w.println("\";");
-        } else {
-            w.println("return null;");
-        }
-        w.outdent();
-        w.println();
-        w.println("}");
-        w.outdent();
+		w.println();
+		w.indent();
+		w.println("public String getCodebase() {");
+		w.indent();
+		if (null != codeBaseAttribute) {
+			w.print("return \"");
+			w.print(codeBaseAttribute.value());
+			w.println("\";");
+		} else {
+			w.println("return null;");
+		}
+		w.outdent();
+		w.println();
+		w.println("}");
+		w.outdent();
 
-        CodebaseLookup codeBaseLookupAttribute = serviceIntf.getAnnotation(CodebaseLookup.class);
+		CodebaseLookup codeBaseLookupAttribute = serviceIntf
+				.getAnnotation(CodebaseLookup.class);
 
-        w.println();
-        w.indent();
-        w.println("public boolean getCodebaseLookup() {");
-        w.indent();
-        if (null != codeBaseLookupAttribute) {
-            w.print("return ");
-            w.print(Boolean.toString(codeBaseLookupAttribute.value()));
-            w.println(";");
-        } else {
-            w.println("return true;");
-        }
-        w.outdent();
-        w.println();
-        w.println("}");
-        w.outdent();
+		w.println();
+		w.indent();
+		w.println("public boolean getCodebaseLookup() {");
+		w.indent();
+		if (null != codeBaseLookupAttribute) {
+			w.print("return ");
+			w.print(Boolean.toString(codeBaseLookupAttribute.value()));
+			w.println(";");
+		} else {
+			w.println("return true;");
+		}
+		w.outdent();
+		w.println();
+		w.println("}");
+		w.outdent();
 
+		Params paramAttribute = serviceIntf.getAnnotation(Params.class);
 
-        Params paramAttribute = serviceIntf.getAnnotation(Params.class);
+		w.println();
+		w.indent();
+		w.println("public java.util.HashMap<String, String> getParameters() {");
+		w.indent();
+		w.println("java.util.HashMap<String, String> props = new java.util.HashMap<String, String>();");
 
-        w.println();
-        w.indent();
-        w.println("public java.util.HashMap<String, String> getParameters() {");
-        w.indent();
-        w.println("java.util.HashMap<String, String> props = new java.util.HashMap<String, String>();");
+		if (null != paramAttribute) {
 
-        if (null != paramAttribute) {
+			String[] names = paramAttribute.names();
+			String[] values = paramAttribute.values();
 
-            String[] names = paramAttribute.names();
-            String[] values = paramAttribute.values();
+			for (int i = 0; i < names.length; i++) {
+				w.print("props.put(\"");
+				w.print(names[i]);
+				w.print("\", \"");
+				w.print(values[i]);
+				w.println("\");");
+			}
+		}
 
-            for (int i = 0; i < names.length; i++) {
-                w.print("props.put(\"");
-                w.print(names[i]);
-                w.print("\", \"");
-                w.print(values[i]);
-                w.println("\");");
-            }
-        }
+		w.print("return props;");
+		w.outdent();
+		w.println();
+		w.println("}");
+		w.outdent();
 
-        w.print("return props;");
-        w.outdent();
-        w.println();
-        w.println("}");
-        w.outdent();
+	}
 
-    }
+	@Override
+	protected Class<? extends RemoteServiceProxy> getProxySupertype() {
+		return RemoteAppletProxy.class;
+	}
 
-    @Override
-    protected Class<? extends RemoteServiceProxy> getProxySupertype() {
-        return RemoteAppletProxy.class;
-    }
+	private String getJarName(GeneratorContext context) {
+		try {
+			ConfigurationProperty prop = context.getPropertyOracle()
+					.getConfigurationProperty("jarlinker.name");
+			if (prop.getValues().isEmpty()) {
+				return null;
+			}
+			return prop.getValues().get(0);
+		} catch (BadPropertyValueException ex) {
+			return null;
+		}
 
-    private String getJarName(GeneratorContext context) {
-        try {
-            ConfigurationProperty prop = context.getPropertyOracle().getConfigurationProperty("jarlinker.name");
-            if (prop.getValues().isEmpty()) {
-                return null;
-            }
-            return prop.getValues().get(0);
-        } catch (BadPropertyValueException ex) {
-            return null;
-        }
-
-    }
+	}
 }
-
