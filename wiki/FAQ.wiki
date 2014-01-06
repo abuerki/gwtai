@@ -2,25 +2,23 @@
 
 == I run the GWT Shell and get a dialog that says _Java(TM) Plug-in Fatal Error_. ==
 
-Alas the GWT Shell can not handle embedded things like Flash or Applets. There is some restriction in the SWT component used to run a browser inside of the Shell application. To test your application you have to compile the code and run it in a browser.
+Alas, the GWT Shell can not handle embedded things like Flash or Applets. There are some restrictions in the SWT component used to run a browser inside of the Shell application. To test your application, you have to compile the code and run it in a browser.
 
 For more information see the [http://code.google.com/p/google-web-toolkit/issues/detail?id=283 GWT issue 283].
 
 == The GWT !Java2JavaScript compiler says _No source code is available for type javax.swing.JApplet_. ==
 
-You have your applet implementation class within you _client_ package, that does not work. You have to put the applet class into the _server package_, or in a package of its own.
+You have your applet implementation class within your _client_ package, or in a package which the GWT compiler will treat as translatable code, which does not work. You have to put the applet class into the _server package_, or in a package that is *NOT* listed in a {{{<source path="..."/>}}} entry in your MODULE_NAME.gwt.xml module file.
 
 == I don't want my GWT application to include the Applet source code. ==
 
-During compilation the GWT !Java2JavaScript compiler needs to see the actual Applet implementation. But the respective annotation is compile time only. The GWT compiler only translates the files in the _client_ package. So decoupling works by placing the classes into different packages. Once you compiled your project the GWT compiler output won't contain any Applet classes.
-
+During compilation the GWT !Java2JavaScript compiler needs to see the actual Applet implementation. But the respective annotation is compile time only. The GWT compiler only translates the files in the _client_ package, and in packages included in {{{<source path="..."/>}}} entries in your MODULE_NAME.gwt.xml module file. So, decoupling works by placing the classes into different packages. Once you compiled your project, the GWT compiler output won't contain any Applet classes.
 
 == I have problems compiling, the GWT compiler throws a !StackOverflowError. ==
 
-On Linux please make sure you use a 32bit JDK, even on a 64bit platform you have to fall
-back on a 32bit JDK. This is not a GwtAI but a GWT problem. See the [http://groups.google.com/group/Google-Web-Toolkit/search?group=Google-Web-Toolkit&q=64-bit+linux&qt_g=Search+this+group GWT Google Groups] for more information on that one.
+On Linux, please make sure you use a 32bit JDK.  Even on a 64bit platform, you have to fallback on a 32bit JDK. This is a GWT problem, not a GwtAI problem. See the [http://groups.google.com/group/Google-Web-Toolkit/search?group=Google-Web-Toolkit&q=64-bit+linux&qt_g=Search+this+group GWT Google Groups] for more information on that one.
 
-The {{{java.lang.StackOverflowError}}} seems to occure only on a 1.6 JDK version. The easiest workaround the {{{java.lang.StackOverflowError}}} is to use a JDK 1.5 compiler, instead of JDK 1.6. So try using a 1.5 JDK to compile your code. With JDK 1.6 you can try to increase the heap size with some JVM arguments (e.g. {{{-XX:PermSize=64M}}} and {{{-XX:MaxPermSize=256M}}}). Although the heap size increase is not guaranteed to work. 
+The {{{java.lang.StackOverflowError}}} seems to occure only on a 1.6 JDK version. The easiest workaround, for the {{{java.lang.StackOverflowError}}} exception, is to use a JDK 1.5 compiler, instead of JDK 1.6. So try using a 1.5 JDK to compile your code. With JDK 1.6 you can try to increase the heap size with some JVM arguments (e.g. {{{-XX:PermSize=64M}}} and {{{-XX:MaxPermSize=256M}}}). However, the heap size increase is not guaranteed to work. 
 
 This is related to [http://code.google.com/p/google-web-toolkit/issues/detail?id=3510 GWT issue 3510].
 
@@ -32,17 +30,14 @@ The {{{TrayIconApplet}}} example class uses the [https://jdic.dev.java.net/ JDes
 
 == I get a !ClassNotFoundException when I try to run the Applet  ==
 
-This is because the browser can not find the classes and resources needed to start the Applet. Since Java Applets are executed in a sandbox the whole code and resource loading works a bit different. To learn more about Applets and the Applet runtime (browser plugin) see the Applets section in the [http://java.sun.com/docs/books/tutorial/deployment/applet/ The Java Tutorials].
+This is because the browser can not find the classes and resources needed to start the Applet. Since Java Applets are executed in a sandbox, the whole code and resource loading works a bit different. To learn more about Applets and the Applet runtime (browser plugin) see the Applets section in [http://java.sun.com/docs/books/tutorial/deployment/applet/ The Java Tutorials].
 
 In order to make the Applet loading work in the browser, you have to make sure that all resources are in the right place. Take the following steps:
 
-*1.* Build one or multiple JAR files containing all classes and resources needed by your applet.
-
-*2.* Use the GwtAI _@Archive_ annotation to tell GwtAI how these JAR files are named.
-
-*3.* Place the JAR files such that the browser can see them. E.g. in the GWT output directory or inside the WAR file you want to deploy.
-
-*4.* Use the GwtAI _@Codebase_ annotation to tell GwtAI where the JAR files can be found.
+ # Build one or multiple JAR files containing all classes and resources needed by your applet.
+ # Use the GwtAI _@Archive_ annotation to tell GwtAI how these JAR files are named.
+ # Place the JAR files such that the browser can see them. E.g. in the GWT output directory or inside the WAR file you want to deploy.
+ # Use the GwtAI _@Codebase_ annotation to tell GwtAI where the JAR files can be found.
 
 == I get an "`[ERROR] Unable to locate jarsigner`" message followed by an !UnableToCompleteException when building my project ==
 
@@ -52,21 +47,21 @@ What is happening is that the java executable from the JRE is being used to run 
 
 Either type the following at the bash prompt, or add them to your .bash_profile or .bashrc file:
 
-`    export JAVA_HOME=/path/to/jdk`
+    `export JAVA_HOME=/path/to/jdk`
 
-`    export JRE_HOME=$JAVA_HOME/jre`
+    `export JRE_HOME=$JAVA_HOME/jre`
 
-`    export PATH="$JAVA_HOME/bin:$JRE_HOME/bin:$PATH"`
+    `export PATH="$JAVA_HOME/bin:$JRE_HOME/bin:$PATH"`
 
 === Setting Environment Variables from Windows Command Line ===
 
 If you are building from the command line (cmd.exe), you can do the following:
 
-`    set JAVA_HOME="C:\path\to\jdk"`
+    `set JAVA_HOME="C:\path\to\jdk"`
 
-`    set JRE_HOME="%JAVA_HOME%\jre"`
+    `set JRE_HOME="%JAVA_HOME%\jre"`
 
-`    set PATH="%JAVA_HOME%\bin;%JRE_HOME%\bin;%PATH%"`
+    `set PATH="%JAVA_HOME%\bin;%JRE_HOME%\bin;%PATH%"`
 
 === Setting Environment Variables from Windows XP ===
  * Right-click My Computer, and then click Properties.
@@ -85,6 +80,20 @@ If you are building from the command line (cmd.exe), you can do the following:
  * Edit the `Path` environment variable, placing "`%JAVA_HOME%\bin;%JRE_HOME%\bin;`" at the beginning.
 
 If you are not an administrator, you will be able to edit only the upper (personal) environment variable list.
+
+== Why does my applet sometimes get a "`netscape.javascript.JSException: Failure to evaluate ...`" exception, when calling a !JavaScript callback, after changing the source of an iframe, but not all the time? ==
+
+Remember that the !JavaScript engine does not know anything about what is going on inside the Java Virtual Machine, and so it has no way of knowing that a Java applet still has a reference to a !JavaScript object.  Also, keep in mind that a new !JavaScript context is created when the iframe's source is changed, making the old context available for garbage collection.  If the Java applet uses the callback after the iframe's source has been changed, but BEFORE the !JavaScript engine's garbage collector runs, then the call will be successful, because the !JavaScript object will still exist.  However, if the Java applet tries to use the callback after the iframe's source has been changed, AND AFTER the !JavaScript engine's garbage collector runs, then the call will result in the JSException being thrown, because the !JavaScript object will no longer exist.  Think of any references a Java applet has to !JavaScript objects as being WEAK references, from the view point of the !JavaScript engine, and may be cleaned up once the !JavaScript engine sees no more hard references to the context to which the !JavaScript objects belong.  And thus, since there is no guarantee on when the !JavaScript engine's garbage collector runs, calls from Java applets to !JavaScript callbacks will sometimes succeed, and will sometimes fail after changing an iframe's source.
+
+The following are suggested solutions to developers having this problem:
+
+ * Before changing the source of an iframe, make sure to stop whatever your Java applets are doing, to ensure that they will not attempt to use references to !JavaScript objects after the iframe's source has been changed.  This solution will have the smaller memory footprint, out of the solutions presented here, but would require developers to always remember to stop their applets whenever they change the source of an iframe.
+
+    OR
+
+ * Instead of reusing the same iframe, have multiple iframes, hiding all but the one whose source is to be displayed.  Just remember that this solution will have a higher memory footprint, and may not be the best choice when there are a lot of iframes needed, and/or when the total size of the contents to be loaded is high for the sites being embedded within the iframes.
+
+See Issue 31 for more background behind this FAQ entry.
 
 == Where can I get help? ==
 
