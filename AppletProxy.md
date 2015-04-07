@@ -1,0 +1,68 @@
+# THIS PAGE IS OUTDATED #
+
+# Introduction #
+
+It is only possible to call methods on an applet with String arguments. If other types are used they may/will be converted to string by the browser. To support more types a protocol must be implemented and handled by a proxy between GWT and the Applet. The proxy is implemented as an Applet it self which embeds the real applet.
+
+
+# Protocol Plan #
+
+We have some focus points for the protocol in the following priority:
+- We dont want to force a large codebase in the applet
+- We want to support a complete object graph as parameters
+- We want a small data payload
+
+After some digging around it seems VERY hard to fullfill all focus points. We looked into the RPC code from GWT to check how it could be reused and we looked at some JSON-RPC libraries but all of it seems to import a pretty large codebase into the applet. Therefore we decided to prototype this with a very simple protocols which only support primitives and Strings.
+
+**ANY HELP IS APPRECIATED IN IMPLEMENTING SUPPORT FOR COMPLETE OBJECT GRAPH**
+
+# Protocol Details (Simple) #
+Name: SGDP (Simple Gwtai Data Protocol)
+
+## Data types ##
+  * S = String
+  * B = Byte
+  * L = Long
+  * I = Integer
+  * F = Float
+  * D = Double
+  * C = Char
+  * Z = Boolean
+  * V = Void (return type only)
+  * A appendix = Array (fx. SA for String[.md](.md))
+
+## Parameter ##
+The syntax of the parameter is:
+```
+<datatype>:<data>
+```
+
+### data ###
+The data differs on the datatype.
+  * Integer, Long, Char: The number represented by the parameter, fx. '45'. Arrays are commaseperated fx. '45,51'
+  * Float, Double: The number represented by the parameter, fx. '23.45'. Arrays are commaseperated fx. '23.45,51.34'
+  * Boolean: The value represented by the parameter as '0'(false) or '1'(true). Arrays are commaseperated fx. '0,0,1,0,1'
+  * String: The base64 encoded String. Arrays are commaseparated base64 encoded Strings.
+  * Byte: The number represented by the parameter, fx. '45'. Arrays are base64 encoded.
+
+
+## Request Syntax ##
+The syntax of the protocol is like this:
+```
+<method>|<return type>[|<parameter>][|<parameter>]
+```
+
+### Method ###
+The name of the method to call.
+
+### Return type ###
+The datatype the method must has as return type in its signature.
+
+
+### Example ###
+```
+sumNumbers|I|I:1|I:3
+mergeArrays|IA|IA:1,2,3|IA:3,5,23
+displayStrings|V|SA:SGVsbG8=,V29ybGQh
+acceptBytes|B|BA:SGVsbG8gV29ybGQh
+```

@@ -1,0 +1,98 @@
+## I run the GWT Shell and get a dialog that says _Java(TM) Plug-in Fatal Error_. ##
+
+Alas, the GWT Shell can not handle embedded things like Flash or Applets. There are some restrictions in the SWT component used to run a browser inside of the Shell application. To test your application, you have to compile the code and run it in a browser.
+
+For more information see the [GWT issue 283](http://code.google.com/p/google-web-toolkit/issues/detail?id=283).
+
+## The GWT Java2JavaScript compiler says _No source code is available for type javax.swing.JApplet_. ##
+
+You have your applet implementation class within your _client_ package, or in a package which the GWT compiler will treat as translatable code, which does not work. You have to put the applet class into the _server package_, or in a package that is **NOT** listed in a `<source path="..."/>` entry in your MODULE\_NAME.gwt.xml module file.
+
+## I don't want my GWT application to include the Applet source code. ##
+
+During compilation the GWT Java2JavaScript compiler needs to see the actual Applet implementation. But the respective annotation is compile time only. The GWT compiler only translates the files in the _client_ package, and in packages included in `<source path="..."/>` entries in your MODULE\_NAME.gwt.xml module file. So, decoupling works by placing the classes into different packages. Once you compiled your project, the GWT compiler output won't contain any Applet classes.
+
+## I have problems compiling, the GWT compiler throws a StackOverflowError. ##
+
+On Linux, please make sure you use a 32bit JDK.  Even on a 64bit platform, you have to fallback on a 32bit JDK. This is a GWT problem, not a GwtAI problem. See the [GWT Google Groups](http://groups.google.com/group/Google-Web-Toolkit/search?group=Google-Web-Toolkit&q=64-bit+linux&qt_g=Search+this+group) for more information on that one.
+
+The `java.lang.StackOverflowError` seems to occure only on a 1.6 JDK version. The easiest workaround, for the `java.lang.StackOverflowError` exception, is to use a JDK 1.5 compiler, instead of JDK 1.6. So try using a 1.5 JDK to compile your code. With JDK 1.6 you can try to increase the heap size with some JVM arguments (e.g. `-XX:PermSize=64M` and `-XX:MaxPermSize=256M`). However, the heap size increase is not guaranteed to work.
+
+This is related to [GWT issue 3510](http://code.google.com/p/google-web-toolkit/issues/detail?id=3510).
+
+**Hint:** If you rely on some JDK 1.6 libraries, you can still use JDK 1.5 to compile. Just run `javac` with the JDK 1.6 `rt.jar` in the classpath.
+
+## The source tree includes JDIC, why is that required? ##
+
+The `TrayIconApplet` example class uses the [JDesktop Integration Components (JDIC) project](https://jdic.dev.java.net/) to hook into the desktop tray. GwtAI itself does not depend on [JDIC](https://jdic.dev.java.net/).
+
+## I get a ClassNotFoundException when I try to run the Applet ##
+
+This is because the browser can not find the classes and resources needed to start the Applet. Since Java Applets are executed in a sandbox, the whole code and resource loading works a bit different. To learn more about Applets and the Applet runtime (browser plugin) see the Applets section in [The Java Tutorials](http://java.sun.com/docs/books/tutorial/deployment/applet/).
+
+In order to make the Applet loading work in the browser, you have to make sure that all resources are in the right place. Take the following steps:
+
+  1. Build one or multiple JAR files containing all classes and resources needed by your applet.
+  1. Use the GwtAI _@Archive_ annotation to tell GwtAI how these JAR files are named.
+  1. Place the JAR files such that the browser can see them. E.g. in the GWT output directory or inside the WAR file you want to deploy.
+  1. Use the GwtAI _@Codebase_ annotation to tell GwtAI where the JAR files can be found.
+
+## I get an "`[ERROR] Unable to locate jarsigner`" message followed by an UnableToCompleteException when building my project ##
+
+What is happening is that the java executable from the JRE is being used to run the GWT build, which sets its "java.home" property to point to the JRE's home.  Since jarsigner is not included in the JRE, it will not be found.  To fix this, set the JAVA\_HOME environment variable to point to where the java JDK is installed, and set JRE\_HOME to point to the "jre" directory under the location where the JDK is installed.  To make sure that the JDK's executables are used, set the PATH environment variable to start with the bin directory under JAVA\_HOME and then the bin directory under JRE\_HOME.  The below subsections describe how to do this under Linux, Windows XP, and Windows 7.
+
+### Setting Environment Variables Under Linux ###
+
+Either type the following at the bash prompt, or add them to your .bash\_profile or .bashrc file:
+
+> `export JAVA_HOME=/path/to/jdk`
+
+> `export JRE_HOME=$JAVA_HOME/jre`
+
+> `export PATH="$JAVA_HOME/bin:$JRE_HOME/bin:$PATH"`
+
+### Setting Environment Variables from Windows Command Line ###
+
+If you are building from the command line (cmd.exe), you can do the following:
+
+> `set JAVA_HOME="C:\path\to\jdk"`
+
+> `set JRE_HOME="%JAVA_HOME%\jre"`
+
+> `set PATH="%JAVA_HOME%\bin;%JRE_HOME%\bin;%PATH%"`
+
+### Setting Environment Variables from Windows XP ###
+  * Right-click My Computer, and then click Properties.
+  * Click the Advanced tab.
+  * Click Environment variables.
+  * Create or set the `JAVA_HOME` environment variable to the path where your JDK is installed.
+  * Create or set the `JRE_HOME` environment variable to "`%JAVA_HOME%\jre`".
+  * Edit the `PATH` environment variable, placing "`%JAVA_HOME%\bin;%JRE_HOME%\bin;`" at the beginning.
+
+### Setting Environment Variables from Windows 7 ###
+
+  * Click Start, Control Panel, User Accounts and Family Safety, User Accounts.
+  * In the task list at the left side, click Change My Environment Variables.
+  * Create or set the `JAVA_HOME` environment variable to the path where your JDK is installed.
+  * Create or set the `JRE_HOME` environment variable to "`%JAVA_HOME%\jre`".
+  * Edit the `Path` environment variable, placing "`%JAVA_HOME%\bin;%JRE_HOME%\bin;`" at the beginning.
+
+If you are not an administrator, you will be able to edit only the upper (personal) environment variable list.
+
+## Why does my applet sometimes get a "`netscape.javascript.JSException: Failure to evaluate ...`" exception, when calling a JavaScript callback, after changing the source of an iframe, but not all the time? ##
+
+Remember that the JavaScript engine does not know anything about what is going on inside the Java Virtual Machine, and so it has no way of knowing that a Java applet still has a reference to a JavaScript object.  Also, keep in mind that a new JavaScript context is created when the iframe's source is changed, making the old context available for garbage collection.  If the Java applet uses the callback after the iframe's source has been changed, but BEFORE the JavaScript engine's garbage collector runs, then the call will be successful, because the JavaScript object will still exist.  However, if the Java applet tries to use the callback after the iframe's source has been changed, AND AFTER the JavaScript engine's garbage collector runs, then the call will result in the JSException being thrown, because the JavaScript object will no longer exist.  Think of any references a Java applet has to JavaScript objects as being WEAK references, from the view point of the JavaScript engine, and may be cleaned up once the JavaScript engine sees no more hard references to the context to which the JavaScript objects belong.  And thus, since there is no guarantee on when the JavaScript engine's garbage collector runs, calls from Java applets to JavaScript callbacks will sometimes succeed, and will sometimes fail after changing an iframe's source.
+
+The following are suggested solutions to developers having this problem:
+
+  * Before changing the source of an iframe, make sure to stop whatever your Java applets are doing, to ensure that they will not attempt to use references to JavaScript objects after the iframe's source has been changed.  This solution will have the smaller memory footprint, out of the solutions presented here, but would require developers to always remember to stop their applets whenever they change the source of an iframe.
+
+> OR
+
+  * Instead of reusing the same iframe, have multiple iframes, hiding all but the one whose source is to be displayed.  Just remember that this solution will have a higher memory footprint, and may not be the best choice when there are a lot of iframes needed, and/or when the total size of the contents to be loaded is high for the sites being embedded within the iframes.
+
+See [Issue 31](https://code.google.com/p/gwtai/issues/detail?id=31) for more background behind this FAQ entry.
+
+## Where can I get help? ##
+
+Please post questions and feedback to the [GwtAI Google Group](http://groups.google.com/group/gwtai).
