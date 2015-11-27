@@ -4,7 +4,7 @@
 	<groupId>com.google.gwt</groupId>
 	<artifactId>gwtai</artifactId>
     <packaging>pom</packaging>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.5</version>
     <name>gwtai</name>
     <url>http://gwtai.googlecode.com</url>
         
