@@ -4,13 +4,16 @@
  */
 package com.google.gwt.gwtai.applet.generator;
 
-import com.google.gwt.core.ext.*;
-import com.google.gwt.core.ext.typeinfo.JMethod;
-import com.google.gwt.user.rebind.SourceWriter;
-import com.google.gwt.user.rebind.rpc.SerializableTypeOracle;
+import java.util.Map;
+
+import com.google.gwt.core.ext.BadPropertyValueException;
+import com.google.gwt.core.ext.ConfigurationProperty;
+import com.google.gwt.core.ext.GeneratorContext;
+import com.google.gwt.core.ext.RebindResult;
+import com.google.gwt.core.ext.TreeLogger;
+import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
-import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
-import com.google.gwt.core.ext.typeinfo.JType;
+import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.gwtai.applet.client.Align;
 import com.google.gwt.gwtai.applet.client.AppletClassName;
@@ -26,13 +29,10 @@ import com.google.gwt.gwtai.applet.client.Params;
 import com.google.gwt.gwtai.applet.client.RemoteAppletProxy;
 import com.google.gwt.gwtai.applet.client.SeparateJVM;
 import com.google.gwt.gwtai.applet.client.Width;
-import com.google.gwt.rpc.server.RPC;
 import com.google.gwt.user.client.rpc.impl.RemoteServiceProxy;
+import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.user.rebind.rpc.ProxyCreator;
-import com.google.gwt.user.rebind.rpc.SerializableTypeOracleBuilder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.google.gwt.user.rebind.rpc.SerializableTypeOracle;
 
 /**
  * 
@@ -47,7 +47,7 @@ public class AppletProxyCreator extends ProxyCreator {
 	}
 
 	@Override
-	public String create(TreeLogger logger, GeneratorContextExt context)
+	public RebindResult create(TreeLogger logger, GeneratorContext context)
 			throws UnableToCompleteException {
 		Archive archiveAttribute = serviceIntf.getAnnotation(Archive.class);
 

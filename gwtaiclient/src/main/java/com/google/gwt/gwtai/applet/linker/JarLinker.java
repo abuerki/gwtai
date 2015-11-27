@@ -7,9 +7,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
 
 import com.google.gwt.core.ext.LinkerContext;
 import com.google.gwt.core.ext.TreeLogger;
@@ -23,20 +26,6 @@ import com.google.gwt.dev.resource.impl.DefaultFilters;
 import com.google.gwt.dev.resource.impl.PathPrefix;
 import com.google.gwt.dev.resource.impl.PathPrefixSet;
 import com.google.gwt.dev.resource.impl.ResourceOracleImpl;
-import com.google.gwt.gwtai.applet.client.Applet;
-import com.google.gwt.gwtai.applet.proxy.AppletProxy;
-import com.google.gwt.gwtai.applet.proxy.AppletProxyStub;
-import com.google.gwt.gwtai.applet.util.AppletUtil;
-import com.google.gwt.gwtai.applet.util.JavaLibraryPath;
-import com.google.gwt.gwtai.applet.util.LibraryElement;
-import com.google.gwt.user.client.rpc.IsSerializable;
-import com.google.gwt.user.client.rpc.SerializationStreamReader;
-import com.google.gwt.user.client.rpc.impl.AbstractSerializationStreamReader;
-import com.google.gwt.user.server.Base64Utils;
-import com.google.gwt.user.server.rpc.SerializationPolicy;
-import com.google.gwt.user.server.rpc.SerializationPolicyProvider;
-import com.google.gwt.user.server.rpc.UnexpectedException;
-import java.util.Arrays;
 
 /**
  * A GWT linker to create and sign a JAR file which contains all the Applet classes.
@@ -119,7 +108,7 @@ import com.google.gwt.gwtai.applet.util.LibraryElement;
 		String keystore = null;
 		String alias = null;
 		String storepass = null;
-
+		String manifestPath = null;
                 
 
 		
@@ -158,7 +147,7 @@ import com.google.gwt.gwtai.applet.util.LibraryElement;
 					
 					throw new UnableToCompleteException();
 				}
-				List<String> resourceList = currentProperty.getValues();
+				List<String> resourceList = new ArrayList<String>(currentProperty.getValues());
                                 resourceList.addAll(Arrays.asList(DEFAULTINCLUDES));
 				includeResources = resolveResources(logger,resourceList);
 			} else if (propName.equalsIgnoreCase("jarlinker.jarsigner")) {
@@ -169,6 +158,8 @@ import com.google.gwt.gwtai.applet.util.LibraryElement;
 				storepass = firstPropValue;
 			} else if (propName.equalsIgnoreCase("jarlinker.alias")) {
 				alias = firstPropValue;
+			} else if (propName.equalsIgnoreCase("jarlinker.manifest")) {
+				manifestPath = firstPropValue;
 			}
 		}
 		
@@ -235,7 +226,7 @@ import com.google.gwt.gwtai.applet.util.LibraryElement;
 		// TODO
 		// Linux seems to have problems with the '..' notation, so let's assemble an absolute path
 		
-		byte[] jarContent = createJar(logger, includeResources);
+		byte[] jarContent = createJar(logger, includeResources, manifestPath);
 		
 		if (keystore != null && alias != null && storepass != null) {
 			jarContent = signJar(logger, jarsignerPath, keystore, alias, storepass, jarContent);
@@ -252,7 +243,7 @@ import com.google.gwt.gwtai.applet.util.LibraryElement;
 	/**
 	 * Private helper-method to create and sign our JAR file.
 	 */
-	private byte[] createJar(TreeLogger logger, String includeResources[]) throws UnableToCompleteException {
+	private byte[] createJar(TreeLogger logger, String includeResources[], String manifestAdditionsPath) throws UnableToCompleteException {
 		if(includeResources.length == 0){
 			logger.log(Type.INFO, "No resources to add. JAR-file will not be created.");
 			return new byte[0];
@@ -263,10 +254,23 @@ import com.google.gwt.gwtai.applet.util.LibraryElement;
 		
 		ByteArrayOutputStream byteArrayOutStream = null;
 		JarOutputStream jarOutStream = null;
-
+		
 		try {
 			byteArrayOutStream = new ByteArrayOutputStream();
-			jarOutStream = new JarOutputStream(byteArrayOutStream);
+			File manifestFile = null;
+			if (manifestAdditionsPath != null) {
+				manifestFile = new File(manifestAdditionsPath);
+			}
+			if (manifestFile != null && manifestFile.exists()) {
+				FileInputStream manifestAdditionsStream = new FileInputStream(manifestFile);
+				Manifest myManifest = new Manifest(manifestAdditionsStream);
+				// The Manifest needs a MANIFEST_VERSION to be created properly (next line). If not, it is created empty.
+				myManifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
+				jarOutStream = new JarOutputStream(byteArrayOutStream, myManifest);
+			}
+			else {
+				jarOutStream = new JarOutputStream(byteArrayOutStream);
+			}
 			
 			for (String includeResource: includeResources) {
                             logger.log(Type.DEBUG, "Adding "+includeResource);
@@ -394,8 +398,10 @@ import com.google.gwt.gwtai.applet.util.LibraryElement;
 		
 		resourceOracle.setPathPrefixes(pathPrefixSet);
 		
-		ResourceOracleImpl.refresh(logger, resourceOracle);
-		
+		//ResourceOracleImpl.clearCache();
+		resourceOracle.scanResources(logger);
+		logger.log(Type.INFO, "resourceOracle.pathNames " + resourceOracle.getPathNames());
+
 		return resourceOracle.getPathNames().toArray(new String[0]);
 	}
 	

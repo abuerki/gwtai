@@ -6,7 +6,6 @@
 package com.google.gwt.gwtai.applet.client;
 
 import java.util.List;
-import org.apache.naming.java.javaURLContextFactory;
 
 /**
  *

@@ -1,10 +1,10 @@
 package com.google.gwt.gwtai.applet.client;
 
-import com.google.gwt.user.server.Base64Utils;
 import java.io.UnsupportedEncodingException;
-import org.apache.catalina.util.Base64;
 
 import junit.framework.TestCase;
+
+import com.google.gwt.user.server.Base64Utils;
 
 /**
  * Test class for <code>com.google.gwt.gwtai.applet.client.Base64Util</code>.
